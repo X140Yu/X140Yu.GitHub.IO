@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="如何写好 commit message？">
+
+
+
+
+  <meta name="keywords" content="技术, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-01-04-how-to-write-good-commit-message/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 如何写好 commit message？ - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          如何写好 commit message？
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-01-04
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-01-04-how-to-write-good-commit-message/" data-title="如何写好 commit message？">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Subject-和-body-之间要留一个空行"><span class="toc-text">1. Subject 和 body 之间要留一个空行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-把-subject-控制在-50-个字符之内"><span class="toc-text">2. 把 subject 控制在 50 个字符之内</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Subject-的首字母大写"><span class="toc-text">3. Subject 的首字母大写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Subject-的结尾不要加标点符号"><span class="toc-text">4. Subject 的结尾不要加标点符号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-在-subject-中，使用-imperative-的语句"><span class="toc-text">5. 在 subject 中，使用 imperative 的语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-控制-body-每行的长度在-72-个字符"><span class="toc-text">6. 控制 body 每行的长度在 72 个字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-用-body-说明这次-commit-的-what-why-how"><span class="toc-text">7. 用 body 说明这次 commit 的 what, why, how</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>Commit message 是每个开发人员每天都要写的东西，可是大多数人都会以一个 bug fix 或者 update xxx 草草了事。那么什么是好的 commit message 呢？我看到了一篇<a href="http://chris.beams.io/posts/git-commit/" target="_blank" rel="noopener">好文</a> ，顺手给大家总结了一下</p>
+<a id="more"></a>
+<p>比如，这是一条 commit message，首先我们要搞清楚 subject 和 body。</p>
+<p><img src="http://ww3.sinaimg.cn/large/5cc3eefejw1fbf1lbtx1dj20ze0l6qeq.jpg" alt></p>
+<h3 id="1-Subject-和-body-之间要留一个空行"><a href="#1-Subject-和-body-之间要留一个空行" class="headerlink" title="1. Subject 和 body 之间要留一个空行"></a>1. Subject 和 body 之间要留一个空行</h3><ul>
+<li>这是 <code>git commit</code> 命令的<a href="https://www.kernel.org/pub/software/scm/git/docs/git-commit.html#_discussion" target="_blank" rel="noopener">推荐做法</a></li>
+</ul>
+<ul>
+<li>很多 git 的命令依赖于 subject 和 body 中的空行，比如 <code>git log --oneline</code>，<code>git shortlog</code></li>
+<li>PS. 如果 commit 内容较少，没必要写 body</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// good</span><br><span class="line">Summarize changes in around 50 characters or less</span><br><span class="line"></span><br><span class="line">More detailed explanatory text, if necessary. Wrap it to about 72</span><br><span class="line">characters or so. In some contexts, the first line is treated as the</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">Summarize changes in around 50 characters or less</span><br><span class="line">More detailed explanatory text, if necessary. Wrap it to about 72</span><br><span class="line">characters or so. In some contexts, the first line is treated as the</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="2-把-subject-控制在-50-个字符之内"><a href="#2-把-subject-控制在-50-个字符之内" class="headerlink" title="2. 把 subject 控制在 50 个字符之内"></a>2. 把 subject 控制在 50 个字符之内</h3><p>如图，不解释。</p>
+<p><img src="http://ww4.sinaimg.cn/large/5cc3eefejw1fbf1lb459zj21k40icn0j.jpg" alt></p>
+<h3 id="3-Subject-的首字母大写"><a href="#3-Subject-的首字母大写" class="headerlink" title="3. Subject 的首字母大写"></a>3. Subject 的首字母大写</h3><p>不觉得开头大写很优美吗？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// good</span><br><span class="line">Accelerate to 88 miles per hour</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">accelerate to 88 miles per hour</span><br></pre></td></tr></table></figure>
+<h3 id="4-Subject-的结尾不要加标点符号"><a href="#4-Subject-的结尾不要加标点符号" class="headerlink" title="4. Subject 的结尾不要加标点符号"></a>4. Subject 的结尾不要加标点符号</h3><p>Subject 尽量简明扼要，标点符号不是必须的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// good</span><br><span class="line">Open the pod bay doors</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">Open the pod bay doors.</span><br></pre></td></tr></table></figure>
+<h3 id="5-在-subject-中，使用-imperative-的语句"><a href="#5-在-subject-中，使用-imperative-的语句" class="headerlink" title="5. 在 subject 中，使用 imperative 的语句"></a>5. 在 subject 中，使用 imperative 的语句</h3><p>先来看看什么是 imperative 和 indicative</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// imperative（命令性） VS indicative（陈述性）</span><br><span class="line">Empty the bin, John. // imperative</span><br><span class="line">John empties the bin. // indicative</span><br></pre></td></tr></table></figure>
+<p>Commit 中 的 subject 使用 imperative 的语句，比如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// good</span><br><span class="line">- Refactor subsystem X for readability</span><br><span class="line">- Update getting started documentation</span><br><span class="line">- Remove deprecated methods</span><br><span class="line">- Release version 1.0.0</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">- Fixed bug with Y</span><br><span class="line">- Changing behavior of X</span><br><span class="line">- More fixes for broken stuff</span><br><span class="line">- Sweet new API methods</span><br></pre></td></tr></table></figure>
+<p>有一个简单的做法可以看出你的 subject 是否符合了这条规定，就是把它套进 <code>If applied, this commit will {subject}</code>，如果语句通顺没有语病，说明你的 subject 是没有问题的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// good</span><br><span class="line">- If applied, this commit will refactor subsystem X for readability</span><br><span class="line">- If applied, this commit will update getting started documentation</span><br><span class="line">- If applied, this commit will remove deprecated methods</span><br><span class="line">- If applied, this commit will release version 1.0.0</span><br><span class="line">- If applied, this commit will merge pull request #123 from user/branch</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">- If applied, this commit will fixed bug with Y</span><br><span class="line">- If applied, this commit will changing behavior of X</span><br><span class="line">- If applied, this commit will more fixes for broken stuff</span><br><span class="line">- If applied, this commit will sweet new API methods</span><br></pre></td></tr></table></figure>
+<p>在我看来，其实就是以动词原型开头（逃</p>
+<h3 id="6-控制-body-每行的长度在-72-个字符"><a href="#6-控制-body-每行的长度在-72-个字符" class="headerlink" title="6. 控制 body 每行的长度在 72 个字符"></a>6. 控制 body 每行的长度在 72 个字符</h3><p>如果一行太长话，那真是没法看……</p>
+<h3 id="7-用-body-说明这次-commit-的-what-why-how"><a href="#7-用-body-说明这次-commit-的-what-why-how" class="headerlink" title="7. 用 body 说明这次 commit 的 what, why, how"></a>7. 用 body 说明这次 commit 的 what, why, how</h3><p>能做到这一步的人真的很少。</p>
+<p>PS. 我还是建议大家多用英文写 commit message，因为除了写英文代码注释以外，commit message 是唯一能在每日的工作中训练自己写好英语的机会了。好的 commit message 不光自己看着心里舒服，跟你协作开发的人看着也得劲。从这一刻开始，写好每一条 commit message 吧！</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-01-04-how-to-write-good-commit-message/">https://x140yu.github.io/2017-01-04-how-to-write-good-commit-message/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/技术/">技术</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-01-14-yu-ge-dai-ni-you-tian-tan/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">宇带逛之天坛篇</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-01-01-wwmxd/">
+        <span class="next-text nav-default"><读>「万万没想到 - 用理工科思维理解世界」</读></span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-01-04-how-to-write-good-commit-message/';
+        this.page.identifier = '2017-01-04-how-to-write-good-commit-message/';
+        this.page.title = '如何写好 commit message？';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

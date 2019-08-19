@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Swift 笔记（1） - 基础">
+
+
+
+
+  <meta name="keywords" content="iOS, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2015-01-20-SwiftNote-01/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Swift 笔记（1） - 基础 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Swift 笔记（1） - 基础
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-01-21
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2015-01-20-SwiftNote-01/" data-title="Swift 笔记（1） - 基础">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#变量和常量"><span class="toc-text">变量和常量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#字符串"><span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数值类型"><span class="toc-text">数值类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#布尔类型"><span class="toc-text">布尔类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#元组（Tuples）"><span class="toc-text">元组（Tuples）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数组"><span class="toc-text">数组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字典"><span class="toc-text">字典</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流程控制"><span class="toc-text">流程控制</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#for-循环"><span class="toc-text">for 循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#while-循环"><span class="toc-text">while 循环</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#if-和-switch"><span class="toc-text">if 和 switch</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可选型（Optionals）"><span class="toc-text">可选型（Optionals）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#声明"><span class="toc-text">声明</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#获取"><span class="toc-text">获取</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#不需要获取方法的可选型变量声明"><span class="toc-text">不需要获取方法的可选型变量声明</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h3 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h3><p><code>var</code> 来修饰变量，<code>let</code> 修饰常量</p>
+<a id="more"></a>
+<p>Swift 采取类型推倒，在定义变量时如果已知变量的类型时不需要写类型。不过不用担心，Swift 是一门静态类型的语言，在编译的时候也做类型检察的。</p>
+<h4 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h4><p>用 <code>var</code> 定义的字符串都是可变的，类似于 Objective-C 中的 NSMutableString，但是比它好在可以直接采用 <code>+</code> 来连接字符串。</p>
+<p>如果你想让字符串不可更改，请定义成 <code>let</code></p>
+<p>Swift 中的字符串都是 value 类型的。当你把字符串赋值给变量或者当参数传入函数时，它的值会被拷贝。</p>
+<h4 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> r = <span class="number">10</span></span><br><span class="line"><span class="keyword">let</span> pi = <span class="number">3.14</span></span><br><span class="line"><span class="keyword">var</span> area = r * r * pi</span><br></pre></td></tr></table></figure>
+<p>这样做是不行的。Swift 中，所有的数字类型必须得是显示的转换。所以你得这么<br>干：</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> area = <span class="type">Double</span>(r) * <span class="type">Double</span>(r) * pi</span><br></pre></td></tr></table></figure>
+<p>这里是构造的新的 Double 类型变量，类似于 C 中的强制转换，真实的 r 还是 Int 类型的。</p>
+<h4 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h4><p>判断的条件只能够使用布尔类型，Swift 不会把大于0的值当做 true。</p>
+<h4 id="元组（Tuples）"><a href="#元组（Tuples）" class="headerlink" title="元组（Tuples）"></a>元组（Tuples）</h4><p>元组是一个可以包含多种类型的集合类型，所以定义元组的时候可以不需要指定类型(当然你可以指定类型)。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> tup = (<span class="string">"abc"</span>, <span class="number">123</span>, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>访问元组元素的时候可以这样：<code>tup.0</code></p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> dinner = (people: <span class="number">3</span>, place: <span class="string">"香格里拉"</span>)</span><br></pre></td></tr></table></figure>
+<p>这是为元组的元素起了名字，获取元素的时候就可以 <code>dinner.people</code> 这样了。</p>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><p>存储有序集合的类型</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">//定义一个数组：</span></span><br><span class="line"><span class="keyword">var</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="comment">//获取第二个元素</span></span><br><span class="line">array[<span class="number">1</span>]</span><br><span class="line"><span class="comment">//定义一个可以存储任何类型的数组</span></span><br><span class="line"><span class="keyword">var</span> awesomeArray: [<span class="type">AnyObject</span>] = [<span class="number">123</span>, <span class="number">1.231</span>, <span class="string">"asd"</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><p>字典是一个能够存储键值和值映射关系的集合。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">//定义一个字典</span></span><br><span class="line"><span class="keyword">var</span> dic = [<span class="number">1.5</span>: <span class="string">"One"</span>, <span class="number">2</span>: <span class="string">"Two"</span>]</span><br><span class="line"><span class="comment">//当然字典也可以规定存储的类型</span></span><br><span class="line"><span class="keyword">var</span> diction: [<span class="type">Int</span>:<span class="type">String</span>] = [<span class="number">1</span>: <span class="string">"One"</span>, <span class="number">2</span>: <span class="string">"Two"</span>]</span><br><span class="line"><span class="comment">//通过键值寻找值</span></span><br><span class="line">dic[<span class="number">1.5</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><h4 id="for-循环"><a href="#for-循环" class="headerlink" title="for 循环"></a>for 循环</h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span>...<span class="number">5</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>类似于 Python 中的 for-in 循环，1…5 表示一个范围，是 Range 类型的，前后都包括，所以循环5遍。</p>
+<p>当然也可以用 for-in 来遍历一个字符串。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">c</span> <span class="keyword">in</span> <span class="string">"Swift"</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="built_in">c</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h4><p>Swift 支持 while 和 do-while 循环。跟 C 中类似，知识语法稍有不同（少个括号）。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">100</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(i)</span><br><span class="line">    ++i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="if-和-switch"><a href="#if-和-switch" class="headerlink" title="if 和 switch"></a>if 和 switch</h4><p>if 没什么好说的，对于 switch 可以谈谈。<br>Swift 中的 switch 必须有 default ，还有 switch 不需要加 break。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> score = <span class="number">59</span></span><br><span class="line"><span class="keyword">switch</span> score &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>...<span class="number">59</span>:</span><br><span class="line">      <span class="built_in">println</span>(<span class="string">"Failed!"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="number">60</span>...<span class="number">100</span>:</span><br><span class="line">      <span class="built_in">println</span>(<span class="string">"Pass!"</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      printin(<span class="string">"NB!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="可选型（Optionals）"><a href="#可选型（Optionals）" class="headerlink" title="可选型（Optionals）"></a>可选型（Optionals）</h3><p>Swift 不允许在编译的时候定义未初始化的变量。如果你有一个 String 类型的变量，你在运行之前不知道它是什么，该怎么办呢？把它设置成 nil（<code>var str: String = nil</code>）? 同样，Swift 是不允许的，因为 nil 不是 String 类型的。这时候 optional 就派上用场了。<br>optional 的意思是，这个变量可能有值，也可能没有值。</p>
+<h5 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str1: <span class="type">String?</span></span><br><span class="line"><span class="keyword">var</span> str2: <span class="type">String?</span> = “<span class="type">This</span> <span class="keyword">is</span> <span class="type">Optional</span>”</span><br></pre></td></tr></table></figure>
+<p>这两种都可以。</p>
+<h5 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h5><p>当调用可选型变量的成员方法时，有两种方法：</p>
+<ol>
+<li>解包</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> unwrappedStr = str &#123;</span><br><span class="line">    <span class="comment">//str 有值的时候才会进入</span></span><br><span class="line">    <span class="built_in">println</span>(str.uppercaseString)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>弱制解包（自己起的。。。）</li>
+</ol>
+<p><code>str2 = str2?.uppercaseStrig</code></p>
+<p>当 <code>str2</code> 没有值的时候，这句话只会返回 nil，什么副作用也没有。有值的时候会返回 <code>Optional(str)</code></p>
+<ol start="3">
+<li>强制解包</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">str!.uppercaseStrig</span><br></pre></td></tr></table></figure>
+<p>这样做的话，如果 str 当前为 nil，则程序会崩溃。<br>如果你非得这么用，必须确保这个可选型变量有值。</p>
+<h5 id="不需要获取方法的可选型变量声明"><a href="#不需要获取方法的可选型变量声明" class="headerlink" title="不需要获取方法的可选型变量声明"></a>不需要获取方法的可选型变量声明</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var str: String!</span><br></pre></td></tr></table></figure>
+<p>定义的时候，把问号改成了叹号。获取的时候不再需要以上几种方法。但是注意，如果在获取的时候如果变量为 nil, 程序会崩溃。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2015-01-20-SwiftNote-01/">https://x140yu.github.io/2015-01-20-SwiftNote-01/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2015-01-22-SwiftNote-02/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Swift 笔记（2） - 类和结构体</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015-01-09_plansFor2015/">
+        <span class="next-text nav-default">2015 年的一些计划</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2015-01-20-SwiftNote-01/';
+        this.page.identifier = '2015-01-20-SwiftNote-01/';
+        this.page.title = 'Swift 笔记（1） - 基础';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

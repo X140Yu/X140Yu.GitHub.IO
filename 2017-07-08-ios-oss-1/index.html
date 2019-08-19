@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="在 Kickstarter-iOS 源码中学到的（一） - 工程相关">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-07-08-ios-oss-1/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 在 Kickstarter-iOS 源码中学到的（一） - 工程相关 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          在 Kickstarter-iOS 源码中学到的（一） - 工程相关
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-08
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-07-08-ios-oss-1/" data-title="在 Kickstarter-iOS 源码中学到的（一） - 工程相关">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#依赖管理"><span class="toc-text">依赖管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile"><span class="toc-text">Makefile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#几个方便的-Swift-脚本"><span class="toc-text">几个方便的 Swift 脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pull-request-流程"><span class="toc-text">Pull request 流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#丰富的测试"><span class="toc-text">丰富的测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#规范的-commit-message"><span class="toc-text">规范的 commit message</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>其实在 Kickstarter 刚开源他们客户端源码的时候，我就从 GitHub 的 trends 里看到了。作为一个实用主义者，悄悄点了个 star 就走掉了。</p>
+<p>后来在 <a href="objc.io">ObjC.io</a> 上的这个 <a href="https://talk.objc.io/episodes/S01E47-view-models-at-kickstarter" target="_blank" rel="noopener">talk</a> 里，我看到了 Kickstarter 的工程师 <a href="https://twitter.com/mbrandonw" target="_blank" rel="noopener">Brandon Williams</a> 介绍了他们在客户端中大量使用 ViewModel 的经历，而且在视频里用 ViewModel 重构了一段代码。当时我对 MVVM 比较迷，就抱着试试看的心态 <code>clone</code> 了一下他们的<a href="https://github.com/kickstarter/ios-oss" target="_blank" rel="noopener">客户端源码</a>，看过了之后我只想说，为什么我没有早点看它的代码！</p>
+<a id="more"></a>
+<h3 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h3><p>第一眼看到他们的代码，是使用的 <code>git submodule</code> 来管理依赖关系的。其实依赖的库并不是很多，所以这么管理也没有什么痛点。虽然比 Cocoapods 管理起来麻烦了一点，但是能对于依赖的东西有完整的把控能力，也算是一个优点吧。不过用 submodule 需要团队里的成员对 submodule 都有一定的了解，否则可能就会一团糟了。</p>
+<p>关于 git submodules, Cocoapods 和 Carthage 管理依赖关系的优劣<a href="https://medium.com/real-life-programming/carthage-vs-cocoapods-vs-git-submodules-9dc341ec6710" target="_blank" rel="noopener">这篇文章</a>里说得很清楚了，我就不再赘述了，适合自己的才是最好的。</p>
+<h3 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h3><p>看到 README 中的 Getting Started 中讲到，clone repo 之后，只要执行 <code>make bootstrap</code> 就可以安装工具和相关依赖了。</p>
+<p>不得不说这个思路很好，用 make 来管理和运行与项目相关的一些操作，如果加了一项与工程相关的操作比如 test、 build，直接在 make 里加一条对应的就好，清晰又直观。第一次拿到项目的人一眼就知道了所有的命令 <del>不用像我司的客户端一样，脚本飞得到处都是，想运行啥都得找半天</del></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">build: dependencies</span><br><span class="line">	$(XCODEBUILD) $(BUILD_FLAGS) $(XCPRETTY)</span><br><span class="line"></span><br><span class="line">test-all:</span><br><span class="line">	PLATFORM=iOS &quot;$(MAKE)&quot; test</span><br><span class="line">	PLATFORM=iOS TARGET=Library &quot;$(MAKE)&quot; test</span><br><span class="line"></span><br><span class="line">test: bootstrap</span><br><span class="line">	$(XCODEBUILD) test $(BUILD_FLAGS) $(XCPRETTY)</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	$(XCODEBUILD) clean $(BUILD_FLAGS) $(XCPRETTY)</span><br><span class="line"></span><br><span class="line">dependencies: submodules configs secrets opentok</span><br><span class="line"></span><br><span class="line">bootstrap: hooks dependencies</span><br><span class="line">	brew update || brew update</span><br><span class="line">	brew unlink swiftlint || true</span><br><span class="line">	brew install swiftlint</span><br><span class="line">	brew link --overwrite swiftlint</span><br><span class="line"></span><br><span class="line">submodules:</span><br><span class="line">	git submodule sync --recursive || true</span><br><span class="line">	git submodule update --init --recursive || true</span><br></pre></td></tr></table></figure>
+<h3 id="几个方便的-Swift-脚本"><a href="#几个方便的-Swift-脚本" class="headerlink" title="几个方便的 Swift 脚本"></a>几个方便的 Swift 脚本</h3><p>其实客户端的颜色和本地化字符串管理一向是开发中的痛点。而在他们的客户端中，我看到了两个 swift 文件，就是专门解决这个问题的。</p>
+<p>他们色表是一个 <code>Colors.json</code> 文件，放在一个 Design 的目录里，Design 里面还有他们全部设计的 Sketch 文件，不得不说很良心。有一个 <code>colors</code> 的 Swift 脚本，专门把色表 parse 成一个 <code>Colors.swift</code> 文件，调用者只需要 <code>UIColor.ksr_green_400</code> 就可以取到颜色了。这种色表管理颜色的方式应该值得每一个客户端的开发者学习。设计师负责管理色表，而脚本负责生成代码。和这样相比，直接在代码里写颜色的确不方便太多。</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UIColor</span> </span>&#123;</span><br><span class="line">  <span class="comment">/// 0x07565F</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">var</span> ksr_forest_600: <span class="type">UIColor</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> .hex(<span class="number">0x07565F</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再就是 <code>localizedString</code> 了，做过国际化的同学们一定都了解，iOS 的 <code>localizedString</code> 太难用了，难用到无法理解。而项目里的 <code>strings.swift</code> 就完美地解决了这件事情。它会 parse 工程中的 <code>Localizable.strings</code> 文件，生成对应的 <code>Strings.swift</code>，里面就有所有的本地化字符串方法，而且还有对应的提示。再也不怕本地化了！<del>其实知乎也做过类似的东西，只不过脚本不是用 Swift 写的</del></p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Strings</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   "About %&#123;reward_amount&#125;"</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">   - **es**: "Aprox. %&#123;reward_amount&#125;"</span></span><br><span class="line"><span class="comment">   - **de**: "Ungefähr %&#123;reward_amount&#125;"</span></span><br><span class="line"><span class="comment">   - **fr**: "Environ %&#123;reward_amount&#125;"</span></span><br><span class="line"><span class="comment">   - **en**: "About %&#123;reward_amount&#125;"</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">About_reward_amount</span><span class="params">(reward_amount: String)</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> localizedString(</span><br><span class="line">      key: <span class="string">"About_reward_amount"</span>,</span><br><span class="line">      defaultValue: <span class="string">"About %&#123;reward_amount&#125;"</span>,</span><br><span class="line">      <span class="built_in">count</span>: <span class="literal">nil</span>,</span><br><span class="line">      substitutions: [<span class="string">"reward_amount"</span>: reward_amount]</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Pull-request-流程"><a href="#Pull-request-流程" class="headerlink" title="Pull request 流程"></a>Pull request 流程</h3><p>在 push 代码之前，会有一个 git hook 来执行 swiftlint，来保证代码符合规范并且避免一些低级的错误。</p>
+<p>有代码就有测试是必须的 <del>这一点可以秒杀大多数做客户端的公司了吧</del></p>
+<p>在提每个 pull request 的时候，作者都需要说明做了什么，并且为什么这么做，这个 PR 改了哪里，截图大概长什么样子等等，可以参考一下<a href="https://github.com/kickstarter/ios-oss/pull/107" target="_blank" rel="noopener">这个</a>。</p>
+<p>而每个 reviewer 都会提出很多意见。</p>
+<h3 id="丰富的测试"><a href="#丰富的测试" class="headerlink" title="丰富的测试"></a>丰富的测试</h3><p>这里的测试不光指几乎完整覆盖的 Unit Test，还有几乎完整的 UI Test。</p>
+<p>项目中使用 <a href="https://github.com/facebook/ios-snapshot-test-case" target="_blank" rel="noopener">ios-snapshot-test-case</a> 来做 UI Test，它会将项目里大部分界面配合 mock 数据生成截图保存在 Screenshots 文件夹里。 每次提交 PR 之前，都要跑这些测试，一旦图片发生变化，PR 的 diff 里就会显示这些变化，reviewer 一眼就可以看得出你的代码到底改了哪里，真是非常方便。</p>
+<h3 id="规范的-commit-message"><a href="#规范的-commit-message" class="headerlink" title="规范的 commit message"></a>规范的 commit message</h3><p>几乎每一条 commit 都会带上一个 task 的 id，而且同一个 task 的多个 commit 在 merge 的时候会 squash，非常整洁。如果不知道怎么写 commit message 可以参考我的这一篇<a href="https://zhaoxinyu.me/2017-01-04-how-to-write-good-commit-message/" target="_blank" rel="noopener">博文</a></p>
+<p><img src="http://oo8znht6g.bkt.clouddn.com/20170708002521_8ZHaih_Screenshot.jpeg" alt></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章只是抛砖引玉，我可能只看到了这个客户端源码工程方面的冰山一角，还希望大家在有经历的情况下也去看看他们客户端的代码。其实工作经验的积累完全不需要换公司来解决。如果你有心，GitHub 上有大量的开源客户端源码，拿过来好好看一看，吸收一下，就好像吸收了一家公司的工作经验，多爽。</p>
+<p>在 Kickstarter 的开源代码之外，我还了解到，他们 native 组的工程师同时维护 Andriod 和 iOS 客户端的代码！这也是一般的公司都比不了的吧…… 随着对他们公司了解地越来越多，我也被 Brandon 圈粉，他不但推进了 ios-oss 的开源，让我看到这么优秀的客户端源码，而且他的很多分享也令我印象深刻。只可惜最近他从 Kickstarter 离职了，不过期待他给我们带来更多精彩！</p>
+<p>下篇关于 Kickstart iOS 的分析应该是在层次结构和代码方面 <del>希望自己不要太监</del></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-07-08-ios-oss-1/">https://x140yu.github.io/2017-07-08-ios-oss-1/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-07-09-ios-oss-2/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">在 Kickstarter-iOS 源码中学到的（二） - 代码</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-07-04-calayer-mask/">
+        <span class="next-text nav-default">用 CALayer.mask 实现边界的渐隐效果</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-07-08-ios-oss-1/';
+        this.page.identifier = '2017-07-08-ios-oss-1/';
+        this.page.title = '在 Kickstarter-iOS 源码中学到的（一） - 工程相关';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

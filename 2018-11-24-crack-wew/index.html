@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="手把手教你给企业微信 Mac 客户端去除水印">
+
+
+
+
+  <meta name="keywords" content="Objective-C, 逆向工程, lldb, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-11-24-crack-wew/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 手把手教你给企业微信 Mac 客户端去除水印 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          手把手教你给企业微信 Mac 客户端去除水印
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-11-24
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-11-24-crack-wew/" data-title="手把手教你给企业微信 Mac 客户端去除水印">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-起因"><span class="toc-text">0x01 起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-工具准备"><span class="toc-text">0x02 工具准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-寻找入口"><span class="toc-text">0x03 寻找入口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-制做-Framework"><span class="toc-text">0x04 制做 Framework</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-结尾"><span class="toc-text">0x05 结尾</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01 起因"></a>0x01 起因</h2><p>最近因为某些原因，公司准备把用了好多年的 Slack 换成企业微信。这其实是件挺正常的事情，公司在不停地发展，什么样的变化都有可能会发生。说不定公司在做大到一定程度以后，做自己的 IM 也不一定。</p>
+<p>但如果之前没有用过 Slack 还好，但在用过几年之后，就不免会把它与企业微信之间做一些对比。</p>
+<p>我喜欢 Slack 的 <a href="https://get.slack.help/hc/en-us/articles/115000769927-Message-and-file-threads" target="_blank" rel="noopener">Message and file threads</a>、 <a href="https://get.slack.help/hc/en-us/articles/206870317-Emoji-reactions" target="_blank" rel="noopener">Emoji reactions</a> 还有它便捷的 <a href="https://api.slack.com/" target="_blank" rel="noopener">API</a>，这几点企业微信都做的不太好，甚至没有。这还挺让人失望的。</p>
+<p>而且它的水印真的很魔性，在聊天界面很显眼。所以我决定用我仅有的一点点<del>逆向工程</del>破解知识，来把它的水印从聊天界面中去除。</p>
+<a id="more"></a>
+<h2 id="0x02-工具准备"><a href="#0x02-工具准备" class="headerlink" title="0x02 工具准备"></a>0x02 工具准备</h2><ul>
+<li><a href="https://www.hopperapp.com/" target="_blank" rel="noopener">Hopper Disassembler</a> demo version 的就可以，我们并不需要用到它的付费版功能</li>
+<li><a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="noopener">insert_dylib</a> 用于修改二进制，加入一个 <code>LC_LOAD_DYLIB</code> 的 <code>load command</code>，让最终的二进制在运行的时候，加载我们自己写的 framework 中的代码</li>
+<li>Xcode，创建 framework，编写代码</li>
+<li>企业微信，2.6.1 版本</li>
+</ul>
+<h2 id="0x03-寻找入口"><a href="#0x03-寻找入口" class="headerlink" title="0x03 寻找入口"></a>0x03 寻找入口</h2><blockquote>
+<p>我觉得客户端中的逆向工程或者说“破解”，最重要的是找到对应的方法，或者说入口，找到了以后，离成功也就只有一步之遥了。</p>
+</blockquote>
+<p>在安装完企业微信之后，把 <code>/Applications/企业微信.app/Contents/MacOS/企业微信</code> 这个二进制文件拖进 Hopper 里，待它分析完毕后，开始搜索与水印相关的方法。</p>
+<p>如果开发人员比较正常的话，那 99% 的概率搜索 <code>waterMark</code> 就可以找到我们想要的方法（那 1% 可能需要搜索 <code>shuiyin</code> 🙃），</p>
+<p><img src="https://s1.ax1x.com/2018/11/25/FkFsPO.png" width="500"></p>
+<p>There you go，有大量跟水印相关的方法。下面几个方法看起来都是通过返回的 <code>BOOL</code> 值来决定聊天界面是否需要显示水印，</p>
+<ul>
+<li><code>-[WEWConversation isConversationSupportWaterMark]</code></li>
+<li><code>+[WEWConversation isWaterMarkSupportConversation:]</code></li>
+<li><code>-[WEWConversationService isOpenConversationWaterMark]</code> (企业微信管理员的设置里应该有一键关闭水印之类的设置 🤔)</li>
+</ul>
+<blockquote>
+<p>在<del>逆向</del>破解的过程中实现同一个需求往往有多种途径，发散思维，路不只一条</p>
+</blockquote>
+<p>这里我们选择第一个方法，通过 Hopper 查看 Pseudo-code 可以得知，不同的 conversation 有不同的水印设置，比如文件传输助手还有一些机器人的聊天界面就没有水印，如果在这个方法里返回 NO，那所有的聊天界面就都应该没有水印了，</p>
+<p><img src="https://s1.ax1x.com/2018/11/25/FkFBa6.png" width="500"></p>
+<p>我们先在 lldb 中验证一下猜想，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建企业微信的调试 targer，准备调试，这一步并不会启动企业微信</span></span><br><span class="line">lldb -w /Applications/企业微信.app/Contents/MacOS/企业微信</span><br></pre></td></tr></table></figure>
+<p>进入 lldb 的调试模式，试试在这个方法下一个断点，结果 lldb 抱怨说找不到对应的方法，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) b -[WEWConversation isConversationSupportWaterMark]</span><br><span class="line">Breakpoint 1: no locations (pending).</span><br><span class="line">WARNING:  Unable to resolve breakpoint to any actual locations.</span><br></pre></td></tr></table></figure>
+<p>难道是我下断点的方式不对？断 <code>-[NSObject init]</code> 试一下，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) b -[NSObject init]</span><br><span class="line">Breakpoint 2: <span class="built_in">where</span> = libobjc.A.dylib`-[NSObject init], address = 0x000000000000b702</span><br></pre></td></tr></table></figure>
+<p>根据 log 得知，是能断成功的，这说明下断点的姿势没问题，出问题的可能是 lldb，也有可能是企业微信对最终的二进制做了手脚（这就触及我的知识盲区了，希望能有懂行的人出现给我解解惑 🤩</p>
+<p>所以我们只能通过断函数地址的方法来进行调试了，这需要先让程序启动起来。在此之前，把上面下的断点都删掉，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) breakpoint delete</span><br><span class="line">About to delete all breakpoints, <span class="keyword">do</span> you want to <span class="keyword">do</span> that?: [Y/n] Y</span><br><span class="line">All breakpoints removed. (2 breakpoints)</span><br></pre></td></tr></table></figure>
+<p>先启动应用程序，待应用运行起来后，在 lldb 调试界面，按 <code>CTRL + C</code> 让应用暂停下来，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) run</span><br><span class="line">... </span><br><span class="line">CTRL + C</span><br></pre></td></tr></table></figure>
+<p>通过 Hopper/class-dump/MachOView 可知，<code>-[WEWConversation isConversationSupportWaterMark]</code> 方法的地址是  <code>0x00000001017fb7e6</code>，所以我们在这个地址上下断点即可断到这个函数，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) b 0x00000001017fb7e6</span><br><span class="line">Breakpoint 3: <span class="built_in">where</span> = 企业微信`___lldb_unnamed_symbol145659$$企业微信, address = 0x00000001017fb7e6</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️ 在应用启动之前是不可以通过地址下断点的，因为在应用程序启动后，所有的地址会产生一个随机的 offset，在这之后 lldb 才能确定这个 offset 是多少，从而在正确的地址 break</p>
+</blockquote>
+<p>接着我们让应用程序继续运行，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) c</span><br></pre></td></tr></table></figure>
+<p>选中一个会出现水印的对话，这时应用程序会停下，看 lldb 的调试界面可以发现，应用成功断在某个方法上了，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">* thread <span class="comment">#1, queue = 'com.apple.main-thread', stop reason = breakpoint 3.1</span></span><br><span class="line">    frame <span class="comment">#0: 0x00000001017fb7e6 企业微信` ___lldb_unnamed_symbol145659$$企业微信 </span></span><br><span class="line">企业微信`___lldb_unnamed_symbol145659$$企业微信:</span><br><span class="line">-&gt;  0x1017fb7e6 &lt;+0&gt;:  push   rbp</span><br><span class="line">    0x1017fb7e7 &lt;+1&gt;:  mov    rbp, rsp</span><br><span class="line">    0x1017fb7ea &lt;+4&gt;:  push   r15</span><br><span class="line">    0x1017fb7ec &lt;+6&gt;:  push   r14</span><br><span class="line">    0x1017fb7ee &lt;+8&gt;:  push   rbx</span><br><span class="line">    0x1017fb7ef &lt;+9&gt;:  push   rax</span><br><span class="line">    0x1017fb7f0 &lt;+10&gt;: mov    r15, rdi</span><br><span class="line">    0x1017fb7f3 &lt;+13&gt;: mov    r14, qword ptr [rip + 0x16364a6] ; <span class="string">"conversationType"</span></span><br><span class="line">Target 0: (企业微信) stopped.</span><br></pre></td></tr></table></figure>
+<p>由于每一个 Objective-C 的方法调用都会变为一个 C 的方法调用 <code>objc_msgSend(obj, SEL, p1, ...)</code> 所以通过打印 <code>rdi</code> 还有 <code>rsi</code> 寄存器中的值就可以确定我们断的方法是不是我们想要的，</p>
+<blockquote>
+<p>x86_64 中的寄存器与函数参数的对应关系如下表，</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">arg1</th>
+<th style="text-align:center">arg2</th>
+<th style="text-align:center">arg3</th>
+<th style="text-align:center">arg4</th>
+<th style="text-align:center">arg5</th>
+<th style="text-align:center">arg6</th>
+<th style="text-align:center">argx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">RDI</td>
+<td style="text-align:center">RSI</td>
+<td style="text-align:center">RDX</td>
+<td style="text-align:center">RCX</td>
+<td style="text-align:center">R8</td>
+<td style="text-align:center">R9</td>
+<td style="text-align:center">R10+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) po <span class="variable">$rdi</span></span><br><span class="line">&lt;WEWConversation: 0x11f195a40&gt;</span><br><span class="line">(lldb) po (char *)<span class="variable">$rsi</span></span><br><span class="line"><span class="string">"isConversationSupportWaterMark"</span></span><br></pre></td></tr></table></figure>
+<p>没错，就是 <code>-[WEWConversation isConversationSupportWaterMark]</code></p>
+<p>现在我们让这个函数直接返回 <code>NO</code>，然后继续让程序运行，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) thread <span class="built_in">return</span> 0</span><br><span class="line">(lldb) c</span><br></pre></td></tr></table></figure>
+<p>现在再跳回企业微信，发现之前会出现水印的对话没有水印了，这说明我们的猜想是正确的 🥰</p>
+<h2 id="0x04-制做-Framework"><a href="#0x04-制做-Framework" class="headerlink" title="0x04 制做 Framework"></a>0x04 制做 Framework</h2><p>虽然可以通过 lldb 调试的方法去掉水印，可是这样太麻烦了，不可能以后每次都这么搞吧？如果能让应用程序每一次启动的时候，都执行我们加入的代码就好了。这一步可以通过 <a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="noopener">insert_dylib</a> 工具实现。它可以修改二进制文件，在其 dyld load commands 列表的最后加入我们需要 load 的 dylib/Framework 的 command。</p>
+<p>使用 Xcode 创建一个名为 WEWTweak 的 Cocoa Framework。</p>
+<p>因为需要使用 Method Swizzling 换掉上面函数的实现，但还懒得裸写这部分逻辑 ，那就使用 Pod 引入 <code>JRSwizzle</code> 吧 😌（注意 Podfile 中不要加 <code>use_framework!</code>）。</p>
+<blockquote>
+<p>加了 <code>use_framework!</code> 以后，每一个 pod target 都是一个 framework，这样需要处理很多的 framework，比较麻烦，我们希望所有 pod target 最终的符号都链接到 <code>WEWTweak.framework</code> 中，一个 framework 解决问题</p>
+</blockquote>
+<p>然后在 framework 中创建一个 <code>NSObject</code> 的 category <code>(WEWTweak)</code>，加入以下 ugly 的代码，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;JRSwizzle/JRSwizzle.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSObject</span> (<span class="title">WEWTweak</span>)</span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    [objc_getClass(<span class="string">"WEWConversation"</span>)</span><br><span class="line">     jr_swizzleMethod:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"isConversationSupportWaterMark"</span>)</span><br><span class="line">     withMethod:<span class="keyword">@selector</span>(wew_isConversationSupportWaterMark)</span><br><span class="line">     error:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">BOOL</span>)wew_isConversationSupportWaterMark &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>上面的方法交换的代码写在 <code>load</code> 或 <code>__attribute__((constructor))</code> 都可以</p>
+<blockquote>
+<p><code>__attribute__((constructor))</code> 是一个 clang 的 attribute，被标记的 C 方法会在 <code>+(void)load</code>  和 <code>main</code> 函数之间被执行。</p>
+</blockquote>
+<p>编译项目，把产物 <code>WEWTweak.framework</code> 还有 <a href="https://github.com/X140Yu/WEWTweak/blob/master/insert_dylib" target="_blank" rel="noopener">insert_dylib</a> 都拖到企业微信二进制的同级目录，然后进行下面的操作，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /Applications/企业微信.app/Contents/MacOS</span><br><span class="line">$ ls</span><br><span class="line">WEWTweak.framework insert_dylib       企业微信</span><br><span class="line"><span class="comment"># 给 insert_dylib 加一下可执行的权限</span></span><br><span class="line">$ chmod +x insert_dylib</span><br><span class="line"><span class="comment"># 备份一下二进制文件</span></span><br><span class="line">$ cp 企业微信 企业微信.bak</span><br><span class="line"><span class="comment"># 把制作好的 framework 通过 insert_dylib 植入二进制文件中</span></span><br><span class="line">$ ./insert_dylib /Applications/企业微信.app/Contents/MacOS/WEWTweak.framework/WEWTweak 企业微信 企业微信 --all-yes</span><br><span class="line"></span><br><span class="line">企业微信 already exists. Overwrite it? [y/n] y</span><br><span class="line">LC_CODE_SIGNATURE load <span class="built_in">command</span> found. Remove it? [y/n] y</span><br><span class="line">Added LC_LOAD_DYLIB to 企业微信</span><br></pre></td></tr></table></figure>
+<p>植入成功，启动下企业微信试试，</p>
+<p><img src="https://s1.ax1x.com/2018/11/25/FkFDIK.png" width="500"></p>
+<p>签名校验失败，interesting……</p>
+<p><img src="https://s1.ax1x.com/2018/11/25/FkF0Vx.jpg" width="200"></p>
+<blockquote>
+<p>之前我也曾逆向/破解过一些程序，校验二进制信息的还是头一回遇到。Good Job 企业微信团队！</p>
+</blockquote>
+<p>点击 OK，发现程序退出了。这说明程序中有 <code>exit</code> 调用，这是线索啊同学们，线索就是断点啊！</p>
+<p>退出之前的 lldb session，再开一个，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ lldb -w 企业微信</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 exit 上下断点</span></span><br><span class="line">(lldb) b <span class="built_in">exit</span></span><br><span class="line">Breakpoint 1: 3 locations.</span><br><span class="line"><span class="comment"># 启动程序</span></span><br><span class="line">(lldb) run</span><br></pre></td></tr></table></figure>
+<p>再次点击 OK 按钮，lldb 暂停了程序，通过 <code>bt</code> 打印调用栈，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">(lldb) bt</span><br><span class="line">* thread <span class="comment">#1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.3</span></span><br><span class="line"> * frame <span class="comment">#0: 0x00007fff5d4781a7  libsystem_c.dylib` exit </span></span><br><span class="line">  frame <span class="comment">#1: 0x00007fff2d9498bb  AppKit` -[NSApplication terminate:]  + 1755</span></span><br><span class="line">  frame <span class="comment">#2: 0x000000010055a82f  企业微信` ___lldb_unnamed_symbol29576$$企业微信  + 150</span></span><br><span class="line">  frame <span class="comment">#3: 0x00000001004eb8ce  企业微信` ___lldb_unnamed_symbol26847$$企业微信  + 1035</span></span><br><span class="line">  frame <span class="comment">#4: 0x000000010054f77b  企业微信` ___lldb_unnamed_symbol29391$$企业微信  + 54</span></span><br></pre></td></tr></table></figure>
+<p>通过调用栈中的函数地址信息配合 Hooper 的 Navigate -&gt; Go to Address or Symbol，可以确认调用栈长这样，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="meta">#0: -[NSApplication terminate:]</span></span><br><span class="line"><span class="meta">#1: +[WEWApplicationUtils terminate]</span></span><br><span class="line"><span class="meta">#2: -[WEWApplicationLifeCricleObserver applicationDidFinishLaunching]</span></span><br><span class="line"><span class="meta">#3: -[WEWApplicationDelegateWindowController applicationDidFinishLaunching:]</span></span><br></pre></td></tr></table></figure>
+<p><code>#2</code> 中的方法最有问题，通过 Hooper 的 Pseudo-code 对该方法的分析如下，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> -[WEWApplicationLifeCricleObserver applicationDidFinishLaunching](<span class="keyword">void</span> * <span class="keyword">self</span>, <span class="keyword">void</span> * _cmd) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    rbx = [[<span class="built_in">NSBundle</span> mainBundle] <span class="keyword">retain</span>];</span><br><span class="line">    r14 = [[rbx executablePath] <span class="keyword">retain</span>];</span><br><span class="line">    [rbx release];</span><br><span class="line">    r15 = [<span class="built_in">NSTemporaryDirectory</span>() <span class="keyword">retain</span>];</span><br><span class="line">    rbx = [[r15 stringByAppendingPathComponent:^ &#123; <span class="comment">/* block implemented at sub_1004ebb58 */</span> &#125;] <span class="keyword">retain</span>];</span><br><span class="line">    [r15 release];</span><br><span class="line">    rax = objc_retainAutorelease(r14);</span><br><span class="line">    var_50 = rax;</span><br><span class="line">    r15 = [rax UTF8String];</span><br><span class="line">    rax = objc_retainAutorelease(rbx);</span><br><span class="line">    var_48 = rax;</span><br><span class="line">    rbx = sub_100b16d72(r15, [rax UTF8String], <span class="string">@"tmp_exe"</span>);</span><br><span class="line">    r14 = sub_100b170c4();</span><br><span class="line">    <span class="comment">// some check...</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>大意就是，通过 <code>[NSBundle mainBundle] executablePath]</code> 来获取企业微信的二进制路径，然后把它复制一份到一个临时目录中，命名为 <code>tmp_exe</code> 然后对此文件进行一些 check 来确认这份二进制是否被修改过。</p>
+<p>解决这个问题的方法还是有很多种，可以选择 hook 下面那些 check 的 C 方法，或者让这个方法运行一半就返回。我选择的方式是修改 <code>[NSBundle mainBundle] executablePath]</code> 方法的返回值，反正我们都要备份最终的二进制，那干脆让这个方法指向备份的文件好了 😌</p>
+<p>修改 framework 中的分类文件，如下所示，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">&lt;JRSwizzle/JRSwizzle.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSObject</span> (<span class="title">WEWTweak</span>)</span></span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    [objc_getClass(<span class="string">"WEWConversation"</span>)</span><br><span class="line">     jr_swizzleMethod:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"isConversationSupportWaterMark"</span>)</span><br><span class="line">     withMethod:<span class="keyword">@selector</span>(wew_isConversationSupportWaterMark)</span><br><span class="line">     error:<span class="literal">nil</span>];</span><br><span class="line"></span><br><span class="line">    [<span class="built_in">NSBundle</span> jr_swizzleMethod:<span class="keyword">@selector</span>(executablePath)</span><br><span class="line">                    withMethod:<span class="keyword">@selector</span>(wew_executablePath)</span><br><span class="line">                         error:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">NSString</span> *)wew_executablePath &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">@"/Applications/企业微信.app/Contents/MacOS/企业微信.bak"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">BOOL</span>)wew_isConversationSupportWaterMark &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>再编译一次程序，把 <code>WEWTweak.framework</code> 拖入 <code>/Applications/企业微信.app/Contents/MacOS/</code> 覆盖，然后再执行一次下面的代码，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ ./insert_dylib /Applications/企业微信.app/Contents/MacOS/WEWTweak.framework/WEWTweak 企业微信 企业微信 --all-yes</span><br></pre></td></tr></table></figure>
+<p>启动企业微信，水印不见了 🎉</p>
+<h2 id="0x05-结尾"><a href="#0x05-结尾" class="headerlink" title="0x05 结尾"></a>0x05 结尾</h2><p>感谢 <a href="https://github.com/Sunnyyoung/WeChatTweak-macOS" target="_blank" rel="noopener">Sunnyyoung/WeChatTweak-macOS</a> 项目，我在其中抄了好几段代码 🌸</p>
+<p>本文的完整代码见这里 <a href="https://github.com/X140Yu/WEWTweak" target="_blank" rel="noopener">X140Yu/WEWTweak</a>，如果本文或者这个库对你有帮助，欢迎 star 哦 🌟</p>
+<p>如果你发现文章中有任何写得不对的地方，或者有任何想法，都欢迎在评论区里跟我交流 🙆‍♂️</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-11-24-crack-wew/">https://x140yu.github.io/2018-11-24-crack-wew/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Objective-C/">Objective-C</a>
+            
+              <a href="/tags/逆向工程/">逆向工程</a>
+            
+              <a href="/tags/lldb/">lldb</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">2𝟢18</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-11-02-KeyPath/">
+        <span class="next-text nav-default">KeyPath in iOS</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-11-24-crack-wew/';
+        this.page.identifier = '2018-11-24-crack-wew/';
+        this.page.title = '手把手教你给企业微信 Mac 客户端去除水印';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

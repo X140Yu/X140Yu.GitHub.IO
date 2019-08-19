@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="记一次团队的内部分享 - FRP in Swift">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, FRP, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-05-25-frp-in-swift-basic/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 记一次团队的内部分享 - FRP in Swift - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          记一次团队的内部分享 - FRP in Swift
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-05-26
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-05-25-frp-in-swift-basic/" data-title="记一次团队的内部分享 - FRP in Swift">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Functional-Reactive-Programming-in-Swift"><span class="toc-text">Functional Reactive Programming in Swift</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What"><span class="toc-text">What?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Functional-Programming"><span class="toc-text">Functional Programming</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#First-class-function"><span class="toc-text">First-class function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Higher-order-function"><span class="toc-text">Higher-order function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Pure-function"><span class="toc-text">Pure function</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Example"><span class="toc-text">Example</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reactive-Programming"><span class="toc-text">Reactive Programming</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Asynchronous-Data-Streams"><span class="toc-text">Asynchronous Data Streams</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Functional-Reactive"><span class="toc-text">Functional + Reactive</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Stream"><span class="toc-text">Stream</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Transformation"><span class="toc-text">Transformation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Binding"><span class="toc-text">Binding</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#in-Swift"><span class="toc-text">in Swift!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Why"><span class="toc-text">Why</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Good"><span class="toc-text">Good</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bad"><span class="toc-text">Bad</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How"><span class="toc-text">How</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Unserstand-the-basic-reactive-unit"><span class="toc-text">Unserstand the basic reactive unit</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Observable"><span class="toc-text">Observable</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Subscriber"><span class="toc-text">Subscriber</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Integrate-a-reactive-programming-library"><span class="toc-text">Integrate a reactive programming library</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Credits"><span class="toc-text">Credits</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>这是 2017/05/26 我在知乎 iOS 团队内部做的一次分享</p>
+</blockquote>
+<p>第一次做技术分享，最大的问题还是出在准备上。确定了分享的时间，但是到底要讲些什么内容内心却一直没有一个准确的范围，结果就是到了前一天还是往里面加东西，前一刻还在修改 Kyenote。分享的时候因为有很多写代码的环节，所以一开始有些小紧张，手还发抖，不过到后来慢慢好起来了。本来想把实况录屏全程记录下来的，但是因为 Ariplay 的录屏貌似有些小问题，为了不耽误大家时间，我就直接放弃了，还是有些小遗憾。</p>
+<a id="more"></a>
+<p>以下是 Keynote 和分享的主要内容</p>
+<script async class="speakerdeck-embed" data-slide="1" data-id="69a9cff70bc74577a78194958fe41a33" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+<h1 id="Functional-Reactive-Programming-in-Swift"><a href="#Functional-Reactive-Programming-in-Swift" class="headerlink" title="Functional Reactive Programming in Swift"></a>Functional Reactive Programming in Swift</h1><h2 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h2><h3 id="Functional-Programming"><a href="#Functional-Programming" class="headerlink" title="Functional Programming"></a>Functional Programming</h3><h4 id="First-class-function"><a href="#First-class-function" class="headerlink" title="First-class function"></a>First-class function</h4><p>Treats functions as first-class citizens</p>
+<h4 id="Higher-order-function"><a href="#Higher-order-function" class="headerlink" title="Higher-order function"></a>Higher-order function</h4><p>A function that does at least one of the following:</p>
+<ul>
+<li>takes one or more functions as arguments </li>
+<li>returns a function as its result</li>
+</ul>
+<h4 id="Pure-function"><a href="#Pure-function" class="headerlink" title="Pure function"></a>Pure function</h4><p>Function which has no side-effects</p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">// pure function</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">addTen</span><span class="params">(<span class="number">_</span> a: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a + <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// higher order function</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">twice</span><span class="params">(<span class="number">_</span> f: @escaping <span class="params">(Int)</span></span></span> -&gt; (<span class="type">Int</span>)) -&gt; (<span class="type">Int</span>) -&gt; (<span class="type">Int</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        f(f($<span class="number">0</span>))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// first-class citizen</span></span><br><span class="line"><span class="keyword">let</span> addTenTwice = twice(addTen)</span><br><span class="line">addTenTwice(<span class="number">10</span>) <span class="comment">//30</span></span><br><span class="line"><span class="keyword">let</span> addTenFourTimes = twice(addTenTwice)</span><br><span class="line">addTenFourTimes(<span class="number">10</span>) <span class="comment">//50</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// a little more harder</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">multiplyBySelf</span><span class="params">(<span class="number">_</span> a: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a * a</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> g = twice(multiplyBySelf)</span><br><span class="line">g(<span class="number">3</span>) <span class="comment">// 81</span></span><br><span class="line">twice(g)(<span class="number">3</span>) <span class="comment">// 43046721</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">3</span> * <span class="number">3</span> <span class="comment">//9</span></span><br><span class="line"><span class="keyword">let</span> b = a * a <span class="comment">//81</span></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">c</span> = b * b <span class="comment">//6561</span></span><br><span class="line"><span class="keyword">let</span> d = <span class="built_in">c</span> * <span class="built_in">c</span> <span class="comment">//43046721</span></span><br></pre></td></tr></table></figure>
+<h3 id="Reactive-Programming"><a href="#Reactive-Programming" class="headerlink" title="Reactive Programming"></a>Reactive Programming</h3><h4 id="Asynchronous-Data-Streams"><a href="#Asynchronous-Data-Streams" class="headerlink" title="Asynchronous Data Streams"></a>Asynchronous Data Streams</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--a---b-c---d---X---|-&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>A stream is a sequence of ongoing events ordered in time</li>
+<li>Everything can be a stream<ul>
+<li>touch event</li>
+<li>KVO</li>
+<li>Notification</li>
+<li>callback</li>
+<li>Network response</li>
+<li>timer</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<h3 id="Functional-Reactive"><a href="#Functional-Reactive" class="headerlink" title="Functional + Reactive"></a>Functional + Reactive</h3><h4 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h4><ul>
+<li>Like an Array, it can hold anything</li>
+<li>Unlike an Array, you can’t access it anytime you want, instread, you get notified when it’s value get changed</li>
+<li>Like a pipe, if you missed the thing through it, it’s gone forever</li>
+</ul>
+<h4 id="Transformation"><a href="#Transformation" class="headerlink" title="Transformation"></a>Transformation</h4><ul>
+<li>Change a stream to another stream, just like change a sequence to another</li>
+<li>Higher-order functions, map, filter, reduce, flatMap, etc</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> reviewers = [<span class="string">"kimi"</span>, <span class="string">"qfu"</span>, <span class="string">"dhc"</span>, <span class="string">"x"</span>, <span class="string">"gaoji"</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// implement our own trnasformation functions</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">xy_map</span>&lt;T&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; [<span class="type">T</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> result: [<span class="type">T</span>] = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">            result.append(transform(i))</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">xy_filter</span><span class="params">(<span class="number">_</span> condition: <span class="params">(Element)</span></span></span> -&gt; <span class="type">Bool</span>) -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> result: [<span class="type">Element</span>] = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> condition(i) &#123;</span><br><span class="line">                result.append(i)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">xy_reduce</span>&lt;T&gt;<span class="params">(<span class="number">_</span> initialValue: T, <span class="number">_</span> combine: <span class="params">(T, Element)</span></span></span> -&gt; <span class="type">T</span>) -&gt; <span class="type">T</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> value = initialValue</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">            value = combine(value, i)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reviewers.xy_map &#123;</span><br><span class="line">    $<span class="number">0</span>.uppercased()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">reviewers.xy_filter &#123;</span><br><span class="line">    $<span class="number">0</span>.characters.<span class="built_in">count</span> &gt; <span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// chain transformations</span></span><br><span class="line">reviewers</span><br><span class="line">    .xy_filter &#123; $<span class="number">0</span>.characters.<span class="built_in">count</span> &gt; <span class="number">3</span> &#125;</span><br><span class="line">    .xy_reduce(<span class="string">""</span>) &#123; <span class="keyword">return</span> $<span class="number">0</span> + <span class="string">"\($1) review my code please~\n"</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// the original value hasn't been changed</span></span><br><span class="line">reviewers</span><br><span class="line"></span><br><span class="line"><span class="comment">// a little bit about flatMap</span></span><br><span class="line"><span class="keyword">let</span> xxs = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>], [<span class="number">5</span>, <span class="number">6</span>]]</span><br><span class="line"><span class="keyword">let</span> xso = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="literal">nil</span>, <span class="number">5</span>]</span><br><span class="line"><span class="comment">// flatMap has 2 signature</span></span><br><span class="line">xxs.flatMap &#123; arr <span class="keyword">in</span></span><br><span class="line">    arr.<span class="built_in">map</span> &#123;$<span class="number">0</span>&#125;</span><br><span class="line">&#125; <span class="comment">// [1, 2, 3, 4, 5, 6]</span></span><br><span class="line">xso.flatMap &#123;</span><br><span class="line">    $<span class="number">0</span></span><br><span class="line">&#125; <span class="comment">// [1, 2, 3, 5]</span></span><br></pre></td></tr></table></figure>
+<h4 id="Binding"><a href="#Binding" class="headerlink" title="Binding"></a>Binding</h4><p>Binding makes program more reactive</p>
+<h3 id="in-Swift"><a href="#in-Swift" class="headerlink" title="in Swift!"></a>in Swift!</h3><ul>
+<li>Functional language</li>
+<li>Compiler &amp; strong typed</li>
+</ul>
+<p>Functional + Reactive + Swift, write awesome program!</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><h3 id="Good"><a href="#Good" class="headerlink" title="Good"></a>Good</h3><ul>
+<li>Improve productivity</li>
+<li>Less and more centralised code</li>
+<li>Easy to maintain</li>
+<li>Avoid complexity with mutable state growing over time</li>
+<li>Change the way you think when coding</li>
+</ul>
+<h3 id="Bad"><a href="#Bad" class="headerlink" title="Bad"></a>Bad</h3><ul>
+<li>Learning curve is steep, but not that steep</li>
+<li>Hard to debug</li>
+</ul>
+<p>The benefits it brings are worth we give it a try</p>
+<h2 id="How"><a href="#How" class="headerlink" title="How"></a>How</h2><h3 id="Unserstand-the-basic-reactive-unit"><a href="#Unserstand-the-basic-reactive-unit" class="headerlink" title="Unserstand the basic reactive unit"></a>Unserstand the basic reactive unit</h3><h4 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h4><p>It send messages</p>
+<h4 id="Subscriber"><a href="#Subscriber" class="headerlink" title="Subscriber"></a>Subscriber</h4><p>It consume messages</p>
+<p>Observables are like <code>Sequence</code>,</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Observables are like Sequence</span></span><br><span class="line"><span class="keyword">let</span> xs = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// iterate a sequence</span></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> xs &#123;</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// the operation above equals</span></span><br><span class="line"><span class="keyword">var</span> xsIte = xs.makeIterator()</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">let</span> x = xsIte.next() &#123;</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// we can use Sequence feature to make a CountDown</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CountDown</span>: <span class="title">Sequence</span>, <span class="title">IteratorProtocol</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> num: <span class="type">Int</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> notify: (<span class="type">Int?</span>) -&gt; ()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">mutating</span> <span class="function"><span class="keyword">func</span> <span class="title">next</span><span class="params">()</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">        notify(num)</span><br><span class="line">        <span class="keyword">if</span> num == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">defer</span> &#123;</span><br><span class="line">            num -= <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ite = <span class="type">CountDown</span>(num: <span class="number">10</span>) &#123;</span><br><span class="line">        <span class="comment">// as a subscriber, we are consuming messages</span></span><br><span class="line">        <span class="built_in">print</span>($<span class="number">0</span>)</span><br><span class="line">    &#125;.makeIterator()</span><br><span class="line"></span><br><span class="line"><span class="comment">// now it's kind like a stream</span></span><br><span class="line"><span class="comment">// once next() called, it'll print the latest value, it's reactive now</span></span><br><span class="line">ite.next() <span class="comment">//10</span></span><br><span class="line">ite.next() <span class="comment">//9</span></span><br><span class="line">ite.next() <span class="comment">//8</span></span><br></pre></td></tr></table></figure>
+<p>How can we make our own Observable/Subscriber pattern?</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">KeyValueObserver</span>&lt;<span class="title">A</span>&gt;: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> block: (<span class="type">A</span>) -&gt; ()</span><br><span class="line">    <span class="keyword">let</span> keyPath: <span class="type">String</span></span><br><span class="line">    <span class="keyword">let</span> object: <span class="type">NSObject</span></span><br><span class="line">    <span class="keyword">init</span>(object: <span class="type">NSObject</span>, keyPath: <span class="type">String</span>, <span class="number">_</span> block: @escaping (<span class="type">A</span>) -&gt; ()) &#123;</span><br><span class="line">        <span class="keyword">self</span>.block = block</span><br><span class="line">        <span class="keyword">self</span>.keyPath = keyPath</span><br><span class="line">        <span class="keyword">self</span>.object = object</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</span><br><span class="line">        object.addObserver(<span class="keyword">self</span>, forKeyPath: keyPath, options: .new, context: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">deinit</span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"deinit"</span>)</span><br><span class="line">        object.removeObserver(<span class="keyword">self</span>, forKeyPath: keyPath)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">observeValue</span><span class="params">(forKeyPath keyPath: String?, of object: <span class="keyword">Any</span>?, change: [NSKeyValueChangeKey : <span class="keyword">Any</span>]?, context: UnsafeMutableRawPointer?)</span></span> &#123;</span><br><span class="line">        block(change![.newKey] <span class="keyword">as</span>! <span class="type">A</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observable</span>&lt;<span class="title">A</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> callbacks: [(<span class="type">A</span>) -&gt; ()] = []</span><br><span class="line">    <span class="keyword">var</span> objects: [<span class="type">Any</span>] = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">pipe</span><span class="params">()</span></span> -&gt; ((<span class="type">A</span>) -&gt; (), <span class="type">Observable</span>&lt;<span class="type">A</span>&gt;) &#123;</span><br><span class="line">        <span class="keyword">let</span> observable = <span class="type">Observable</span>&lt;<span class="type">A</span>&gt;()</span><br><span class="line">        <span class="keyword">return</span> (&#123; [<span class="keyword">weak</span> observable] value <span class="keyword">in</span></span><br><span class="line">            observable?.send(value)&#125;, observable</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">send</span><span class="params">(<span class="number">_</span> value: A)</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> callback <span class="keyword">in</span> callbacks &#123;</span><br><span class="line">            callback(value)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">subscribe</span><span class="params">(callback: @escaping <span class="params">(A)</span></span></span> -&gt; ()) &#123;</span><br><span class="line">        callbacks.append(callback)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">UITextField</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">observable</span><span class="params">()</span></span> -&gt; <span class="type">Observable</span>&lt;<span class="type">String</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">let</span> (sink, observable) = <span class="type">Observable</span>&lt;<span class="type">String</span>&gt;.pipe()</span><br><span class="line">        <span class="keyword">let</span> observer = <span class="type">KeyValueObserver</span>(object: <span class="keyword">self</span>, keyPath: #keyPath(text)) &#123;</span><br><span class="line">            sink($<span class="number">0</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        observable.objects.append(observer)</span><br><span class="line">        <span class="keyword">return</span> observable</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> textField: <span class="type">UITextField?</span> = <span class="type">UITextField</span>()</span><br><span class="line"></span><br><span class="line">textField?.text = <span class="string">"asd"</span></span><br><span class="line"><span class="keyword">var</span> observable = textField?.observable()</span><br><span class="line">    </span><br><span class="line">observable!.subscribe &#123;</span><br><span class="line">    <span class="built_in">print</span>($<span class="number">0</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">textField?.text = <span class="string">"asdjlas"</span></span><br><span class="line">textField?.text = <span class="string">"asdjk"</span></span><br><span class="line">textField = <span class="literal">nil</span></span><br><span class="line">observable = <span class="literal">nil</span></span><br></pre></td></tr></table></figure>
+<h3 id="Integrate-a-reactive-programming-library"><a href="#Integrate-a-reactive-programming-library" class="headerlink" title="Integrate a reactive programming library"></a>Integrate a reactive programming library</h3><ul>
+<li>ReactiveSwift</li>
+<li>ReactiveKit</li>
+<li>RxSwift</li>
+</ul>
+<p>Neither can goes wrong, but I prefer RxSwift because,</p>
+<ul>
+<li>It’s a <a href="http://reactivex.io/" target="_blank" rel="noopener">ReactiveX</a> official Swift implementation which means<ul>
+<li>Developer won’t give it up (Maybe?)</li>
+<li>You can easily switch to other platform</li>
+</ul>
+</li>
+<li>It has a greate <a href="https://github.com/RxSwiftCommunity" target="_blank" rel="noopener">community</a></li>
+</ul>
+<h2 id="Credits"><a href="#Credits" class="headerlink" title="Credits"></a>Credits</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/Higher-order_function#Swift" target="_blank" rel="noopener">wiki/Higher-order function</a></li>
+<li><a href="https://news.realm.io/news/altconf-ash-furrow-functional-reactive-swift/" target="_blank" rel="noopener">Functional Reactive Awesomeness with Swift</a></li>
+<li><a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754" target="_blank" rel="noopener">The introduction to Reactive Programming you’ve been missing</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-05-25-frp-in-swift-basic/">https://x140yu.github.io/2017-05-25-frp-in-swift-basic/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+              <a href="/tags/FRP/">FRP</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-07-04-calayer-mask/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">用 CALayer.mask 实现边界的渐隐效果</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-04-14-swift-syntax-cheat-code/">
+        <span class="next-text nav-default"><译> Swift 代码小抄</译></span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-05-25-frp-in-swift-basic/';
+        this.page.identifier = '2017-05-25-frp-in-swift-basic/';
+        this.page.title = '记一次团队的内部分享 - FRP in Swift';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

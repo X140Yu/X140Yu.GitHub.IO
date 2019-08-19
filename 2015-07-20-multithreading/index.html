@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="iOS 多线程学习笔记">
+
+
+
+
+  <meta name="keywords" content="iOS, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2015-07-20-multithreading/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> iOS 多线程学习笔记 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          iOS 多线程学习笔记
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-07-20
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2015-07-20-multithreading/" data-title="iOS 多线程学习笔记">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程和线程"><span class="toc-text">进程和线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程"><span class="toc-text">多线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优缺点"><span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程在-iOS-开发中的应用"><span class="toc-text">多线程在 iOS 开发中的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主线程"><span class="toc-text">主线程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程实现方案"><span class="toc-text">多线程实现方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用-NSThread"><span class="toc-text">使用 NSThread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GCD"><span class="toc-text">GCD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#任务"><span class="toc-text">任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#队列"><span class="toc-text">队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GCD-中的几个函数"><span class="toc-text">GCD 中的几个函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程的安全隐患"><span class="toc-text">多线程的安全隐患</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#互斥锁"><span class="toc-text">互斥锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程间的通信"><span class="toc-text">线程间的通信</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p>进程是指正在运行的一个应用程序实例。每个进程都是独立的，运行在受保护的内存空间里面。</p>
+<p>一个进程想执行任务，必须要至少有一个线程。线程是进程的基本执行单元。</p>
+<a id="more"></a>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>一个进程里开启多条线程，每条线程并发执行不同的任务。多线程可以提高程序的运行效率。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>同一时间，CPU 只能处理一条线程，多线程是 CPU 不停地各个线程间切换造成的假象。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
+<ul>
+<li>提高程序的执行效率</li>
+<li>提高资源的利用率（CPU，内存利用率）</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><p>开启线程需要占用内存空间，开启大量线程会降低程序的性能</p>
+</li>
+<li><p>线程越多，CPU 在线程切换的开销越大</p>
+</li>
+<li><p>程序设计更加复杂（线程间通信）</p>
+</li>
+</ul>
+<h2 id="多线程在-iOS-开发中的应用"><a href="#多线程在-iOS-开发中的应用" class="headerlink" title="多线程在 iOS 开发中的应用"></a>多线程在 iOS 开发中的应用</h2><h3 id="主线程"><a href="#主线程" class="headerlink" title="主线程"></a>主线程</h3><p>程序运行后，默认会开启一条线程（UI 线程）。</p>
+<p>作用是，显示、刷新 UI 界面，处理 UI 事件。</p>
+<p>不要将比较耗时的操作放到主线程中。</p>
+<h2 id="多线程实现方案"><a href="#多线程实现方案" class="headerlink" title="多线程实现方案"></a>多线程实现方案</h2><table>
+<thead>
+<tr>
+<th>name</th>
+<th>简介</th>
+<th>语言</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pthread</td>
+<td>基于 UNIX，跨平台</td>
+<td>C</td>
+<td>程序员管理</td>
+</tr>
+<tr>
+<td>NSThread</td>
+<td>可直接操作线程对象</td>
+<td>Objective-C</td>
+<td>程序员管理</td>
+</tr>
+<tr>
+<td>GCD</td>
+<td>替代 NSThread，充分利用设备的核心</td>
+<td>C</td>
+<td>系统管理</td>
+</tr>
+<tr>
+<td>NSOperation</td>
+<td>基于 GCD，更加面向对象</td>
+<td>Objective-C</td>
+<td>系统管理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-NSThread"><a href="#使用-NSThread" class="headerlink" title="使用 NSThread"></a>使用 NSThread</h3><ul>
+<li>一个 NSThread 对象就代表一条线程</li>
+<li>线程函数结束以后就代表线程生命周期终结，不能再次启动线程，而是得创建新的线程</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建线程</span></span><br><span class="line"><span class="built_in">NSThread</span> *thread = [[<span class="built_in">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(threadFunction) object:<span class="literal">nil</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动线程</span></span><br><span class="line">[thread start];</span><br></pre></td></tr></table></figure>
+<h3 id="GCD"><a href="#GCD" class="headerlink" title="GCD"></a>GCD</h3><p>GCD 的全称是 Grand Central Dispatch，对于这种专业词汇就不要翻译成「大神经中枢派发」了，就了解它是一种多线程技术就好了。<br>GCD 有两个关键概念：<br>GCD 的使用就是创建任务，接着把任务添加到队列就好了。</p>
+<h4 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h4><p>执行的操作</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用同步的方式执行，在当前线程执行</span></span><br><span class="line"><span class="keyword">void</span> <span class="built_in">dispatch_sync</span> ( <span class="built_in">dispatch_queue_t</span> queue, dispatch_block_t block );</span><br><span class="line"><span class="comment">// 异步</span></span><br><span class="line"><span class="keyword">void</span> <span class="built_in">dispatch_async</span> ( <span class="built_in">dispatch_queue_t</span> queue, dispatch_block_t block );</span><br></pre></td></tr></table></figure>
+<h4 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h4><p>用来存放任务</p>
+<ul>
+<li>串行队列：这个队列的所有任务都是按顺序进行的</li>
+<li>并发队列：所有任务都是同时进行的，线程的创建交由操作系统进行    <ul>
+<li>获得全局并发队列：<code>dispatch_queue_t dispatch_get_global_queue ( long identifier, unsigned long flags );</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="GCD-中的几个函数"><a href="#GCD-中的几个函数" class="headerlink" title="GCD 中的几个函数"></a>GCD 中的几个函数</h4><figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 延时执行</span></span><br><span class="line">dispatch_after</span><br><span class="line"><span class="comment">// 只执行一次</span></span><br><span class="line"><span class="built_in">dispatch_once</span></span><br><span class="line">```    </span><br><span class="line"></span><br><span class="line"><span class="meta">#### GCD 中的队列组</span></span><br><span class="line">队列组是把任务都放进一个组里，当组里所有的任务都被处理完毕以后，会通知</span><br><span class="line"></span><br><span class="line">```objc</span><br><span class="line"><span class="comment">// 创建组</span></span><br><span class="line">dispatch_group_t group = dispatch_group_create();</span><br><span class="line"><span class="comment">// 获取全局队列</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 进行耗时操作</span></span><br><span class="line">dispatch_group_async(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 进行耗时操作</span></span><br><span class="line">dispatch_group_async(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 前两个任务都结束以后，会调用这个 block</span></span><br><span class="line">dispatch_group_notify(group, queue, ^&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="多线程的安全隐患"><a href="#多线程的安全隐患" class="headerlink" title="多线程的安全隐患"></a>多线程的安全隐患</h2><p>多个线程访问同一块资源（对象，变量，文件等）。</p>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@synchronized</span>(<span class="keyword">self</span>) &#123;</span><br><span class="line">      <span class="comment">// 加锁区域</span></span><br><span class="line">     <span class="comment">// 小括号里面放的是锁的对象，通常传 self 就可以（代表同一把锁）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ul>
+<li>能解决线程安全问题<br>缺点：</li>
+<li>消耗大量 CPU 资源<h2 id="线程间的通信"><a href="#线程间的通信" class="headerlink" title="线程间的通信"></a>线程间的通信</h2>在一个线程执行下载内容，但是需要把下载好的东西更新到 UI 上，这时候需要在线程之间传递东西。<br>不可以在子线程执行更新 UI 的操作，因为主线程也会对 UI 操作，这样会发生问题的。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 回到主线程操作，是 NSObject 的方法，任意控件都可以执行这种操作</span></span><br><span class="line">- (<span class="keyword">void</span>)performSelectorOnMainThread:(SEL)aSelector withObject:(<span class="keyword">id</span>)arg waitUntilDone:(<span class="built_in">BOOL</span>)wait</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 GCD，在子线程的 BLOCK 中，再调用 dispatch_async 回到主线程更新 UI</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2015-07-20-multithreading/">https://x140yu.github.io/2015-07-20-multithreading/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2015-07-30-develop-husthelper/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">开发「理工助手」那些事儿</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015-06-16-trip-to-dalian/">
+        <span class="next-text nav-default">大连旅游指北</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2015-07-20-multithreading/';
+        this.page.identifier = '2015-07-20-multithreading/';
+        this.page.title = 'iOS 多线程学习笔记';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

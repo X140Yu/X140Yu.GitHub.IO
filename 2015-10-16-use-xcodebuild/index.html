@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 xcodebuild">
+
+
+
+
+  <meta name="keywords" content="iOS, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2015-10-16-use-xcodebuild/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 xcodebuild - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 xcodebuild
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-10-16
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2015-10-16-use-xcodebuild/" data-title="使用 xcodebuild">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#xcodebuild-是什么？"><span class="toc-text">xcodebuild 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-xcodebuild"><span class="toc-text">使用 xcodebuild</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Build"><span class="toc-text">Build</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Archive"><span class="toc-text">Archive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Export"><span class="toc-text">Export</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Test"><span class="toc-text">Test</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#我能用-xcodebuild-做什么？"><span class="toc-text">我能用 xcodebuild 做什么？</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="xcodebuild-是什么？"><a href="#xcodebuild-是什么？" class="headerlink" title="xcodebuild 是什么？"></a>xcodebuild 是什么？</h2><p>根据 OS X Man Pages：xcodebuild 可以编译在一个 Xcode project 里的一个或多个 targets，或者编译 Xcode workspace 或 Xcode project 内的一个 scheme。</p>
+<a id="more"></a>
+<p>说白了，就是 Apple 提供的一个命令行工具，可以在没有图形界面的情况下编译程序。</p>
+<p>有的同学可能会有疑问，我平时在 Xcode 上一按 <code>command + b</code> 程序就可以编译了啊， 用 xcodebuild 这个程序做什么？这个问题问得不错。</p>
+<p>对于平时自己一个人或者团队比较小的情况，xcodebuild 的确没有用，编译个程序还得用到 CLI，确实有点蛋疼。但是对于团队合作就不同了，因为程序员比较多，而且有专职的测试人员。对于某个 Git 分支产生的变化，都需要编译出一个新的版本，然后生成 <code>.ipa</code> 的安装文件给 QA 或者公司的其他人员测试和使用。这个编译工作就不能交给某个人来做，而是应该交给一台服务器。</p>
+<p>CI 的概念就这么来了。CI 其实就是一个帮助你编译的服务器程序，并且可以把编译的结果打包。是不是很神奇？那么这个服务器的编译，需要一段脚本程序来启动。针对编译 iOS 程序，就需要使用 xcodebuild 了。</p>
+<h2 id="使用-xcodebuild"><a href="#使用-xcodebuild" class="headerlink" title="使用 xcodebuild"></a>使用 xcodebuild</h2><h3 id="Build"><a href="#Build" class="headerlink" title="Build"></a>Build</h3><p>具体的使用的方式可以参照 OS X Man Pages（也可以 <code>man xcodebuild</code>），下面我给出具体的一个例子。</p>
+<p>假如有一个应用，使用 Cocoapods 创建，它的名字是 XYDemo，主程序的 scheme 是 XYDemo，那么编译它的话，可以执行以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcodebuild -workspace XYDemo.xcworkspace \</span><br><span class="line">           -scheme <span class="string">"XYDemo"</span> \</span><br><span class="line">           -sdk iphonesimulator \</span><br><span class="line">           -destination <span class="string">'platform=iOS Simulator,name=iPhone 6,OS=9.0'</span></span><br></pre></td></tr></table></figure>
+<p>这样程序就会跑起来，然后最后返回给你编译是成功还是失败了。</p>
+<h3 id="Archive"><a href="#Archive" class="headerlink" title="Archive"></a>Archive</h3><p>Archive 也一样简单，执行以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcodebuild -workspace XYDemo.xcworkspace \</span><br><span class="line">           -scheme <span class="string">"XYDemo"</span> \</span><br><span class="line">           clean \</span><br><span class="line">           archive \</span><br><span class="line">           -archivePath <span class="string">"build/XYDemo"</span></span><br></pre></td></tr></table></figure>
+<p>执行的结果是，在当前目录的 build 目录下，生成一个 <code>XYDemo.xcarchive</code> 的文件。</p>
+<h3 id="Export"><a href="#Export" class="headerlink" title="Export"></a>Export</h3><p>要想导出 <code>.ipa</code> 文件呢？</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcodebuild -exportArchive -exportFormat ipa \</span><br><span class="line">           -archivePath <span class="string">"build/XYDemo.xcarchive"</span> \</span><br><span class="line">           -exportPath <span class="string">"build/XYDemo.ipa"</span> \</span><br><span class="line">           -exportProvisioningProfile <span class="string">"ProvisioningProfileName"</span></span><br></pre></td></tr></table></figure>
+<p>这会在 build 目录下生成 <code>XYDemo.ipa</code> 文件。如果你需要在导出的时候带证书的话，还要添加 <code>-exportProvisioningProfile 证书文件名</code> 参数。</p>
+<h3 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h3><p>不光是单元测试，今年出的 UITesting 也可以使用 xcodebuild 来进行。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">xcodebuild -workspace XYDemo.xcworkspace \</span><br><span class="line">           -scheme <span class="string">"XYDemoReleaseUITests"</span> \</span><br><span class="line">           -sdk iphonesimulator \</span><br><span class="line">           -destination <span class="string">'platform=iOS Simulator,name=iPhone 6,OS=9.0'</span> \</span><br><span class="line">           -resultBundlePath <span class="string">"build"</span> \</span><br><span class="line">           <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<p><code>-resultBundlePath</code> 参数可以输出测试的信息，包括测试每一步的截图。</p>
+<p>最后再给大家推荐一个和 xcodebuild 结合使用的工具 <a href="https://github.com/supermarin/xcpretty" target="_blank" rel="noopener">xcpretty</a>，它能将 xcodebuild 生成的结果按照格式进行处理，而且可以生成测试结果的 HTML 文件，非常赞。</p>
+<h2 id="我能用-xcodebuild-做什么？"><a href="#我能用-xcodebuild-做什么？" class="headerlink" title="我能用 xcodebuild 做什么？"></a>我能用 xcodebuild 做什么？</h2><p>一般地情况下，是很少用到它的。<br>我能想到的使用场景有：</p>
+<ol>
+<li>团队开发，使用 CI 的时候，需要编写 build 的脚本。</li>
+<li>很喜欢使用 CLI 的用户。</li>
+</ol>
+<p>Ps，在 GitHub 的许多开源项目，也会集成 CI 服务，比如 Travis CI。在合并了某个贡献者分支的代码的时候，CI 就会根据脚本自动 build 一次，然后给出提示，很有意思。另外，它对于开源项目是免费的，有兴趣的，可以用它来体验一下。</p>
+<p>参考:</p>
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="noopener">OS X Man Pages - xcodebuild</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Continuous_integration" target="_blank" rel="noopener">Continuous integration - Wikipedia</a></li>
+<li><a href="https://travis-ci.org" target="_blank" rel="noopener">Travis CI</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2015-10-16-use-xcodebuild/">https://x140yu.github.io/2015-10-16-use-xcodebuild/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2015-10-19-what-are-cookies/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default"><译> 什么是 cookie?</译></span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015-07-30-develop-husthelper/">
+        <span class="next-text nav-default">开发「理工助手」那些事儿</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2015-10-16-use-xcodebuild/';
+        this.page.identifier = '2015-10-16-use-xcodebuild/';
+        this.page.title = '使用 xcodebuild';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

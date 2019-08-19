@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Any & AnyObject in Swift">
+
+
+
+
+  <meta name="keywords" content="Objective-C, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2019-01-26-any-anyobject-in-swift/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Any & AnyObject in Swift - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Any & AnyObject in Swift
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-01-26
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2019-01-26-any-anyobject-in-swift/" data-title="Any & AnyObject in Swift">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Any"><span class="toc-text">Any</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Types-to-Any"><span class="toc-text">Types to Any</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Closures-can-be-Any"><span class="toc-text">Closures can be Any</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Functions-are-just-named-closures-so-it-can-be-Any"><span class="toc-text">Functions are just named closures, so it can be Any</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enums-can-be-Any"><span class="toc-text">Enums can be Any</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Structs-and-classes-can-be-Any"><span class="toc-text">Structs and classes can be Any</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Protocols-can-be-Any"><span class="toc-text">Protocols can be Any</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无奖竞猜，Never-和-Void-分别是什么类型？-🤔"><span class="toc-text">无奖竞猜，Never 和 Void 分别是什么类型？ 🤔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Any-To-Types"><span class="toc-text">Any To Types</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AnyObject"><span class="toc-text">AnyObject</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-AnyObject"><span class="toc-text">What is AnyObject?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#id-as-Any"><span class="toc-text">id as Any</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#这么做的目的是什么？🤔"><span class="toc-text">这么做的目的是什么？🤔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#那么是如何实现的呢？🤔"><span class="toc-text">那么是如何实现的呢？🤔</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#objc-Classes"><span class="toc-text">@objc Classes</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Bridged-value-types"><span class="toc-text">Bridged value types</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Unbridged-value-types"><span class="toc-text">Unbridged value types</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Quiz-📝"><span class="toc-text">Quiz 📝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AnyObject-的其它作用"><span class="toc-text">AnyObject 的其它作用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Weak"><span class="toc-text">Weak</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Any-amp-AnyObject-的其它应用"><span class="toc-text">Any &amp; AnyObject 的其它应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Then-✨"><span class="toc-text">Then ✨</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Some-Tips"><span class="toc-text">Some Tips</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#减少-Any-和-AnyObject-类型的使用"><span class="toc-text">减少 Any 和 AnyObject 类型的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Obective-C-中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上"><span class="toc-text">Obective-C 中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prefer-Swift-Value-Types-to-Bridged-Objective-C-Reference-Types"><span class="toc-text">Prefer Swift Value Types to Bridged Objective-C Reference Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Write-More-Swift-🐤"><span class="toc-text">Write More Swift 🐤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安利一个工具"><span class="toc-text">安利一个工具</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>这是我 1 月 22 日在知乎 iOS 团队内部的一次分享</p>
+<p>这一次没有使用 Keynote，尝试性地全程使用 Playground，效果还不错</p>
+<p>Playground 版本可以查看<a href="https://github.com/X140Yu/Any-AnyObject-in-Swift" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Any"><a href="#Any" class="headerlink" title="Any"></a>Any</h2><p>什么是 Any? 🤔</p>
+<blockquote>
+<p><code>Any</code> can represent an <strong>instance</strong> of any type at all, including function types. <a href="https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html" target="_blank" rel="noopener">doc</a><br> <code>Any</code> 可以代表一个任意类型的实例，包括函数类型。</p>
+</blockquote>
+<h3 id="Types-to-Any"><a href="#Types-to-Any" class="headerlink" title="Types to Any"></a>Types to Any</h3><p>所有能够看到的类型都能被转换成 Any</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> any: <span class="type">Any</span> = <span class="string">"Any"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// static type is Any, dynamic type is Int</span></span><br><span class="line">any = <span class="number">42</span></span><br><span class="line"></span><br><span class="line">type(of: any)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// static type is Any, dynamic type is String</span></span><br><span class="line">any = <span class="string">"string"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// static type is Any, dynamic type is (Int, String)</span></span><br><span class="line">any = (<span class="number">42</span>, <span class="string">"42"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// static type is Any, dynamic type is [Int]</span></span><br><span class="line">any = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// static type is Any, dynamic type is [Int: Int]</span></span><br><span class="line">any = [<span class="number">1</span>: <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="Closures-can-be-Any"><a href="#Closures-can-be-Any" class="headerlink" title="Closures can be Any"></a>Closures can be <code>Any</code></h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="built_in">c</span>: () -&gt; () = &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Functions-are-just-named-closures-so-it-can-be-Any"><a href="#Functions-are-just-named-closures-so-it-can-be-Any" class="headerlink" title="Functions are just named closures, so it can be Any"></a>Functions are just named closures, so it can be <code>Any</code></h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">function</span><span class="params">()</span></span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">any = function</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> f: () -&gt; () = function</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> fs: () -&gt; () = function.<span class="keyword">self</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面用 self 和不用 self 有什么区别呢？🤔</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">1</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<h4 id="Enums-can-be-Any"><a href="#Enums-can-be-Any" class="headerlink" title="Enums can be Any"></a>Enums can be <code>Any</code></h4><blockquote>
+<p>💡 Optionals are enums</p>
+</blockquote>
+ <figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;(<span class="number">1</span>) <span class="keyword">as</span> <span class="type">Any</span></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"><span class="keyword">let</span> o: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt; = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;(<span class="number">1</span>)</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">let</span> o1: <span class="type">Int?</span> = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">any = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"><span class="keyword">let</span> o2: <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="type">Type</span> = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">let</span> o3: <span class="type">Int?</span>.<span class="type">Type</span> = <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<h4 id="Structs-and-classes-can-be-Any"><a href="#Structs-and-classes-can-be-Any" class="headerlink" title="Structs and classes can be Any"></a>Structs and classes can be <code>Any</code></h4><blockquote>
+<p>💡 String is a struct</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = <span class="string">"abc"</span></span><br><span class="line"></span><br><span class="line">any = <span class="type">String</span>.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"><span class="keyword">let</span> s: <span class="type">String</span>.<span class="type">Type</span> = <span class="type">String</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>💡 KeyPath is a class</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = \<span class="type">String</span>.<span class="built_in">count</span> <span class="keyword">as</span> <span class="type">Any</span></span><br><span class="line">any = <span class="type">KeyPath</span>&lt;<span class="type">String</span>, <span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> k2: <span class="type">KeyPath</span>&lt;<span class="type">String</span>, <span class="type">Int</span>&gt;.<span class="type">Type</span> = <span class="type">KeyPath</span>&lt;<span class="type">String</span>, <span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// ... can be</span></span><br><span class="line"><span class="keyword">let</span> k1: <span class="type">AnyObject</span>.<span class="type">Type</span> = <span class="type">KeyPath</span>&lt;<span class="type">String</span>, <span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">let</span> k: <span class="type">AnyClass</span> = <span class="type">KeyPath</span>&lt;<span class="type">String</span>, <span class="type">Int</span>&gt;.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<h4 id="Protocols-can-be-Any"><a href="#Protocols-can-be-Any" class="headerlink" title="Protocols can be Any"></a>Protocols can be <code>Any</code></h4><blockquote>
+<p>💡 Error is a protocol</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = <span class="type">Error</span>.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// protocol is not like other types (sturct, class ...)</span></span><br><span class="line"><span class="comment">// so this is not correct</span></span><br><span class="line"><span class="comment">//let e1: Error.Type = Error.self</span></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"><span class="keyword">let</span> e: <span class="type">Error</span>.<span class="type">Protocol</span> = <span class="type">Error</span>.<span class="keyword">self</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// this is correct</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TestError</span>: <span class="title">Error</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">let</span> e2: <span class="type">Error</span>.<span class="type">Type</span> = <span class="type">TestError</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<p><code>Any</code> means anything</p>
+<p>所以它也能代表它自己 😎</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = <span class="type">Any</span>.<span class="keyword">self</span></span><br><span class="line"><span class="comment">// ... actually is</span></span><br><span class="line"><span class="keyword">let</span> ap: <span class="type">Any</span>.<span class="type">Protocol</span> = <span class="type">Any</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<h4 id="无奖竞猜，Never-和-Void-分别是什么类型？-🤔"><a href="#无奖竞猜，Never-和-Void-分别是什么类型？-🤔" class="headerlink" title="无奖竞猜，Never 和 Void 分别是什么类型？ 🤔"></a>无奖竞猜，<code>Never</code> 和 <code>Void</code> 分别是什么类型？ 🤔</h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">any = <span class="type">Never</span>.<span class="keyword">self</span></span><br><span class="line">any = <span class="type">Void</span>.<span class="keyword">self</span></span><br><span class="line">any = <span class="type">AnyObject</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<p>Never 是个 empty case enum，Void 是 () empty tuple</p>
+<h4 id="Any-To-Types"><a href="#Any-To-Types" class="headerlink" title="Any To Types"></a>Any To Types</h4><p>上面介绍了从任意类型转换成 <code>Any</code>，那么如何把 <code>Any</code> 转换成想要的类型呢？(Downcast)</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> thing: <span class="type">Any</span> = <span class="number">42</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// if let</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> integer = thing <span class="keyword">as</span>? <span class="type">Int</span> &#123;</span><br><span class="line">    integer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... or simpler，但并不推荐</span></span><br><span class="line">thing <span class="keyword">as</span>! <span class="type">Int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// or use switch</span></span><br><span class="line"><span class="keyword">let</span> things: [<span class="type">Any</span>] = [</span><br><span class="line">  	<span class="number">0</span>,</span><br><span class="line">    <span class="number">0.0</span>,</span><br><span class="line">    <span class="string">"hello"</span>,</span><br><span class="line">    <span class="number">42</span>,</span><br><span class="line">    (<span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">    <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">self</span>,</span><br><span class="line">    &#123; (name: <span class="type">String</span>) -&gt; <span class="type">String</span> <span class="keyword">in</span> <span class="string">"Hello, (name)"</span> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> thing <span class="keyword">in</span> things &#123;</span><br><span class="line">  <span class="keyword">switch</span> thing &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span> <span class="keyword">as</span> <span class="type">Int</span>:</span><br><span class="line">        <span class="string">"zero as an Int"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span> <span class="keyword">as</span> <span class="type">Double</span>:</span><br><span class="line">        <span class="string">"zero as a Double"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> someInt <span class="keyword">as</span> <span class="type">Int</span>:</span><br><span class="line">        <span class="string">"an integer value of (someInt)"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> someDouble <span class="keyword">as</span> <span class="type">Double</span> <span class="keyword">where</span> someDouble &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="string">"a positive double value of (someDouble)"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">is</span> <span class="type">Double</span>:</span><br><span class="line">        <span class="string">"some other double value that I don't want to print"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">is</span> <span class="type">Optional</span>&lt;<span class="type">Int</span>&gt;.<span class="type">Type</span>:</span><br><span class="line">        <span class="string">"type optional int.self"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> someString <span class="keyword">as</span> <span class="type">String</span>:</span><br><span class="line">        <span class="string">"a string value of "</span>(someString)<span class="string">""</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> (x, y) <span class="keyword">as</span> (<span class="type">Double</span>, <span class="type">Double</span>):</span><br><span class="line">        <span class="string">"an (x, y) point at (x), (y)"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">let</span> stringConverter <span class="keyword">as</span> (<span class="type">String</span>) -&gt; <span class="type">String</span>:</span><br><span class="line">        stringConverter(<span class="string">"Michael"</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="string">"something else"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="AnyObject"><a href="#AnyObject" class="headerlink" title="AnyObject"></a>AnyObject</h2><h3 id="What-is-AnyObject"><a href="#What-is-AnyObject" class="headerlink" title="What is AnyObject?"></a>What is <code>AnyObject</code>?</h3><blockquote>
+<p><code>AnyObject</code> can represent an instance of any class type. <a href="https://docs.swift.org/swift-book/LanguageGuide/TypeCasting.html" target="_blank" rel="noopener">doc</a></p>
+<p>The protocol to which all classes implicitly conform.</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> v: <span class="type">AnyObject</span> = <span class="type">AnyClassInstance</span></span><br></pre></td></tr></table></figure>
+<p>一起来看一下 <code>AnyObject</code> 的源码</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">typealias</span> <span class="type">AnyObject</span></span><br></pre></td></tr></table></figure>
+<p>这语法很神奇，<code>typealias</code> 后面没有等号 - -，不要试图写出，因为根本不会编译过</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Cocoa</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> any: <span class="type">AnyObject</span>.<span class="type">Protocol</span> = <span class="type">AnyObject</span>.<span class="keyword">self</span></span><br><span class="line"><span class="keyword">let</span> any1: <span class="type">AnyObject</span> = <span class="type">NSObject</span>()</span><br><span class="line"><span class="keyword">let</span> any2: <span class="type">AnyObject</span>.<span class="type">Type</span> = <span class="type">NSObject</span>.<span class="keyword">self</span></span><br></pre></td></tr></table></figure>
+<p>比较早使用过 Swift 的同学对 AnyObject 一定不会陌生，因为在 Swift 3 之前，<code>AnyObject</code> 是作为 Objective-C <code>id</code> 的存在</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">swift(&lt;<span class="number">3.0</span>)</span><br><span class="line"></span><br><span class="line">id label = [<span class="type">UILabel</span> new];</span><br><span class="line"><span class="comment">// equals</span></span><br><span class="line"><span class="keyword">var</span> label: <span class="type">AnyObject</span> = <span class="type">UILabel</span>()</span><br></pre></td></tr></table></figure>
+<h3 id="id-as-Any"><a href="#id-as-Any" class="headerlink" title="id as Any"></a>id as Any</h3><p>但是随着 swift-evolution 的这个 proposal <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0116-id-as-any.md" target="_blank" rel="noopener">SE-0116</a></p>
+<p>在 Swift 3 中，Objective-C 的 <code>id</code> 被 map 到了 <code>Any</code></p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">swift(&gt;=<span class="number">3.0</span>)</span><br><span class="line"></span><br><span class="line">id label = [<span class="type">UILabel</span> new];</span><br><span class="line"><span class="comment">// equals</span></span><br><span class="line"><span class="keyword">var</span> label: <span class="type">Any</span> = <span class="type">UILabel</span>()</span><br></pre></td></tr></table></figure>
+<h4 id="这么做的目的是什么？🤔"><a href="#这么做的目的是什么？🤔" class="headerlink" title="这么做的目的是什么？🤔"></a>这么做的目的是什么？🤔</h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> 🐱 </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> name: <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Notification</span>.<span class="title">Name</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">let</span> <span class="type">CatDidMeow</span> = <span class="type">Notification</span>.<span class="type">Name</span>(rawValue: <span class="string">"cat.did.meow"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Swift 3.0 之前，如果我想把这个 struct 通过 Notification 的 userinfo 的 object 发送出去，需要做下面这些事情，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">swift(&lt;<span class="number">3.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意这里 userInfo Object 的类型是 AnyObject</span></span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span></span><br><span class="line">    .post(</span><br><span class="line">        name: <span class="type">Notification</span>.<span class="type">Name</span>,</span><br><span class="line">        object: <span class="type">AnyObject?</span></span><br><span class="line">        userInfo: [<span class="type">NSObject</span> : <span class="type">AnyObject</span>]?)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要手动创建一个 Class 类型的 Box 把 value types object 给包起来</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt;: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> value: <span class="type">T</span></span><br><span class="line">    <span class="keyword">init</span>(<span class="number">_</span> value: <span class="type">T</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.value = value</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// post</span></span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span></span><br><span class="line">    .post(</span><br><span class="line">    name: .<span class="type">CatDidMeow</span>,</span><br><span class="line">    object: <span class="literal">nil</span></span><br><span class="line">    userInfo: [<span class="string">"cat"</span> : <span class="type">Box</span>(🐱(name: <span class="string">"Kitty"</span>))])</span><br><span class="line"></span><br><span class="line"><span class="comment">// observe</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> box = notification.userInfo?[<span class="string">"cat"</span>] <span class="keyword">as</span>? <span class="type">Box</span>&lt;🐱&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> cat = box.value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 Swift 3.0 之后，不需要 Box 类型的封装也能把 🐱 发送出去了，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">swift(&gt;=<span class="number">3.0</span>)</span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span></span><br><span class="line">    .addObserver(forName: .<span class="type">CatDidMeow</span>,</span><br><span class="line">                  object: <span class="literal">nil</span>,</span><br><span class="line">                   queue: <span class="literal">nil</span>) &#123; notification <span class="keyword">in</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">let</span> cat = notification.userInfo?[<span class="string">"cat"</span>] <span class="keyword">as</span>? 🐱 &#123;</span><br><span class="line">                        cat.name</span><br><span class="line">                    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span></span><br><span class="line">    .post(name: .<span class="type">CatDidMeow</span>,</span><br><span class="line">        object: <span class="literal">nil</span>,</span><br><span class="line">      userInfo: [<span class="string">"cat"</span>: 🐱(name: <span class="string">"Kitty"</span>)])</span><br></pre></td></tr></table></figure>
+<p>✅ 这样做的目的是让 Swift 能够最大力度的使用已有 Cocoa 中的 Objective-C API，也符合苹果希望我们最大力度使用 value types 的愿景</p>
+<p>💫 Use more value types</p>
+<h4 id="那么是如何实现的呢？🤔"><a href="#那么是如何实现的呢？🤔" class="headerlink" title="那么是如何实现的呢？🤔"></a>那么是如何实现的呢？🤔</h4><blockquote>
+<p>When a Swift value or object is passed into Objective-C as an <code>id</code> parameter, the compiler introduces a universal bridging conversion operation.</p>
+</blockquote>
+<p>也就是说所有的类型都可以被转成 <code>id</code> 类型</p>
+<h5 id="objc-Classes"><a href="#objc-Classes" class="headerlink" title="@objc Classes"></a>@objc Classes</h5><p>因为 Swift 和 Objective-C 两边都能正常操作，所以不需要特别的支持</p>
+<h5 id="Bridged-value-types"><a href="#Bridged-value-types" class="headerlink" title="Bridged value types"></a>Bridged value types</h5><p>如果是 Foundation 中支持 <code>ObjcBridgable</code> 的类型，可以自动被互相转换成 Swift 和 Objective-C 中不同的类型</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> date: <span class="type">NSDate</span> = <span class="type">Date</span>() <span class="keyword">as</span> <span class="type">NSDate</span></span><br><span class="line"><span class="keyword">let</span> data: <span class="type">NSData</span> = <span class="type">Data</span>() <span class="keyword">as</span> <span class="type">NSData</span></span><br></pre></td></tr></table></figure>
+<h5 id="Unbridged-value-types"><a href="#Unbridged-value-types" class="headerlink" title="Unbridged value types"></a>Unbridged value types</h5><p>其余类型属于没被 bridge 的 value types，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> username: <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Object</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)updateUser:(<span class="keyword">id</span>)user;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ... generated swift interface</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">updateUser</span><span class="params">(user: <span class="keyword">Any</span>)</span></span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"><span class="keyword">let</span> object = <span class="type">Object</span>()</span><br><span class="line">object.updateUser(<span class="type">Person</span>(username: <span class="string">"abe"</span>))</span><br><span class="line"></span><br><span class="line"><span class="type">Person</span>` -&gt; `_Swift_Value *</span><br></pre></td></tr></table></figure>
+<p>通过使用 lldb 下断点发现，Swift 会把 unbridged value types 转换成 <code>_Swift_Value *</code> 的类型，在 Swift 中通过 cast 可以转换成对应的类型，但在 Objective-C 中对这种类型无法操作。</p>
+<blockquote>
+<p>When <code>id</code> values are brought into Swift as <code>Any</code>, we use the runtime’s existing ambivalent dynamic casting support to handle bridging back to either class references or Swift value types.</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="meta">@objc</span>Members</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwiftClass</span>: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">testID</span>(<span class="keyword">_</span> <span class="title">any</span>: <span class="title">Any</span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="type">SwiftClass</span> testID:someIDVariable]</span><br><span class="line"><span class="comment">// ... equals</span></span><br><span class="line"><span class="keyword">let</span> object = <span class="type">Object</span>()</span><br><span class="line"><span class="keyword">let</span> a = object <span class="keyword">as</span> <span class="type">Any</span></span><br></pre></td></tr></table></figure>
+<h3 id="Quiz-📝"><a href="#Quiz-📝" class="headerlink" title="Quiz 📝"></a>Quiz 📝</h3><p>下面的输出都是什么？</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> arrayOfAnyObject: [<span class="type">AnyObject</span>] = [</span><br><span class="line">    <span class="number">1</span> <span class="keyword">as</span> <span class="type">AnyObject</span>,</span><br><span class="line">    <span class="string">"str"</span> <span class="keyword">as</span> <span class="type">AnyObject</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">arrayOfAnyObject.forEach &#123; element <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(type(of: element))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">Int</span> &#123; <span class="string">"Int (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">String</span> &#123; <span class="string">"String (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSString</span> &#123; <span class="string">"NSString (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSNumber</span> &#123; <span class="string">"NSNumber (e)"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arrayOfAny = arrayOfAnyObject <span class="keyword">as</span> [<span class="type">Any</span>]</span><br><span class="line">arrayOfAny.forEach &#123; element <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(type(of: element))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">Int</span> &#123; <span class="string">"Int (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">String</span> &#123; <span class="string">"String (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSString</span> &#123; <span class="string">"NSString (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSNumber</span> &#123; <span class="string">"NSNumber (e)"</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arrayOfAny2: [<span class="type">Any</span>] = [<span class="number">1</span>, <span class="string">"2"</span>]</span><br><span class="line">arrayOfAny2.forEach &#123; element <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(type(of: element))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">Int</span> &#123; <span class="string">"Int (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">String</span> &#123; <span class="string">"String (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSString</span> &#123; <span class="string">"NSString (e)"</span> &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> e = element <span class="keyword">as</span>? <span class="type">NSNumber</span> &#123; <span class="string">"NSNumber (e)"</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="AnyObject-的其它作用"><a href="#AnyObject-的其它作用" class="headerlink" title="AnyObject 的其它作用"></a>AnyObject 的其它作用</h3><h4 id="Weak"><a href="#Weak" class="headerlink" title="Weak"></a><code>Weak</code></h4><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">SomeDelegate</span>: <span class="title">AnyObject</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 🔴 error: 'weak' must not be applied to non-class-bound 'Any'; consider adding a protocol conformance that has a class bound</span></span><br><span class="line"><span class="comment">// weak var d: Any? = nil</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Cocoa</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>: <span class="title">NSObject</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">SomeClass</span>: <span class="title">SomeDelegate</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> someClassInstance: <span class="type">SomeClass?</span> = <span class="type">SomeClass</span>()</span><br><span class="line"><span class="keyword">weak</span> <span class="keyword">var</span> d: <span class="type">AnyObject?</span> = someClassInstance</span><br><span class="line">someClassInstance = <span class="literal">nil</span></span><br><span class="line">d</span><br></pre></td></tr></table></figure>
+<h2 id="Any-amp-AnyObject-的其它应用"><a href="#Any-amp-AnyObject-的其它应用" class="headerlink" title="Any &amp; AnyObject 的其它应用"></a>Any &amp; AnyObject 的其它应用</h2><h3 id="Then-✨"><a href="#Then-✨" class="headerlink" title="Then ✨"></a><a href="https://github.com/devxoul/Then" target="_blank" rel="noopener">Then</a> ✨</h3><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Cocoa</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> frame = <span class="type">CGRect</span>().with &#123;</span><br><span class="line">    $<span class="number">0</span>.origin.x = <span class="number">10</span></span><br><span class="line">    $<span class="number">0</span>.size.width = <span class="number">100</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">_</span> = <span class="type">NSTextField</span>().then &#123;</span><br><span class="line">    $<span class="number">0</span>.textColor = .black</span><br><span class="line">    $<span class="number">0</span>.font = .systemFont(ofSize: <span class="number">15</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// or your custom types</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> 🐤 </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name: <span class="type">String</span> = <span class="string">"bird"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> 🐤: <span class="title">Then</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> 🕊 = 🐤().with &#123;</span><br><span class="line">    $<span class="number">0</span>.name = <span class="string">"dove"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">🕊.name</span><br></pre></td></tr></table></figure>
+<h2 id="Some-Tips"><a href="#Some-Tips" class="headerlink" title="Some Tips"></a>Some Tips</h2><h3 id="减少-Any-和-AnyObject-类型的使用"><a href="#减少-Any-和-AnyObject-类型的使用" class="headerlink" title="减少 Any 和 AnyObject 类型的使用"></a>减少 Any 和 AnyObject 类型的使用</h3><p>不要放弃编译检查，如果无法避免，尽早把 Any 或者 AnyObject 转换成真正的类型，然后再使用</p>
+<h3 id="Obective-C-中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上"><a href="#Obective-C-中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上" class="headerlink" title="Obective-C 中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上"></a>Obective-C 中暴露的接口，如果有容器类型，最好把微弱的泛型约束加上</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@property (nonatomic) NSArray&lt;NSDate *&gt; *dueDates;</span><br><span class="line">@property (nonatomic) NSDictionary&lt;NSNumber *, NSString *&gt; *dataDictionary;</span><br><span class="line">@property (nonatomic) NSSet&lt;NSString *&gt; *filter;</span><br><span class="line"></span><br><span class="line">⬇️  ✅</span><br><span class="line"></span><br><span class="line">public var dueDates: [Date]</span><br><span class="line">public var dataDictionary: [NSNumber : String]</span><br><span class="line">public var filter: Set&lt;String&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@property (nonatomic) NSArray *dueDates;</span><br><span class="line">@property (nonatomic) NSDictionary *dataDictionary;</span><br><span class="line">@property (nonatomic) NSSet *filter;</span><br><span class="line"></span><br><span class="line">⬇️ 🔴</span><br><span class="line"></span><br><span class="line">public var dueDates: [Any]</span><br><span class="line">public var dataDictionary: [AnyHashable : Any]</span><br><span class="line">public var filter: Set&lt;AnyHashable&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Prefer-Swift-Value-Types-to-Bridged-Objective-C-Reference-Types"><a href="#Prefer-Swift-Value-Types-to-Bridged-Objective-C-Reference-Types" class="headerlink" title="Prefer Swift Value Types to Bridged Objective-C Reference Types"></a>Prefer Swift Value Types to Bridged Objective-C Reference Types</h3><blockquote>
+<p>You should almost never need to use a bridged reference type directly in your own code.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Swift value type</th>
+<th>Objective-C reference type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AffineTransform</code></td>
+<td><code>NSAffineTransform</code></td>
+</tr>
+<tr>
+<td><code>Array</code></td>
+<td><code>NSArray</code></td>
+</tr>
+<tr>
+<td><code>Calendar</code></td>
+<td><code>NSCalendar</code></td>
+</tr>
+<tr>
+<td><code>CharacterSet</code></td>
+<td><code>NSCharacterSet</code></td>
+</tr>
+<tr>
+<td><code>Data</code></td>
+<td><code>NSData</code></td>
+</tr>
+<tr>
+<td><code>DateComponents</code></td>
+<td><code>NSDateComponents</code></td>
+</tr>
+<tr>
+<td><code>DateInterval</code></td>
+<td><code>NSDateInterval</code></td>
+</tr>
+<tr>
+<td><code>Date</code></td>
+<td><code>NSDate</code></td>
+</tr>
+<tr>
+<td><code>Decimal</code></td>
+<td><code>NSDecimalNumber</code></td>
+</tr>
+<tr>
+<td><code>Dictionary</code></td>
+<td><code>NSDictionary</code></td>
+</tr>
+<tr>
+<td><code>IndexPath</code></td>
+<td><code>NSIndexPath</code></td>
+</tr>
+<tr>
+<td><code>IndexSet</code></td>
+<td><code>NSIndexSet</code></td>
+</tr>
+<tr>
+<td><code>Locale</code></td>
+<td><code>NSLocale</code></td>
+</tr>
+<tr>
+<td><code>Measurement</code></td>
+<td><code>NSMeasurement</code></td>
+</tr>
+<tr>
+<td><code>Notification</code></td>
+<td><code>NSNotification</code></td>
+</tr>
+<tr>
+<td>Swift numeric types</td>
+<td><code>NSNumber</code></td>
+</tr>
+<tr>
+<td><code>PersonNameComponents</code></td>
+<td><code>NSPersonNameComponents</code></td>
+</tr>
+<tr>
+<td><code>Set</code></td>
+<td><code>NSSet</code></td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td><code>NSString</code></td>
+</tr>
+<tr>
+<td><code>TimeZone</code></td>
+<td><code>NSTimeZone</code></td>
+</tr>
+<tr>
+<td><code>URL</code></td>
+<td><code>NSURL</code></td>
+</tr>
+<tr>
+<td><code>URLComponents</code></td>
+<td><code>NSURLComponents</code></td>
+</tr>
+<tr>
+<td><code>URLQueryItem</code></td>
+<td><code>NSURLQueryItem</code></td>
+</tr>
+<tr>
+<td><code>URLRequest</code></td>
+<td><code>NSURLRequest</code></td>
+</tr>
+<tr>
+<td><code>UUID</code></td>
+<td><code>NSUUID</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Write-More-Swift-🐤"><a href="#Write-More-Swift-🐤" class="headerlink" title="Write More Swift 🐤"></a>Write More Swift 🐤</h3><h2 id="安利一个工具"><a href="#安利一个工具" class="headerlink" title="安利一个工具"></a>安利一个工具</h2><p><a href="https://github.com/attaswift/Attabench" target="_blank" rel="noopener">Attabench</a></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2019-01-26-any-anyobject-in-swift/">https://x140yu.github.io/2019-01-26-any-anyobject-in-swift/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Objective-C/">Objective-C</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-08-19-debug-cocoapods/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用 VSCode debug CocoaPods 和插件源码</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/">
+        <span class="next-text nav-default">2𝟢18</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2019-01-26-any-anyobject-in-swift/';
+        this.page.identifier = '2019-01-26-any-anyobject-in-swift/';
+        this.page.title = 'Any & AnyObject in Swift';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

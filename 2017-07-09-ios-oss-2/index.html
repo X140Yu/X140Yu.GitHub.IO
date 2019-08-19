@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="在 Kickstarter-iOS 源码中学到的（二） - 代码">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-07-09-ios-oss-2/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 在 Kickstarter-iOS 源码中学到的（二） - 代码 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          在 Kickstarter-iOS 源码中学到的（二） - 代码
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-09
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-07-09-ios-oss-2/" data-title="在 Kickstarter-iOS 源码中学到的（二） - 代码">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Environment"><span class="toc-text">Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AppEnvironment"><span class="toc-text">AppEnvironment</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deep-Linking"><span class="toc-text">Deep Linking</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>上一次我们简单介绍了一下 Kickstarter-iOS 项目工程方面的闪光点，这次我们探究一下，看看到底是哪些设计与细节让我推荐大家都来阅读这份代码。</p>
+<a id="more"></a>
+<h3 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h3><blockquote>
+<p><a href="https://github.com/kickstarter/ios-oss/blob/master/Library/Environment.swift" target="_blank" rel="noopener">Environment.swift</a></p>
+</blockquote>
+<p><code>Environment</code> 这个 <code>sruct</code> 这作为一个存储整个应用状态的存在。那这个应用可以随时获取的全局状态都有什么呢？</p>
+<ul>
+<li>API 环境<ul>
+<li><code>apiService</code>，包括了 <code>appID</code>，<code>apiBaseUrl</code> 等等。这里之所以把它算进 <code>Environment</code> 是因为在测试环境中，<code>apiService</code> 可能会发生改变。</li>
+</ul>
+</li>
+<li>缓存<ul>
+<li><code>cache</code>，一个 <code>NSCache</code> 缓存一些临时的数据</li>
+<li><code>ubiquitousStore</code>，背后是一个 <code>NSUbiquitousKeyValueStore.default</code>，用于放一些有没有出现引导相关的 flag，是 iCloud 同步的</li>
+<li><code>userDefaults</code>，其实就是 UserDefaults，用于持久化数据</li>
+</ul>
+</li>
+<li>设备<ul>
+<li><code>devie</code>，设备型号、系统版本等等</li>
+<li><code>countryCode</code>, <code>language</code>, <code>locale</code>,  一些设备国际化的信息</li>
+<li><code>reachability</code>，当前设备的网络环境</li>
+</ul>
+</li>
+<li>当前登录用户<ul>
+<li><code>currentUser</code></li>
+</ul>
+</li>
+</ul>
+<p>… 等等</p>
+<p>那是不是只要 <code>AppDelegate</code> 持有一个 <code>Environment</code> 的实例就可以完成任务了呢？</p>
+<p>是也不是。</p>
+<p>其实作为一个应用来说，一份 <code>Environment</code> 就足以完成任务了，但 Kickstarter 为了方便 test，搞出了一个 <code>AppEnvironment</code>。</p>
+<h4 id="AppEnvironment"><a href="#AppEnvironment" class="headerlink" title="AppEnvironment"></a>AppEnvironment</h4><blockquote>
+<p><a href="https://github.com/kickstarter/ios-oss/blob/master/Library/AppEnvironment.swift" target="_blank" rel="noopener">AppEnvironment.swift</a></p>
+</blockquote>
+<div style="width:60%"><img src="http://oo8znht6g.bkt.clouddn.com/20170713223902_VZc8mv_Screenshot.png" alt></div>
+
+<p>如图，<code>AppEnvironment</code> 持有了一个 <code>stack: [Environment]</code>，其实同时存这么多 <code>Environment</code> 是没有必要的。对于同一个应用来说，一个 <code>Environment</code> 就够了，那为什么它还要搞这么多出来呢？</p>
+<p>搜索一下 <code>AppEnvironment</code> 中 <code>pushEnvironment</code> 和 <code>popEnvironment</code> 方法的调用，几乎都会出现在 <code>*Test.swift</code> 中。主要作用是测试 <code>Environment</code> 发生变化时，保留旧的 <code>Environment</code> 做一些 state 的判断。</p>
+<p>这个 struct 还提供了一个便捷的 <code>replaceCurrentEnvironment</code> 方法，根据你提供的想要更改的值，update 一下 current 的 environment（其实 <code>push</code> 也是同理，把 current 先 copy 一份，再改需要更新的部分）。这个方法就比较有价值了。比如在 debug 的时候，可以把 <code>apiService</code> 换成 <code>mockService</code>，测试的时候，直接更新 <code>user</code> 为一个 fake user，就直接登录成功了，非常方便。</p>
+<p>关于 Environment 的设计，我是比较认可的。相比于全局的 <code>state</code> 满天飞，这种封装会让程序干净不少。AppEnvironment 中的 stack 如果只是用来测试的话其实完全没有必要存在，第一眼看上去有多个 <code>environment</code> 看上去有些 confusing，不过它是 <code>fileprivate</code>，其实也没啥，是吧？</p>
+<h3 id="Deep-Linking"><a href="#Deep-Linking" class="headerlink" title="Deep Linking"></a>Deep Linking</h3><blockquote>
+<p><a href="https://github.com/kickstarter/ios-oss/blob/master/Library/Navigation.swift" target="_blank" rel="noopener">Navigation.swift</a></p>
+</blockquote>
+<p>iOS 中的 deep linking 就是通过 URL Scheme、Universal Link、3D touch 或者 notification 等 URL 的方式跳转原生页面的方式。</p>
+<p>objc.io 里也有一期关于 Kickstarter 是如何做 deep linking 的，感兴趣的可以看一下。<a href="https://talk.objc.io/episodes/S01E49-deep-linking-at-kickstarter" target="_blank" rel="noopener">链接点我</a></p>
+<p>工程里的实现跟视频里的方案差不多。有一个 Navigation 的 enum，把所有支持通过 URL 跳转的都定义成一个 case，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Navigation</span> </span>&#123;</span><br><span class="line">  <span class="keyword">case</span> checkout(<span class="type">Int</span>, <span class="type">Navigation</span>.<span class="type">Checkout</span>)</span><br><span class="line">  <span class="keyword">case</span> emailClick(qs: <span class="type">String</span>)</span><br><span class="line">  <span class="keyword">case</span> emailLink</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Navigation 存在的意义，是是把一个通过 deep link 方式传入的 URL，解析成一个 Navigation 的 case</p>
+<p>那它是怎么实现这个过程的呢？</p>
+<p><code>allRoutes</code> 中定义出所有支持 deep linking 的 URL 模板，以及它们对应的解析函数，构成一个 route 条目数组</p>
+<p>暴露给外面解析 URL 的入口是 <code>match(_ url: URL)</code></p>
+<p>这个函数首先遍历 <code>allRoutes</code> 中的所有条目，尝试把这些 URL 与 <code>allRoutes</code> 中的 URL 模板匹配 (1)</p>
+<p>模板匹配上了，根据模板中参数的部分把原有 URL 的参数取出来，构成一个参数名为 key，参数值为 value 的 <code>[String:RouteParams]</code>(2)(3)</p>
+<p>然后把这个字典传入 route 条目对应的解析函数(4)，就可以顺利得到我们想要的 <code>Navigation</code> 枚举了(5)，根据这些确定的枚举，就可以做出跳转了。</p>
+<p>Deep link 写得特别出彩的地方是它的很多代码非常地函数式，其实解析的代码也非常适合写成函数式地。<code>map</code> <code>reduce</code> <code>zip</code> 再<br>结合操作符重载，代码可读性高，而且干净，阅读起来令人愉悦。</p>
+<p>可以结合图看一下 deep link 的过程</p>
+<p><img src="http://oo8znht6g.bkt.clouddn.com/20170713223830_TVnt2N_Screenshot.png" alt></p>
+<p>现在再回头看看代码，应该是很清晰了。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-07-09-ios-oss-2/">https://x140yu.github.io/2017-07-09-ios-oss-2/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-07-16-iOS-initializers/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">如何正确书写 iOS 中的 Initializer</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-07-08-ios-oss-1/">
+        <span class="next-text nav-default">在 Kickstarter-iOS 源码中学到的（一） - 工程相关</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-07-09-ios-oss-2/';
+        this.page.identifier = '2017-07-09-ios-oss-2/';
+        this.page.title = '在 Kickstarter-iOS 源码中学到的（二） - 代码';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

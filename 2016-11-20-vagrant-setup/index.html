@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 Vagrant 搭建 Node.js 环境">
+
+
+
+
+  <meta name="keywords" content="工具, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2016-11-20-vagrant-setup/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 Vagrant 搭建 Node.js 环境 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 Vagrant 搭建 Node.js 环境
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-11-20
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2016-11-20-vagrant-setup/" data-title="使用 Vagrant 搭建 Node.js 环境">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <p>我记得我在知乎 Q3 的个人 OKR 中定下了一个小目标，就是学习 Node.js，可是现在 Q4 都过去一半了，Node 的毛也没学。</p>
+<p>为了圆之前吹过的牛逼，同时也为了之后我将与 classTC 同学一起做的项目，我决定好好学习一下。先从环境搭建做起。</p>
+<a id="more"></a>
+<p>其实 Node 的环境是很好搭建的，直接在官网在上下载最新 Binary Package 安装就可以了，可是为什么还要用 Vagrant 呢？</p>
+<p>因为我曾经在一期 TeaHour.fm 的节目中听到过，要养成把写代码的环境和生产的环境保持一致的好习惯。而 Vagrant 就可以做到这一点，不知道的同学可以去官网了解一下。</p>
+<ul>
+<li>首先安装 <a href="https://www.vagrantup.com/" target="_blank" rel="noopener">vagrant</a> + <a href="https://www.virtualbox.org/" target="_blank" rel="noopener">virtual box</a></li>
+<li>mac 上创建一个目录并进入，比如我的目录是 <code>vagrant</code>，</li>
+<li>执行 <code>vagrant init</code></li>
+<li><p>安装 Ubuntu 14.04 box（当然你也可以选择其它 box，你生产环境用什么，这里就用什么 box）</p>
+<p><code>vagrant box add ubuntu/trusty64</code> （此步骤执行时间取决于网速，做好心理准备）</p>
+<p>如果报错，执行 <code>sudo rm /opt/vagrant/embedded/bin/curl</code> 后再执行一遍上一条命令</p>
+</li>
+<li><code>vagrant up</code> 根据当前 Vagrantfile 启动 vagrant</li>
+<li><p><code>vagrant ssh</code> ssh 进入当前的 vagrant 环境，进行一些 setup 的工作</p>
+<p>在 vagrant 中执行 <code>mkdir helloworld</code> 创建一个和 mac 共享的目录<br><code>logout</code> 退出 ssh</p>
+</li>
+<li>在 mac 上的 vagrant 目录创建一个目录 <code>mkdir helloworld</code> 用于与 vagrant 共享</li>
+<li>编辑 Vagrantfile</li>
+</ul>
+<p>熟悉 CocoaPods 的同学看着下面的文件应该很亲切</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- mode: ruby -*-</span></span><br><span class="line"><span class="comment"># vi: set ft=ruby :</span></span><br><span class="line"><span class="comment"># 这里的 host 指的是我们的电脑 -&gt; 也就是 mac</span></span><br><span class="line"><span class="comment"># guest 指的是 Ubuntu</span></span><br><span class="line">Vagrant.configure(<span class="string">"2"</span>) <span class="keyword">do</span> <span class="params">|config|</span></span><br><span class="line">  <span class="comment"># 指定我们使用的 box</span></span><br><span class="line">  config.vm.box = <span class="string">"ubuntu/trusty64"</span></span><br><span class="line">  <span class="comment"># 禁用掉自动更新，当然啦，这行是 optional 的</span></span><br><span class="line">  config.vm.box_check_update = <span class="literal">false</span></span><br><span class="line">  <span class="comment"># 假定我们的 node 程序跑在 8080 端口，我们把这个端口转发出来给 mac，</span></span><br><span class="line">  <span class="comment"># 在 mac 上也就能通过 http://localhost:8080 访问跑在 Ubuntu 上的 node 应用了</span></span><br><span class="line">  config.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">8080</span>, <span class="symbol">host:</span> <span class="number">8080</span></span><br><span class="line">  <span class="comment"># 映射共享文件夹</span></span><br><span class="line">  config.vm.synced_folder <span class="string">"path-to-vagrant/vagrant/helloworld"</span>, <span class="string">"/home/vagrant/helloworld"</span></span><br><span class="line">  <span class="comment"># 这下面的命令可以通过 `vagrant provision` 来执行，进行一些 Ubuntu 环境的初始化工作</span></span><br><span class="line">  <span class="comment"># 不需要每次都执行，有变更了执行就好</span></span><br><span class="line">  config.vm.provision <span class="string">"shell"</span>, <span class="symbol">inline:</span> <span class="string">&lt;&lt;-SHELL</span></span><br><span class="line"><span class="string">    apt-get update</span></span><br><span class="line"><span class="string">    sudo apt-get install nodejs -y</span></span><br><span class="line"><span class="string">    sudo apt-get install npm -y</span></span><br><span class="line"><span class="string">  SHELL</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vagrant reload</code> 重启 vagrant</li>
+<li><code>vagrant provision</code> 安装我们在 Vagrantfile 中写好的 provision</li>
+</ul>
+<p>环境安装到此结束</p>
+<hr>
+<p>测试我们安装好的环境：</p>
+<ul>
+<li><code>vagrant ssh</code> ssh 进 vagrant</li>
+<li>在 mac 上的 /path-to-vagrant/vagrant 新建一个 <code>main.js</code> 的文件，写入以下内容：</li>
+</ul>
+<p>这就是我们建立目录映射的原因，可以通过 mac 上的各种编辑器，编辑在 vagrant 中的东西</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>) </span>&#123;</span><br><span class="line">	response.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>&#125;);</span><br><span class="line">	response.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="number">8080</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'Sever running at http://127.0.0.1:8080'</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vagrant ssh</code> 进入 vagrant，<code>cd helloworld</code> 执行 <code>node main.js</code></li>
+<li>在 mac 上用浏览器查看 <code>localhost:8080</code>，如果有 <code>hello world</code> 就说明成功啦~ 可以顺利开始 node.js 的学习了</li>
+</ul>
+<p><del>如果你只是为了学习 Node.js 大可不必像我这么折腾，直接下载 Binary 安装就可以了</del></p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2016-11-20-vagrant-setup/">https://x140yu.github.io/2016-11-20-vagrant-setup/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/工具/">工具</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2016-12-04-how-to-read-the-swift-standard-libray-source/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default"><译> 如何阅读 Swift 标准库中的源码</译></span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016-10-22-build-swift-on-armv7/">
+        <span class="next-text nav-default"><译> 在 ARMv7 的设备上编译 Swift 3.0</译></span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2016-11-20-vagrant-setup/';
+        this.page.identifier = '2016-11-20-vagrant-setup/';
+        this.page.title = '使用 Vagrant 搭建 Node.js 环境';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

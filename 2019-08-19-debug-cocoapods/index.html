@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 VSCode debug CocoaPods 和插件源码">
+
+
+
+
+  <meta name="keywords" content="Ruby, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2019-08-19-debug-cocoapods/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 VSCode debug CocoaPods 和插件源码 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 VSCode debug CocoaPods 和插件源码
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2019-08-19
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2019-08-19-debug-cocoapods/" data-title="使用 VSCode debug CocoaPods 和插件源码">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何加载我们手动指定路径的-pod-插件？"><span class="toc-text">如何加载我们手动指定路径的 pod 插件？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#覆写一个实例的的方法"><span class="toc-text">覆写一个实例的的方法</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>具体步骤可以看这个 <a href="https://github.com/X140Yu/debug_cocoapods_plugins_in_vscode" target="_blank" rel="noopener">GitHub 仓库</a></p>
+</blockquote>
+<p>前一段时间同事介绍了可以用 <a href="https://www.jetbrains.com/ruby/" target="_blank" rel="noopener">RubyMine</a> 调试 CocoaPods 源码的方法，看后感觉很神奇。因为之前读 CocoaPods 源码不知道如何调试 Ruby 程序，都是用比较原始的打 log 方式，其实挺低效的，毕竟 log + 断点结合起来才是开发 debug 的最好方式。</p>
+<p>但比起 JetBrains 家的 IDE，我更喜欢用 VSCode，所以就研究了一下如何使用它来 debug CocoaPods 源码及 CocoaPods 周边插件。</p>
+<p>研究过程中有几个点还是挺有趣的，所以写出来分享一下。</p>
+<h3 id="如何加载我们手动指定路径的-pod-插件？"><a href="#如何加载我们手动指定路径的-pod-插件？" class="headerlink" title="如何加载我们手动指定路径的 pod 插件？"></a>如何加载我们手动指定路径的 pod 插件？</h3><p>这就要先从 pod 插件的加载过程说起。</p>
+<p>CocoaPods 的插件加载是依托于 CLAide 的，具体的查看方法可以看<a href="https://github.com/CocoaPods/CLAide/blob/b5ced9cc141df732e8027078543eb92fc6447567/lib/claide/command/plugin_manager.rb#L72" target="_blank" rel="noopener">这里</a>。CLAide 中的 <code>PluginManager</code> 会遍历所有的 Ruby Gem，并搜索这些 gem 中是否包含名为 <code>#{plugin_prefix}_plugin</code> 的文件。</p>
+<p><code>Pod::Command</code> 继承了 <code>CLAide::Command</code>，并声明 <code>plugin_prefix</code> 为 <code>%w(claide cocoapods)</code> 。</p>
+<p>也就是说在 pod 命令执行时，<strong>会加载所有包含 <code>claide_plugin.rb</code> 或 <code>cocoapods_plugin.rb</code> 文件的 gem</strong>。</p>
+<p>如果插件是通过这种方式加载的话，那 debug 插件就比较困难了，只能把插件通过 <code>rake install</code> 的方式安装在电脑系统中，才能验证插件功能是否正常，是比较低效的。这也是本文出现的原因。</p>
+<p>要想实现加载指定路径的 Gem 为 CocoaPods 插件，就需要手动干预这一过程。这一部分的代码在<a href="https://github.com/X140Yu/debug_cocoapods_plugins_in_vscode/blob/master/.vscode/plugin_patch.rb" target="_blank" rel="noopener">这里</a>可以找到（也是本仓库唯一的一点代码），主要过程是 patch 了 <code>Gem::Specification</code> 的 <code>latest_specs</code> 方法，覆盖或追加一个我们指定路径的 gem 到加载的列表中。</p>
+<p>如果对 Ruby 是如何查找所有 gems 的过程感到好奇的，可以看<a href="https://github.com/rubygems/rubygems/blob/master/lib/rubygems/specification.rb#L744" target="_blank" rel="noopener">这里</a>，本文不作过多介绍。</p>
+<h3 id="覆写一个实例的的方法"><a href="#覆写一个实例的的方法" class="headerlink" title="覆写一个实例的的方法"></a>覆写一个实例的的方法</h3><p>在短短几十行代码中，还 monkey patch 了一个实例的方法，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xxxobject</span>.<span class="title">xxx_method</span></span></span><br><span class="line">	puts <span class="string">"replaced"</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>但如果想要在这个方法使用上下文中的变量是不行的，比如这样，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">some_variable = <span class="string">'a'</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xxxObject</span>.<span class="title">xxx_method</span></span></span><br><span class="line">	puts some_variable <span class="comment"># NameError - undefined local variable or method `some_variable' for #&lt;XX::XXClass:0x00007f99112754c8&gt;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>道理也很简单，<code>some_variable</code> 并不在 <code>xxxObject</code> 方法中的作用域内。这里通过把 <code>some_variable</code> 声明成了全局变量缓解了这个问题，但这并不是很好的解决方式，希望有更好解决方式的朋友提出见解。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2019-08-19-debug-cocoapods/">https://x140yu.github.io/2019-08-19-debug-cocoapods/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Ruby/">Ruby</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019-01-26-any-anyobject-in-swift/">
+        <span class="next-text nav-default">Any & AnyObject in Swift</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2019-08-19-debug-cocoapods/';
+        this.page.identifier = '2019-08-19-debug-cocoapods/';
+        this.page.title = '使用 VSCode debug CocoaPods 和插件源码';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

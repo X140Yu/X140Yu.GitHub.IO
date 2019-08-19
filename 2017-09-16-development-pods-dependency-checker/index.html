@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="如果你也用 Development Pods">
+
+
+
+
+  <meta name="keywords" content="iOS, electron, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-09-16-development-pods-dependency-checker/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 如果你也用 Development Pods - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          如果你也用 Development Pods
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-09-16
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-09-16-development-pods-dependency-checker/" data-title="如果你也用 Development Pods">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#起源"><span class="toc-text">起源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为某个-Development-Pods-创建独立工程"><span class="toc-text">为某个 Development Pods 创建独立工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Development-Pods-Dependency-Checker"><span class="toc-text">Development Pods Dependency Checker</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>如果你的 iOS 项目是使用 Development Pods 来做组件化的话，这篇文章或许值得一看。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>知乎的 iOS 项目大概在 2016 年 Q4 开始进行组件化的工作，当时的计划就是把主 target 内的文件以 Development Pods 的形式拆分为 Basic，Core，Middleware，Module 四种类别的 Development Pods 供主 target 进行依赖。</p>
+<p>这几层结构之间有下面这个下面这个约束关系，Pods 只能依赖比它们层级低的而不能依赖比它们层级高的，而且同层间也尽量避免依赖关系。换名话说，Core 可以依赖 Basic 但是 Basic 不能依赖 Core。这样做的原因很简单，就是避免循环引用的问题。</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216230012.png" alt></p>
+<p>组件化的目的之一是减少依赖，可以让一个组件独立于主 target 之外独立运行，这样为了这个组件建立单独的工程，独立编译、开发，提升效率。</p>
+<h2 id="为某个-Development-Pods-创建独立工程"><a href="#为某个-Development-Pods-创建独立工程" class="headerlink" title="为某个 Development Pods 创建独立工程"></a>为某个 Development Pods 创建独立工程</h2><p>但是当我为一个组件单独创建工程的时候，遇到了一个问题，姑且把它叫作组件 R 吧。作为一个 Pod，R 的依赖关系是由 R.podspec 体现的，它只需要关心它直接依赖的东西就好了，对于它依赖的依赖它是不需要关心的，Cocoapods 已经帮我们处理好了。</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></span><br><span class="line">  s.name = <span class="string">"R"</span></span><br><span class="line">  <span class="comment"># some other fields...</span></span><br><span class="line">  s.dependency <span class="string">'A'</span></span><br><span class="line">  s.dependency <span class="string">'C'</span></span><br><span class="line">  s.dependency <span class="string">'E'</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>比如，上图的 R 依赖了 A、C、E 三个 Pods。</p>
+<p>为 R 创建依赖独立工程的时候，需要把 R 作为这个工程的一个依赖，使用路径的形式引入。</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Podfile</span></span><br><span class="line"></span><br><span class="line">target <span class="string">'Example'</span> <span class="keyword">do</span></span><br><span class="line">  pod <span class="string">'R'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../R'</span>,	</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>如果你以为这样写就大功告成了，就大错特错了。执行 <code>pod install</code> 后就会发现 <code>未能找到 A</code> 类似的错误。为什么会出现这样的问题呢？其实我也不知道具体的原因😂，但是一个可能的猜测是<br> <code>Podfile</code> 中的依赖关系必须要明确，尤其是这些 pods 都是以本地路径关系相互依赖的情况下。而 <code>podspec</code> 中的依赖不需要那么明确，Cocoapods 会帮你处理。</p>
+<p>因为我们使用 Development Pods，所以所有的 Pods 必然以本地路径的关系进行依赖。所以在为 R 创建独立工程的时候，需要把 R 依赖的所有 Pods 的路径标记出来给 CocoaPods 看。所以你可能会写出下面的 <code>Podfile</code> ，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">target <span class="string">'Example'</span> <span class="keyword">do</span></span><br><span class="line">  pod <span class="string">'R'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../R'</span></span><br><span class="line">  pod <span class="string">'A'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../A'</span></span><br><span class="line">  pod <span class="string">'C'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../C'</span></span><br><span class="line">  pod <span class="string">'E'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../E'</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>满欣欢喜地跑去 <code>pod install</code> ，结果又失败了，原来 C 还依赖了 B！于是你又跑去给 <code>podfile</code> 加了一行，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">target <span class="string">'Example'</span> <span class="keyword">do</span></span><br><span class="line">  pod <span class="string">'R'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../R'</span></span><br><span class="line">  pod <span class="string">'A'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../A'</span></span><br><span class="line">  pod <span class="string">'B'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../B'</span></span><br><span class="line">  pod <span class="string">'C'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../C'</span></span><br><span class="line">  pod <span class="string">'E'</span>, <span class="symbol">:path</span> =&gt; <span class="string">'../../E'</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>好吧，你又失败了，E 还依赖了 D…… Stop! 如果总是这样一次又一次 <code>pod install</code> 才能知道自己全部依赖的 Pods 有什么是不是太搓了？如果依赖少还好，但是对于依赖很多情况，这样一次次处理就有点 2 了。能不能有什么别的方法能一次性知道某个 Development Pod 的全部依赖呢？</p>
+<p>答案是可以的，感兴趣的可以直接移步这里 <a href="https://github.com/X140Yu/development-pods-dependency-checker" target="_blank" rel="noopener">X140Yu/development-pods-dependency-checker</a> </p>
+<h2 id="Development-Pods-Dependency-Checker"><a href="#Development-Pods-Dependency-Checker" class="headerlink" title="Development Pods Dependency Checker"></a>Development Pods Dependency Checker</h2><p>效果在 repo 里的 README 就可以看到了，它能找出工程中的所有依赖，并且把每个 Pod 的依赖展开，显示出它的全部依赖，而不是 podspec 中的那一小部分。</p>
+<p>它的原理很简单，在 <code>pod install</code> 成功之后， <code>Pods/Local Podspecs</code> 目录中会出现一堆 <code>*.podspec.json</code> 文件，你可以把它们理解为 <code>podspec</code> 的 JSON 版本，这对 JS 处理更加友好。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// R.podspec.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"R"</span>,</span><br><span class="line">  <span class="string">"version"</span>: <span class="string">"0.0.1"</span>,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="string">"dependencies"</span>: &#123;</span><br><span class="line">  <span class="string">"A"</span>: [],</span><br><span class="line">  <span class="string">"C"</span>: [],</span><br><span class="line">  <span class="string">"E"</span>: []</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而作为 localpods 的 A, C, E 也会有类似这样的文件。所以我们要做的事情就很简单了，挨个 parse 各个 JSON 文件，递归处理 <code>dependencies</code> 中的每一项，直到它的 <code>dependencies</code> 是空为止。其实核心的逻辑也就下面这一小段，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">trigger</span>(<span class="params">pods</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> podsRet =[]</span><br><span class="line">  pods.forEach(<span class="function"><span class="params">ele</span> =&gt;</span> &#123;</span><br><span class="line">    podsRet.push(recursiveFindDependencies(ele, pods))</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> podsRet</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recursiveFindDependencies</span>(<span class="params">ele, pods</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> pod =&#123;&#125;</span><br><span class="line">  <span class="keyword">if</span> (ele.name == <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  pod.name = ele.name</span><br><span class="line">  pod.dependencies =[]</span><br><span class="line">  ele.dependencies.forEach(<span class="function"><span class="params">dep</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (pod.dependencies.filter(<span class="function"><span class="params">es</span> =&gt;</span> es == dep).length == <span class="number">0</span>) &#123;</span><br><span class="line">      pod.dependencies.push(dep)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> deps = findDependencies(pods, dep).forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">Array</span>.prototype.push.apply(pod.dependencies, recursiveFindDependencies(e, pods))</span><br><span class="line">  </span><br><span class="line">      <span class="keyword">if</span> (pod.dependencies.filter(<span class="function"><span class="params">es</span> =&gt;</span> es == e).length == <span class="number">0</span>) &#123;</span><br><span class="line">        pod.dependencies.push(e)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">return</span> pod</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了这个工具以后，就能够看清一个 pod 到底依赖了什么，首先它更便于为 pod 创建独立运行的工程，其次，也能在开发阶段知道依赖关系，避免同层依赖及低层向更高层的 pod 依赖。</p>
+<p>关于这个小工具，还想说两句。它是用 <a href="https://electron.atom.io/" target="_blank" rel="noopener">electron</a> 写的，其实这东西完全用不上 electron 的跨平台便利性，因为它只可能在 mac 上运行，但我还是脑一抽用它写了，毕竟 HTML &amp; CSS 比原生开发效率高得多。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-09-16-development-pods-dependency-checker/">https://x140yu.github.io/2017-09-16-development-pods-dependency-checker/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/electron/">electron</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-09-21-Swift-4/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">升级 Swift 4</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-08-05-add-test-to-your-pod/">
+        <span class="next-text nav-default">为你的 pod 添加测试</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-09-16-development-pods-dependency-checker/';
+        this.page.identifier = '2017-09-16-development-pods-dependency-checker/';
+        this.page.title = '如果你也用 Development Pods';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

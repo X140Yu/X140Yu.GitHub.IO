@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Swift 中的方法调用（Method Dispatch）（一） - 概述">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-04-08-method-dispatch-in-swift-1/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Swift 中的方法调用（Method Dispatch）（一） - 概述 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Swift 中的方法调用（Method Dispatch）（一） - 概述
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-08
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-04-08-method-dispatch-in-swift-1/" data-title="Swift 中的方法调用（Method Dispatch）（一） - 概述">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#方法的派发方式"><span class="toc-text">方法的派发方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#非-Protocol-对象调用的情况"><span class="toc-text">非 Protocol 对象调用的情况</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Struct"><span class="toc-text">Struct</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Class"><span class="toc-text">Class</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NSObject-Subclass"><span class="toc-text">NSObject Subclass</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protocol-对象调用的情况"><span class="toc-text">Protocol 对象调用的情况</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>Objective-C 方法调用的方式是发消息，那 Swift 方法调用的方式是什么呢？搞清楚 Swift 中方法调用的方式，会对于我们理解 Swift 有更好的帮助</p>
+<p>Swift 4 &amp; Xcode 9.2</p>
+</blockquote>
+<p>先看一个最简单的例子，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">// DogStruct.swift</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">DogStruct</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">makeNoise</span><span class="params">()</span></span> &#123; </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"bark in struct!"</span>) </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> ds = <span class="type">DogStruct</span>()</span><br><span class="line">ds.makeNoise()</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>我们如何知道 <code>ds.makeNoise()</code> 是如何调用的呢？是 <code>objc_msgSend</code> 吗？光靠猜可能不太行，这里我们就要通过 <a href="https://github.com/apple/swift/blob/master/docs/SIL.rst" target="_blank" rel="noopener">SIL</a> 来分析一下了。SIL 能够体现 Swift 的实现细节，分析 SIL 能让我们更好地理解 Swift 代码执行的过程。</p>
+<p>使用 <code>swiftc</code> 把上面这个文件处理一下，生成 <code>DogStuct.sil</code>，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用 swiftc 生成 SIL，不开启编译器优化</span></span><br><span class="line">swiftc -emit-silgen DogStruct.swift -Onone &gt; DogStruct.sil</span><br></pre></td></tr></table></figure>
+<p>打开 <code>DogStruct.sil</code>，刚才的代码被编译成了一个 90 几行的 SIL 文件，下面这几行代表我们的 <code>main</code> 函数（其它部分已省略，感兴趣的同学可以自己尝试生成），</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// main</span><br><span class="line">sil @main : $@convention(c) (Int32, UnsafeMutablePointer&lt;Optional&lt;UnsafeMutablePointer&lt;Int8&gt;&gt;&gt;) -&gt; Int32 &#123;</span><br><span class="line">bb0(%0 : $Int32, %1 : $UnsafeMutablePointer&lt;Optional&lt;UnsafeMutablePointer&lt;Int8&gt;&gt;&gt;):</span><br><span class="line">  alloc_global @_T06vtable2dsAA9DogStructVv       // id: %2</span><br><span class="line">  %3 = global_addr @_T06vtable2dsAA9DogStructVv : $*DogStruct // users: %9, %7</span><br><span class="line">  // function_ref DogStruct.init()</span><br><span class="line">  %4 = function_ref @_T06vtable9DogStructVACycfC : $@convention(method) (@thin DogStruct.Type) -&gt; DogStruct // user: %6</span><br><span class="line">  %5 = metatype $@thin DogStruct.Type             // user: %6</span><br><span class="line">  %6 = apply %4(%5) : $@convention(method) (@thin DogStruct.Type) -&gt; DogStruct // user: %7</span><br><span class="line">  store %6 to [trivial] %3 : $*DogStruct          // id: %7</span><br><span class="line">  // function_ref DogStruct.makeNoise()</span><br><span class="line">  %8 = function_ref @_T06vtable9DogStructV9makeNoiseyyF : $@convention(method) (DogStruct) -&gt; () // user: %10</span><br><span class="line">  %9 = load [trivial] %3 : $*DogStruct            // user: %10</span><br><span class="line">  %10 = apply %8(%9) : $@convention(method) (DogStruct) -&gt; ()</span><br><span class="line">  %11 = integer_literal $Builtin.Int32, 0         // user: %12</span><br><span class="line">  %12 = struct $Int32 (%11 : $Builtin.Int32)      // user: %13</span><br><span class="line">  return %12 : $Int32                             // id: %13</span><br><span class="line">&#125; // end sil function &apos;main&apos;</span><br></pre></td></tr></table></figure>
+<p>其中 4 ~ 10 行是 <code>let ds = DogStruct()</code> 的过程。程序先为 <code>ds</code> 创建了一块全局的空间，然后用 <code>%3</code> 指向它；拿到 <code>DogStruct.init()</code> 的函数引用（<a href="https://github.com/apple/swift/blob/master/docs/SIL.rst#function-ref" target="_blank" rel="noopener">function_ref</a>，<code>%4</code>)以及 <code>DogStruct.Type</code> (<code>%5</code>)，调用之前获取到的 <code>init()</code> 方法并获取到返回值 <code>%6</code>，最后把返回值（<code>%6</code>）存储到之前开辟的内存空间（<code>%3</code>）中</p>
+<p> 11 ~ 14 代表调用 <code>ds.makeNoise()</code> 的过程。<code>%8</code> 是 <code>DogStruct.makeNose()</code> 的函数引用（<a href="https://github.com/apple/swift/blob/master/docs/SIL.rst#function-ref" target="_blank" rel="noopener">function_ref</a>），在调用函数之前，创建一个临时变量 <code>%9</code> 并指向 <code>ds</code>，调用 <code>%8</code> <code>DogStruct.makeNoise()</code></p>
+<p><code>let ds = DogStruct(); ds.makeNoise()</code> 这两句操作分别调用了两个函数。我们知道，在调用函数之前，需要先找到这个函数。通过生成的 SIL 可知，这两个函数的都是在编译时期就被确定的 (<code>function_ref</code>) ，这种调用方式是 Static Dispatch（静态调用）</p>
+<p>在 Swift 中，除了 Static Dispatch，还有 Dynamic Dispatch（动态调用，被调用的函数在 runtime 才能被确认），而 Dynamic Dispatch 实现在方式又有 V-Table Dispatch、Witness Table Dispatch 和 objc_msgSend。虽然方法的调用方式有很多，但搞清楚方法调用的方式却没那么复杂</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216224756.png" alt></p>
+<h2 id="方法的派发方式"><a href="#方法的派发方式" class="headerlink" title="方法的派发方式"></a>方法的派发方式</h2><h3 id="非-Protocol-对象调用的情况"><a href="#非-Protocol-对象调用的情况" class="headerlink" title="非 Protocol 对象调用的情况"></a>非 Protocol 对象调用的情况</h3><p>通过观察编译 Swift 生成的 SIL 代码，总结了定义在 struct、class 和 NSObject Subclass 的常见方法的调用方式（在没有编译器优化的情况下），</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216224837.png" alt></p>
+<p>我们可以通过现象简单推一下原因，为什么方法会以不同的方式被调用？</p>
+<h4 id="Struct"><a href="#Struct" class="headerlink" title="Struct"></a>Struct</h4><p>因为 stuct 不支持继承，所以它不需要一个 table 来记录方法信息。所以在方法调用者是一个 struct 的前提下，它所有的方法调用（包括协议方法），都是静态调用。</p>
+<p>虽然不支持继承，但 struct 能通过 Protocol 实现多态</p>
+<h4 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h4><p>对于一个 pure Swift class 来说，影响它方法调用的关键字只有 <code>final</code></p>
+<p>函数如果被标记成 <code>final</code> ，编译器就会知道这个方法不会被 <code>override</code>，并把它的调用方式标记成静态调用。而对于未标记成 <code>final</code> 并在 class 内部（非 extension）中定义的方法，Swift 会用一种叫作 Virtual Table 的机制来查找这个方法并调用</p>
+<p>因为定义在 extension 中的方法目前还不支持 <code>override</code>，所以定义在其中的方法都是静态派发的。</p>
+<h4 id="NSObject-Subclass"><a href="#NSObject-Subclass" class="headerlink" title="NSObject Subclass"></a>NSObject Subclass</h4><p>影响这种类型的函数调用方式的关键字有很多</p>
+<p>标记为 <code>final</code> 的函数是一定会静态调用的，原因同 class。</p>
+<p>主类（非 extension）中定义的普通方法和标记为 <code>@objc</code> 的方法都使用 V-Table 机制派发。用 Swift 编写的类是不能被 Objective-C 继承的，<code>@objc</code> 只是把方法暴露给 Objective-C，并没有改变方法派发的本质</p>
+<p><code>dynamic</code> 的方法不管在主类还是 extension 中都是通过发消息动态调用的，因为 <code>dynamic</code> 就是干这个事儿的。</p>
+<p>Extension 中的方法是无法基于 V-Table 派发的，被标记为 <code>@objc</code> 和 <code>dynamic</code> 的又无法使用静态派发，所以只能基于 message 派发。</p>
+<p>以上介绍的都是在<strong>没有编译器优化</strong>的情况下方法的派发方式。在有优化的情况下，编译器会尽可能地把基于 Table 机制派发的方法变成静态派发，有的方法甚至会就地展开，变成 inline 的形式，一切为了效率嘛</p>
+<h3 id="Protocol-对象调用的情况"><a href="#Protocol-对象调用的情况" class="headerlink" title="Protocol 对象调用的情况"></a>Protocol 对象调用的情况</h3><p>用 Struct、Class 和 NSObject Subclass 分别实现了同一个协议，用本身的对象和协议对象调用协议中的方法。通过观察编译后的 SIL，我们可以得出以下结论，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216224849.png" alt></p>
+<p>用类本身的对象调用协议方法的时候，像我们上面发现的一样，该怎么派发还是怎么派发，跟正常的方法调用没有区别；但是当用协议对象调用协议方法的时，不管是结构体还是类，所有的方法都是使用一种基于 Witness Table 的形式派发</p>
+<p>定义为 <code>@objc</code> 的协议方法会基于 message 派发的</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>希望大家能通过此文了解使用 SIL 分析 Swift 的实现的方法，并在看到一个 Swift 方法就能想到，它究竟是基于什么方式进行派发</p>
+<p>下一篇文章大概会介绍一下 V-Table 和 Witness Table 都是些什么东西（不太监的情况下</p>
+<p>如果有什么写错的地方欢迎指出~</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2016/416/" target="_blank" rel="noopener">Understanding Swift Performance - Apple WWDC 2016</a></li>
+<li><a href="https://developer.apple.com/videos/play/wwdc2015/409/" target="_blank" rel="noopener">Optimizing Swift Performance - Apple WWDC 2015</a></li>
+<li><a href="https://www.raizlabs.com/dev/2016/12/swift-method-dispatch/" target="_blank" rel="noopener">Method Dispatch in Swift - Raizlabs</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-04-08-method-dispatch-in-swift-1/">https://x140yu.github.io/2018-04-08-method-dispatch-in-swift-1/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">两个 Framework 中如果定义了相同名字的 C 函数会发生什么？</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-03-12-ios-gitlab-ci/">
+        <span class="next-text nav-default">给 iOS 组件集成 GitLab CI</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-04-08-method-dispatch-in-swift-1/';
+        this.page.identifier = '2018-04-08-method-dispatch-in-swift-1/';
+        this.page.title = 'Swift 中的方法调用（Method Dispatch）（一） - 概述';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

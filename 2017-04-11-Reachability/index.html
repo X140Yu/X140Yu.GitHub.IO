@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="读 AFNetworking 源码之 Reachability">
+
+
+
+
+  <meta name="keywords" content="iOS, Objective-C, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-04-11-Reachability/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 读 AFNetworking 源码之 Reachability - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          读 AFNetworking 源码之 Reachability
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-04-11
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-04-11-Reachability/" data-title="读 AFNetworking 源码之 Reachability">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Reachability-是什么？"><span class="toc-text">Reachability 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reachability-的几个实现"><span class="toc-text">Reachability 的几个实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AFNetworkReachabilityManager"><span class="toc-text">AFNetworkReachabilityManager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用及注意事项"><span class="toc-text">使用及注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-初始化对象"><span class="toc-text">1. 初始化对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-开启监听"><span class="toc-text">2. 开启监听</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-接收通知"><span class="toc-text">3. 接收通知</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-停止监听"><span class="toc-text">4. 停止监听</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现"><span class="toc-text">实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="Reachability-是什么？"><a href="#Reachability-是什么？" class="headerlink" title="Reachability 是什么？"></a>Reachability 是什么？</h2><p>根据 Mac 自带的词典，这个单词的英英解释是 <code>able to be contacted</code>，通俗一点就是连接的能力。而放到 App 中就是有没有连接网络的能力。</p>
+<p>相信大家在日常使用应用的时候都看到过。在不同的网络条件下，App 的某些行为会有所不同。比如对于多媒体素材来说，移动网络下通常会请求低质量版本，而 Wi-Fi 下会尽量下载大尺寸甚至原尺寸。还有，在 Wi-Fi 条件下播放视频的时候，如果用户的 Wi-Fi 突然断掉了，那 App 应该自动暂停视频播放及预取缓存，并弹窗提示用户。</p>
+<p>总结一下，当你想知道当前的设备是连着 Wi-Fi 还是连着 4G，或者你想在用户设备网络条件发生变化的时候得到通知，那你就该使用 Reachability 了。</p>
+<a id="more"></a>
+<h2 id="Reachability-的几个实现"><a href="#Reachability-的几个实现" class="headerlink" title="Reachability 的几个实现"></a>Reachability 的几个实现</h2><p>目前网络上大概有三种实现</p>
+<ul>
+<li><a href="https://developer.apple.com/library/content/samplecode/Reachability/Introduction/Intro.html" target="_blank" rel="noopener">Apple Sample Code - Reachability</a></li>
+<li><a href="https://github.com/AFNetworking/AFNetworking/blob/master/AFNetworking/AFNetworkReachabilityManager.h" target="_blank" rel="noopener">AFNetworking - AFNetworkReachabilityManager</a></li>
+<li><a href="https://github.com/tonymillion/Reachability" target="_blank" rel="noopener">tonymillion/Reachability</a></li>
+</ul>
+<p>而它们本质上都是对 SystemConfiguration Framework 中 <code>SCNetworkReachability.h</code> 相关的 C API 进行封装，以实现相同的效果。</p>
+<h2 id="AFNetworkReachabilityManager"><a href="#AFNetworkReachabilityManager" class="headerlink" title="AFNetworkReachabilityManager"></a>AFNetworkReachabilityManager</h2><p>由于三个封装的原理以及实现的功能都大同小异，但在这里会详细介绍一下 AFNetworking（用 Objective-C 开发的同学，项目里应该 95% 以上都会依赖 AFNetworking 吧）版本的使用以及实现。</p>
+<h3 id="使用及注意事项"><a href="#使用及注意事项" class="headerlink" title="使用及注意事项"></a>使用及注意事项</h3><h4 id="1-初始化对象"><a href="#1-初始化对象" class="headerlink" title="1. 初始化对象"></a>1. 初始化对象</h4><p>AFNetworkReachabilityManager 比较常用的几个初始化方法如下，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 获取全局唯一单例</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)sharedManager;</span><br><span class="line"><span class="comment">/// 实例化一个监听默认地址（0.0.0.0）的 manager</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)manager;</span><br><span class="line"><span class="comment">/// 实例化一个监听给定 domain 的 manager</span></span><br><span class="line">+ (<span class="keyword">instancetype</span>)managerForDomain:(<span class="built_in">NSString</span> *)domain;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Note: Reachability cannot tell your application if you can connect to a particular host, only that an interface is available that might allow a connection, and whether that interface is the WWAN.</p>
+</blockquote>
+<p>首先要澄清一个概念，根据 Apple 的文档，Reachability 并不能像 <code>ping</code> 一样，所以在天朝不要看到 Reachability 能够通过 Wi-Fi 连接到 <code>www.youtube.com</code> 就妄想你可以上 YouTube 了，你只是<strong>可能</strong>通过 Wi-Fi 连接到那个 host，而不是<strong>一定</strong>可以连接上。</p>
+<p>这里比较建议调用 <code>+ (instancetype)manager</code> 创建属于自己的 manager，好处我们后面讲。</p>
+<h4 id="2-开启监听"><a href="#2-开启监听" class="headerlink" title="2. 开启监听"></a>2. 开启监听</h4><p>首先需要调用开启监听的方法，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 这是很容易被忽视的方法，不是初始化了 manager 就默认开始监听的</span></span><br><span class="line">- (<span class="keyword">void</span>)startMonitoring;</span><br></pre></td></tr></table></figure>
+<p>如果你只想知道当前的网络条件是什么，通过 manager 的下面三个属性就可以了解了，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BOOL reachable;         // 有无网络连接</span><br><span class="line">BOOL reachableViaWWAN   // 当前是移动网络</span><br><span class="line">BOOL reachableViaWiFi   // 当前是 Wi-Fi</span><br></pre></td></tr></table></figure>
+<h4 id="3-接收通知"><a href="#3-接收通知" class="headerlink" title="3. 接收通知"></a>3. 接收通知</h4><p>AFNetworking 的 Reachability Manager 提供了两种获取网络条件发生变化的方式，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 通过设置 manager 的 statusChangeBlock，监听变化</span></span><br><span class="line">- (<span class="keyword">void</span>)setReachabilityStatusChangeBlock:(<span class="keyword">nullable</span> <span class="keyword">void</span> (^)(AFNetworkReachabilityStatus status))block;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// 通过监听一个 manager 发出的 notification，userinfo 中的</span></span><br><span class="line"><span class="comment">/// `AFNetworkingReachabilityNotificationStatusItem` key 就是当前的 status</span></span><br><span class="line">FOUNDATION_EXPORT <span class="built_in">NSString</span> * <span class="keyword">const</span> AFNetworkingReachabilityDidChangeNotification;</span><br></pre></td></tr></table></figure>
+<p>这里就要解释一下上文中提到问题，为什么不建议使用 <code>+ (instancetype)sharedManager;</code> 获得单例</p>
+<p>因为 <code>setReachabilityStatusChangeBlock</code> 的回调通知的方式只会对最新调用的地方才会生效，如果大家都用 <code>sharedManager</code> 获取 manager，然后在自己的业务里设置回调的 block，如果此时多个业务都跑着，那在网络条件发生变化的时候，那也只有在最后被执行到的代码才会获得通知，之前所有设置 block 的地方都会失效，为了避免这种小概率的事情发生，还是应该在自己的业务里创建自己的 manager。</p>
+<h4 id="4-停止监听"><a href="#4-停止监听" class="headerlink" title="4. 停止监听"></a>4. 停止监听</h4><p>不需要监听网络条件发生变化的时候调用此方法，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)stopMonitoring;</span><br></pre></td></tr></table></figure>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>先来分析一下 manager 的初始化。它有一个 designated initializer，也就是所有的初始化方法都会最终调用这个方法进行初始化（顺便帮我们复习了一把初始化方法的设计），</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">instancetype</span>)initWithReachability:(<span class="built_in">SCNetworkReachabilityRef</span>)reachability &#123;</span><br><span class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _networkReachability = <span class="built_in">CFRetain</span>(reachability);</span><br><span class="line">    <span class="keyword">self</span>.networkReachabilityStatus = AFNetworkReachabilityStatusUnknown;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它接受一个被定义在 <code>SystemConfiguration/SystemConfiguration.h</code> 中 <code>SCNetworkReachabilityRef</code> 的结构体指针为参数。</p>
+<p>看到以 Ref 结尾的对象，就要想到它是 Core Foundation 中的对象类型，这些对象基本上是 C 的指针，编译器不会帮你进行内存管理，所以需要调用 CF 开头的相关 API 自己手动进行内存管理。</p>
+<p>由于 manager 持有一个 <code>SCNetworkReachabilityRef</code> 的对象，所以在这个初始化方法里，它对这个参数进行了 retain 操作，同样地，在 <code>dealloc</code> 中调用了 release 方法对资源进行释放。</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)dealloc &#123;</span><br><span class="line">    [<span class="keyword">self</span> stopMonitoring];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 注意， C 对象的判空要和 NULL 比较</span></span><br><span class="line">    <span class="keyword">if</span> (_networkReachability != <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">CFRelease</span>(_networkReachability);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其它的几个 convenience initializers 就是针对不同的需求创建不同的 <code>SCNetworkReachabilityRef</code> 指针。</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)startMonitoring &#123;</span><br><span class="line">    <span class="comment">/// 在启用某个动作之前先关闭这个动作是一种非常好的编程习惯</span></span><br><span class="line">    <span class="comment">/// 防止多次调用某个方法会发生副作用</span></span><br><span class="line">    [<span class="keyword">self</span> stopMonitoring];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">self</span>.networkReachability) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    __<span class="keyword">weak</span> __<span class="keyword">typeof</span>(<span class="keyword">self</span>)weakSelf = <span class="keyword">self</span>;</span><br><span class="line">    AFNetworkReachabilityStatusBlock callback = ^(AFNetworkReachabilityStatus status) &#123;</span><br><span class="line">        __<span class="keyword">strong</span> __<span class="keyword">typeof</span>(weakSelf)strongSelf = weakSelf;</span><br><span class="line">        <span class="comment">/// 通知 block 的持有者，当前的网络状态</span></span><br><span class="line">        strongSelf.networkReachabilityStatus = status;</span><br><span class="line">        <span class="keyword">if</span> (strongSelf.networkReachabilityStatusBlock) &#123;</span><br><span class="line">            strongSelf.networkReachabilityStatusBlock(status);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// 创建需要的 context，这个结构体包含了用户指定的信息以及 callback</span></span><br><span class="line">    <span class="built_in">SCNetworkReachabilityContext</span> context = &#123;<span class="number">0</span>, (__bridge <span class="keyword">void</span> *)callback, AFNetworkReachabilityRetainCallback, AFNetworkReachabilityReleaseCallback, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="comment">/// 当 self.networkReachability 的状态发生变化时，将会调用 AFNetworkReachabilityCallback 函数指针</span></span><br><span class="line">    <span class="comment">/// AFNetworkReachabilityCallback 的第三个参数将会被传入上面创建的 context 结构体中的 callback 信息</span></span><br><span class="line">    <span class="built_in">SCNetworkReachabilitySetCallback</span>(<span class="keyword">self</span>.networkReachability, AFNetworkReachabilityCallback, &amp;context);</span><br><span class="line">    <span class="comment">/// 开始监听 self.networkReachability，需要指定 runloop 和 runloop mode</span></span><br><span class="line">    <span class="comment">/// Apple 使用的是 kCFRunLoopDefaultMode</span></span><br><span class="line">    <span class="built_in">SCNetworkReachabilityScheduleWithRunLoop</span>(<span class="keyword">self</span>.networkReachability, <span class="built_in">CFRunLoopGetMain</span>(), kCFRunLoopCommonModes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/// 使用后台线程获取当前持有的 SCNetworkReachabilityRef 的网络条件</span></span><br><span class="line">    <span class="comment">/// 更新当前 manager 的 status</span></span><br><span class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, <span class="number">0</span>),^&#123;</span><br><span class="line">        <span class="built_in">SCNetworkReachabilityFlags</span> flags;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">SCNetworkReachabilityGetFlags</span>(<span class="keyword">self</span>.networkReachability, &amp;flags)) &#123;</span><br><span class="line">            AFPostReachabilityStatusChange(flags, callback);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 在 `SCNetworkReachabilitySetCallback(self.networkReachability, AFNetworkReachabilityCallback, &amp;context);` 的时候设置上了系统回调的函数指针</span></span><br><span class="line"><span class="comment">/// 网络条件发生变化时，此函数被调用，同时获取到了那个持有 SCNetworkReachabilityRef 的 manager 的 block</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> AFNetworkReachabilityCallback(<span class="built_in">SCNetworkReachabilityRef</span> __unused target, <span class="built_in">SCNetworkReachabilityFlags</span> flags, <span class="keyword">void</span> *info) &#123;</span><br><span class="line">    AFPostReachabilityStatusChange(flags, (__bridge AFNetworkReachabilityStatusBlock)info);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> AFPostReachabilityStatusChange(<span class="built_in">SCNetworkReachabilityFlags</span> flags, AFNetworkReachabilityStatusBlock block) &#123;</span><br><span class="line">    AFNetworkReachabilityStatus status = AFNetworkReachabilityStatusForFlags(flags);</span><br><span class="line">    <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        <span class="keyword">if</span> (block) &#123;</span><br><span class="line">            <span class="comment">/// 调用那个 manager 的 block，实现通知</span></span><br><span class="line">            block(status);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/// 通知 notification 监听者</span></span><br><span class="line">        <span class="built_in">NSNotificationCenter</span> *notificationCenter = [<span class="built_in">NSNotificationCenter</span> defaultCenter];</span><br><span class="line">        <span class="built_in">NSDictionary</span> *userInfo = @&#123; AFNetworkingReachabilityNotificationStatusItem: @(status) &#125;;</span><br><span class="line">        [notificationCenter postNotificationName:AFNetworkingReachabilityDidChangeNotification object:<span class="literal">nil</span> userInfo:userInfo];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>AFNetworking 的 Reachability 封装的比 Apple 好的地方在于，它不光实现了通过 notification 的方式通知网络变化，还实现了 block 的方式，代码干净，文档丰富。一个 iOS 届最知名的开源库绝非浪得虚名。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-04-11-Reachability/">https://x140yu.github.io/2017-04-11-Reachability/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Objective-C/">Objective-C</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-04-12-simple-ping/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">读 Apple Sample Code 之 Simple Ping</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-02-01-express-api-versioning/">
+        <span class="next-text nav-default">Express 的 API 版本控制</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-04-11-Reachability/';
+        this.page.identifier = '2017-04-11-Reachability/';
+        this.page.title = '读 AFNetworking 源码之 Reachability';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

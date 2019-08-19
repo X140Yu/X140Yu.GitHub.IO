@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="两个 Framework 中如果定义了相同名字的 C 函数会发生什么？">
+
+
+
+
+  <meta name="keywords" content="iOS, C, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 两个 Framework 中如果定义了相同名字的 C 函数会发生什么？ - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          两个 Framework 中如果定义了相同名字的 C 函数会发生什么？
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-14
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/" data-title="两个 Framework 中如果定义了相同名字的 C 函数会发生什么？">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-起因"><span class="toc-text">0x01 起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-尝试"><span class="toc-text">0x02 尝试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-原因"><span class="toc-text">0x03 原因</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态库"><span class="toc-text">静态库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#动态库"><span class="toc-text">动态库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-结论"><span class="toc-text">0x04 结论</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>本文基于大量猜测，如有错误，请指出 👻</p>
+</blockquote>
+<h2 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01 起因"></a>0x01 起因</h2><p>前一段时间给公司的项目升级 CocoaPods 1.5，打算把所有的 Pods 由 Dynamic 变为 Static 集成。在集成完毕调试的时候，到处乱点触发了一次 Crash，堆栈大概长这样，</p>
+<a id="more"></a>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225127.png" alt></p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225146.png" alt></p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225159.png" alt></p>
+<p>大概的过程是，<code>ZipArchive</code> 在内部调用 <code>fill_fopen64_filefunc</code> 这个 C 方法的时候，跳到了 <code>Instabug</code> 的同名函数实现中，然后就发生了 crash</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225213.png" alt></p>
+<p>刚看到这个堆栈的时候，我也是一脸懵逼，在一个 Framework 内部调用方法，怎么就调到另一个 Framework 中的同名方法了呢？难不成是静态库导致的？</p>
+<h2 id="0x02-尝试"><a href="#0x02-尝试" class="headerlink" title="0x02 尝试"></a>0x02 尝试</h2><p>抱着试一试的心态，我创建了一个 Demo 工程，以 Development Pods 的形式依赖 A、B 两个 Pods（<code>use_framework!</code>），</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225226.png" alt></p>
+<p>调用以下两个方法，</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">testA();</span><br><span class="line">testB();</span><br></pre></td></tr></table></figure>
+<p>在都以 Dynamic Library（默认情况下）集成 A，B 的情况下，上面调用输出的结果是，</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">AAAAAA</span><br><span class="line">BBBBBBB</span><br></pre></td></tr></table></figure>
+<p>嗯，意料之中</p>
+<p>使用 CocoaPods 的新 feature，以 Static Library 的形式依赖 A 与 B，再看看上述调用的结果，</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">BBBBBBB</span><br><span class="line">BBBBBBB</span><br></pre></td></tr></table></figure>
+<p>因缺思厅，看来复现了我们一开始遇到的问题</p>
+<h2 id="0x03-原因"><a href="#0x03-原因" class="headerlink" title="0x03 原因"></a>0x03 原因</h2><p>动态库和静态库的一个明显的区别是，会不会被集成到最后的可执行文件中去。</p>
+<h3 id="静态库"><a href="#静态库" class="headerlink" title="静态库"></a>静态库</h3><p>在 link 静态库时候，linker 会把它需要的东西复制到可执行文件中，用 <code>nm</code> 查看以依赖 Static Library 集成的 binary，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225254.png" alt></p>
+<p>可以发现，在 Static Library 中的函数符号出现在了最后的 binary 中（T 代表全局代码段符号），但由于这两个函数的名字都是 <code>test</code>，最终只有一个函数实现被合并进去了。</p>
+<p>这个 <code>test</code> 的实现为什么会指向 B 呢？通过修改 <code>OTHER_LDFLAGS</code> 多次实验后发现，这里的实现指向跟 link 的顺序有关，我猜测，如果是后 link B，那么 linker 在复制 B 中符号的时候会把已经复制过的 A 的符号覆盖，导致 A 的实现就不见了。如果后 link A，那同理，B 的实现会被覆盖。</p>
+<h3 id="动态库"><a href="#动态库" class="headerlink" title="动态库"></a>动态库</h3><p>在以动态库集成的情况下，我们用 <code>nm</code> 查看一下 <code>xxx.app/xxx</code>，<code>xxx.app/Frameworks/A.framework/A</code> 以及 <code>xxx.app/Frameworks/B.framework/B</code>，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225311.png" alt></p>
+<p>可以发现，在最终 binary 中，并未包含 A 或 B 中的任何符号（U 代表未定义符号），真正的符号存在于它们各自的 framework 中，即使 C 函数名重复也不会影响真正的调用。</p>
+<p>实际上公司的项目的场景比我上面介绍的还要复杂一些，Instabug 和 ZipArchive 都是用 Pods 集成的，还使用了 <a href="https://github.com/Ruenzuo/cocoapods-amimono" target="_blank" rel="noopener">cocoapods-amimono</a> 插件，在没有升级到 CocoaPods 1.5 的时候没有出现问题。</p>
+<p>但当把 cocoapods-amimono 拿掉，使用 CocoaPods 1.5 的 Static Framework 功能，就会发现 <code>fill_fopen64_filefunc</code> 在 main binary 中成了未定义的符号，也就是 ZipArchive 中的函数并未全被拷贝进最终的二进制文件中，而是指向了 Instabug.framework 中。</p>
+<p>Instabug 的代码是提前编译好的，linker 没有办法把这部分代码合入 binary。在 ZipArchive 是静态库的情况下，linker 发现了 Instabug 中存在了这个函数，就没有把 ZipArchive 的拷贝进去（都是猜的 =。=</p>
+<h2 id="0x04-结论"><a href="#0x04-结论" class="headerlink" title="0x04 结论"></a>0x04 结论</h2><p>如果你的库中包含某些 C 的函数或者全局变量，即使没有暴露到外面，也要记得加前缀。对于没有 namespace 的语言，加前缀总是没错的，如果还是有错，那就多加几位 🤣</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/">https://x140yu.github.io/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/C/">C</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-04-16-create-cli-using-gem/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用 Ruby Gem 创建命令行工具</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-04-08-method-dispatch-in-swift-1/">
+        <span class="next-text nav-default">Swift 中的方法调用（Method Dispatch）（一） - 概述</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/';
+        this.page.identifier = '2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/';
+        this.page.title = '两个 Framework 中如果定义了相同名字的 C 函数会发生什么？';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

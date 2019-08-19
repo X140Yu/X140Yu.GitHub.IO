@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="升级 CocoaPods 1.5，使用 Swift Static Framework">
+
+
+
+
+  <meta name="keywords" content="iOS, ruby, CocoaPods, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-04-28-cocoapods-1-5/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 升级 CocoaPods 1.5，使用 Swift Static Framework - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          升级 CocoaPods 1.5，使用 Swift Static Framework
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-28
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-04-28-cocoapods-1-5/" data-title="升级 CocoaPods 1.5，使用 Swift Static Framework">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Revision"><span class="toc-text">Revision</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>CocoaPods 1.5 is amazing!</p>
+</blockquote>
+<p><a href="blog.cocoapods.org/CocoaPods-1.5.0/">CocoaPods 1.5</a> 在前一段时间 release 了，其中有一个对于使用了 Swift 的项目非常重要 feature，那就是支持了 Swift 的 Static Framework。</p>
+<a id="more"></a>
+<p>这还要讲讲 Swift Static Framework 的历史。在 Xcode 9 之前，并不支持 Swift Static Framework；Xcode 9 之后支持了 Swift 的 Static Framework，但是使用 Swift + CocoaPods 的项目并没有办法使用 Static Framework，因为 CocoaPods 不支持。在 CocoaPods release  <a href="http://blog.cocoapods.org/CocoaPods-1.4.0/" target="_blank" rel="noopener">1.4 版本</a> 的时候，终于支持了在 <code>use_framework!</code> 的情况下使用 Static Framework，但是对于 Swift 和 Objective-C 混编的项目还是未能完美支持；终于在 1.5 版本，Swift 的项目能用上 Static Framework 了！</p>
+<p>为什么这件事情令人兴奋呢？这还得从 Dynamic Framework 说起。Apple 官方推荐每个 App 使用 Dynamic Framework 的数量是 <a href="https://developer.apple.com/videos/play/wwdc2016/406/" target="_blank" rel="noopener">6 个</a>，这是有原因的。因为在 App 启动的时候，dyld 会load 这些动态库，这会造成启动时间的增加；而且动态库数量过多，还会在 iOS 9 的设备上造成 dyld 的 <a href="https://github.com/artsy/eigen/issues/1246" target="_blank" rel="noopener">crash</a>。所以使用 Static Framework 应该是每个使用了 Swift + CocoaPods 的项目都期望的事情。</p>
+<p>在 CocoaPods 还未支持这件事情的时候，可以使用 <a href="https://github.com/Ruenzuo/cocoapods-amimono" target="_blank" rel="noopener">cocoapods-amimono</a> 这个插件。它会把所有 Dynamic Framework 的符号拷贝到最终程序的可执行文件中，解决上面出现的两个问题。</p>
+<p>既然使用动态库有这样那样的问题，那在升级了 1.5 以后，全都使用静态库不就好了？事是这么回事，但使用静态库也不是完美的，因为你还可能会遇到这样的问题：<a href="https://zhaoxinyu.me/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/" target="_blank" rel="noopener">两个 Framework 中如果定义了相同名字的 C 函数会发生什么？</a> ，<a href="https://twitter.com/_X140Yu/status/984308379173568513" target="_blank" rel="noopener">调用 category 方法会 crash</a> 等等，不过都比较好解决，不像 Dynamic Framework 那样有硬伤。</p>
+<p>总体上来说，使用静态库还是比动态库有优势的。</p>
+<p>然而要想在项目中使用这个 feature，需要在 <code>podspec</code> 显示指定 <code>s.static_framework = true</code>，对于集成 100 多个 pod 的项目来说，一个个改起来太麻烦了，也不现实。但是 CocoaPods 是 Ruby 写的呀，我们可以通过 patch CocoaPods 来实现在只写几行代码的情况下，把所有 pod 变成 Static Framework，</p>
+<p>得益于 Ruby 的动态性，我们可以直接在 podfile 中书写以下代码，实现静态库的 patch 而不需要修改 podspec，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">pre_install <span class="keyword">do</span> <span class="params">|_|</span></span><br><span class="line">  Pod::PodTarget.send(<span class="symbol">:define_method</span>, <span class="symbol">:static_framework?</span>) &#123; <span class="literal">true</span> &#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这样对于 PodTarget 的 patch 就会在 <code>pod install</code> 的时候生效，所以我们就不需要改每个 pod 的 podspec 就可以实现每个 pod 都是 <code>static_framework</code> 的效果了，enjoy~<br>​</p>
+<h2 id="Revision"><a href="#Revision" class="headerlink" title="Revision"></a>Revision</h2><ul>
+<li>2018-12-25 把 Static Library 改为 Static Framework</li>
+<li>2018-09-19 更新了 patch podfile 的脚本</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-04-28-cocoapods-1-5/">https://x140yu.github.io/2018-04-28-cocoapods-1-5/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/ruby/">ruby</a>
+            
+              <a href="/tags/CocoaPods/">CocoaPods</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-08-20-analyze-pods-dependecy/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">分析使用 CocoaPods 项目的依赖</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-04-17-bundler-in-ios-proj/">
+        <span class="next-text nav-default">管理 iOS 项目的 ruby 依赖</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-04-28-cocoapods-1-5/';
+        this.page.identifier = '2018-04-28-cocoapods-1-5/';
+        this.page.title = '升级 CocoaPods 1.5，使用 Swift Static Framework';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

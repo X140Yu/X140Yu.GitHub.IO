@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="给 iOS 组件集成 GitLab CI">
+
+
+
+
+  <meta name="keywords" content="iOS, CI, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-03-12-ios-gitlab-ci/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 给 iOS 组件集成 GitLab CI - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          给 iOS 组件集成 GitLab CI
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-03-12
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-03-12-ios-gitlab-ci/" data-title="给 iOS 组件集成 GitLab CI">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CI-都能做些什么？"><span class="toc-text">CI 都能做些什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitLab-runner"><span class="toc-text">GitLab runner</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gitlab-ci-yml"><span class="toc-text">.gitlab-ci.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lint-amp-Code-Coverage"><span class="toc-text">lint &amp; Code Coverage</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OCLint"><span class="toc-text">OCLint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#swiftlint"><span class="toc-text">swiftlint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Code-Coverage"><span class="toc-text">Code Coverage</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#danger"><span class="toc-text">danger</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pod-template"><span class="toc-text">pod template</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pod-template-文件组织"><span class="toc-text">pod template 文件组织</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>相信每个人都有这样一个愿景，就是希望自己维护的每一个组件都能跟知名的开源项目一样优秀，有高的代码质量，完整的测试和文档。为了达到这一目的，就需要有 CI 作为项目开发过程中的一个环节介入。在每次 push 或者提交 Merge Request 的时候，CI 可以代替人来做一些事情，编译项目，跑跑测试，做一些静态检测，帮助提交者和 reviewer 及时发现一些简单的问题，提高工作效率。CI 的</p>
+<a id="more"></a>
+<h2 id="CI-都能做些什么？"><a href="#CI-都能做些什么？" class="headerlink" title="CI 都能做些什么？"></a>CI 都能做些什么？</h2><p>对于 iOS 组件来说，以下几件事在 CI 阶段做是比较有帮助的，</p>
+<ul>
+<li>build 项目并运行所有测试，给出 Code Coverage</li>
+<li>使用 lint 工具对代码进行静态分析</li>
+<li>使用 <a href="http://danger.systems/ruby/" target="_blank" rel="noopener">danger</a> 找出 MR 以及 MR 改动中可能存在的问题</li>
+</ul>
+<p>以上的几步都会通过 danger 在 MR 下面给出评论，效果如图，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225508.png" alt></p>
+<h2 id="GitLab-runner"><a href="#GitLab-runner" class="headerlink" title="GitLab runner"></a>GitLab runner</h2><p>选择 GitLab runner 作为 CI 平台是很自然事情，它 UI 好看（是的 Jenkins 太复古了），集成简单，而且还可以作为 MR 的合并流程的其中一环，比如 pipeline 没过，就无法合并，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225535.png" alt></p>
+<h3 id="gitlab-ci-yml"><a href="#gitlab-ci-yml" class="headerlink" title=".gitlab-ci.yml"></a><code>.gitlab-ci.yml</code></h3><p>想要 runner 执行上边提到的几个步骤，需要在仓库的根目录添加 <code>.gitlab-ci.yml</code> ，这个文件告诉了 runner，每次 push 或者 MR 的提交后，它应该做什么事情。关于这个文件怎么写，<a href="https://docs.gitlab.com/ce/ci/yaml/" target="_blank" rel="noopener">官网</a>写得比较清楚，这里就不再赘述了，就谈谈我觉得需要注意的一些问题吧，</p>
+<ul>
+<li>一个 stage 过后产出的文件是不能被下一个 stage 获取到的，如果想这样，需要在 stage 中添加 <code>artifacts</code> 字段，指定文件的路径</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">xxx_stage:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">xxx</span></span><br><span class="line"><span class="attr">  artifacts:</span></span><br><span class="line"><span class="attr">    paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">xxx.abc</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>对于多个仓库想要使用同一个 runner 的情况，需要在每个 stage 中添加 <code>tags</code> 字段，标示 runner 的名字，而且需要在仓库的配置里面设置一下</li>
+</ul>
+<ul>
+<li>如果遇到字符集的问题，可以在 <code>before_script</code> 中添加下面行</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">before_script:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">export</span> <span class="string">LANG=en_US.UTF-8</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">export</span> <span class="string">LANGUAGE=en_US:en</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">export</span> <span class="string">LC_ALL=en_US.UTF-8</span></span><br></pre></td></tr></table></figure>
+<h3 id="lint-amp-Code-Coverage"><a href="#lint-amp-Code-Coverage" class="headerlink" title="lint &amp; Code Coverage"></a>lint &amp; Code Coverage</h3><p>因为项目是 Objective-C 和 Swift 混编的，所以两种语言的 lint 都要有。因为还处于搭建的初期，而且 lint 的规则还处于变化的过程中，所以并没有把 lint 的结果作为一种很强的约束（比如 lint 不过，pipeline 就会 fail），目前只会把它的结果作为一种提示，评论在 MR 的下面，后面在这套流程走入正轨，在 lint 工具支持的情况下（swiftlint），会补上这一功能</p>
+<h4 id="OCLint"><a href="#OCLint" class="headerlink" title="OCLint"></a>OCLint</h4><p>Objective-C 相关的 lint 工具找了一圈，没有又简单又美观又易用的，只有 OCLint 能将就用一下。Lint 结果需要在 build 工程之后才能给出，所以稍微麻烦一些，前期配置花了一些时间，</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># .gitlab-ci.yml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">build_project:</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">cd</span> <span class="string">Example</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">pod</span> <span class="string">install</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">xcodebuild</span> <span class="string">clean</span> <span class="bullet">-workspace</span> <span class="string">$&#123;POD_NAME&#125;.xcworkspace</span> <span class="bullet">-scheme</span> <span class="string">$&#123;POD_NAME&#125;-Example</span> <span class="string">| xcpretty</span></span><br><span class="line"><span class="string">    # 指定 derived data 目录是不想让每次编译都被缓存，OCLint 对没有更新的 build 不会产生结果</span></span><br><span class="line"><span class="string">    - xcodebuild test -workspace $&#123;POD_NAME&#125;.xcworkspace -scheme $&#123;POD_NAME&#125;-Example -destination 'platform=iOS Simulator,name=iPhone X,OS=11.2' -derivedDataPath build_outputs | xcpretty -r json-compilation-database -o compile_commands.json</span></span><br><span class="line"><span class="string">    # 在远端脚本更新以后，不希望每一个仓库都作出同样的更改，所以把这个脚本放到另外一个仓库</span></span><br><span class="line"><span class="string">    - git archive --remote=xxx.git HEAD ci-lint.rb | tar xvf -</span></span><br><span class="line"><span class="string">    - ruby ci-lint.rb</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ci-lint.rb</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_oclint_comment</span></span></span><br><span class="line">  <span class="comment"># 下载 oclint 的配置文件</span></span><br><span class="line">  download_file(<span class="string">".oclint"</span>)</span><br><span class="line">  <span class="comment"># 让 oc-lint parse 刚才 build 生成的 `compile_commands.json` 文件</span></span><br><span class="line">  oclint_output = <span class="string">`oclint-json-compilation-database -v -e Pods`</span></span><br><span class="line">  puts <span class="string">"----- origin OCLint output -----"</span></span><br><span class="line">  puts oclint_output</span><br><span class="line">  <span class="comment"># 对 oclint 结果做一些处理，比如找到 `TotalFiles=0` 就认为 lint success</span></span><br><span class="line">  oclint_comment = parse_oclint_output(oclint_output)</span><br><span class="line">  puts <span class="string">"----- parsed OCLint output -----"</span></span><br><span class="line">  puts oclint_comment</span><br><span class="line">  oclint_comment</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h4 id="swiftlint"><a href="#swiftlint" class="headerlink" title="swiftlint"></a>swiftlint</h4><p>比 OCLint 好很多，简单美观且易用，社区活跃，不需要编译工程；唯一不能处理的就是一些编译过后才能发现的问题，比如嵌套过深等等（其实这些检测结果多数情况没卵用）。<code>.swiftlint</code> 同样放在其它仓库，方便规则变更，记得把 reporter 改成 <code>emoji</code> ，结果会更好看。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ci-lint.rb</span></span><br><span class="line"><span class="comment"># 获取 swiftlint 的结果</span></span><br><span class="line"></span><br><span class="line"><span class="string">def</span> <span class="string">get_swiftlint_result</span></span><br><span class="line">  <span class="string">swiftlint_comment_content</span> <span class="string">=</span> <span class="string">`swiftlint`</span></span><br><span class="line">  <span class="string">puts</span> <span class="string">"----- origin swift lint content -----"</span></span><br><span class="line">  <span class="string">if</span> <span class="string">not</span> <span class="string">swiftlint_comment_content.include?</span> <span class="string">"Line"</span></span><br><span class="line">    <span class="comment"># 不包含 `Line`，我们认为 lint 通过</span></span><br><span class="line">    <span class="string">swiftlint_comment_content</span> <span class="string">=</span> <span class="string">"\n## swiftlint report\n✅ success\n"</span></span><br><span class="line">  <span class="string">else</span></span><br><span class="line">    <span class="comment"># 否则不通过</span></span><br><span class="line">    <span class="string">swiftlint_comment_content</span> <span class="string">=</span> <span class="string">"\n## swiftlint report\n```\n"</span> <span class="string">+</span> <span class="string">swiftlint_comment_content</span> <span class="string">+</span> <span class="string">"\n```"</span></span><br><span class="line">  <span class="string">end</span></span><br><span class="line">  <span class="string">swiftlint_comment_content</span></span><br><span class="line"><span class="string">end</span></span><br><span class="line"></span><br><span class="line"><span class="string">def</span> <span class="string">get_swiftlint_comment</span></span><br><span class="line">  <span class="comment"># 需要在根目录执行</span></span><br><span class="line">  <span class="string">Dir.chdir("../")</span></span><br><span class="line">  <span class="comment"># 下载 swiftlint 配置文件</span></span><br><span class="line">  <span class="string">download_file(".swiftlint.yml")</span></span><br><span class="line">  <span class="string">swiftlint_comment</span> <span class="string">=</span> <span class="string">get_swiftlint_result</span></span><br><span class="line">  <span class="string">puts</span> <span class="string">"----- parsed swiftlint content -----"</span></span><br><span class="line">  <span class="string">puts</span> <span class="string">swiftlint_comment</span></span><br><span class="line">  <span class="string">swiftlint_comment</span></span><br><span class="line"><span class="string">end</span></span><br></pre></td></tr></table></figure>
+<h4 id="Code-Coverage"><a href="#Code-Coverage" class="headerlink" title="Code Coverage"></a>Code Coverage</h4><p>使用的工具是 <a href="https://github.com/SlatherOrg/slather" target="_blank" rel="noopener">slather</a>，配合 GitLab 原生的 Code Coverage 显示，用正则过滤一下 output 就能获取结果，</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># .slather.yml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 CI 阶段，用来跑 Code Coverage 使用的配置文件</span></span><br><span class="line"><span class="comment"># $&#123;PROJECT_NAME&#125; 需要被替换掉</span></span><br><span class="line"></span><br><span class="line"><span class="attr">configuration:</span> <span class="string">Debug</span></span><br><span class="line"><span class="attr">input_format:</span> <span class="string">profdata</span></span><br><span class="line"><span class="attr">xcodeproj:</span> <span class="string">$&#123;PROJECT_NAME&#125;.xcodeproj</span></span><br><span class="line"><span class="attr">workspace:</span> <span class="string">$&#123;PROJECT_NAME&#125;.xcworkspace</span></span><br><span class="line"><span class="attr">scheme:</span> <span class="string">$&#123;PROJECT_NAME&#125;-Example</span></span><br><span class="line"><span class="comment"># 这个目录是上面 derived data 指定的目录</span></span><br><span class="line"><span class="attr">build_directory:</span> <span class="string">build_outputs</span></span><br><span class="line"><span class="attr">binary_basename:</span> <span class="string">$&#123;PROJECT_NAME&#125;</span></span><br><span class="line"><span class="attr">ignore:</span> </span><br><span class="line"><span class="bullet">  -</span> <span class="string">"Pods/*"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ci-lint.rb</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取每个文件的 coverage 比例结果</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_coverage_comment</span></span></span><br><span class="line">  slather_yml_file_name = <span class="string">".slather.yml"</span></span><br><span class="line">  <span class="comment"># 下载 slather 的配置文件</span></span><br><span class="line">  download_file(slather_yml_file_name)</span><br><span class="line">  <span class="comment"># 把 `$&#123;PROJECT_NAME&#125;` 替换成 $CI_PROJECT_DIR</span></span><br><span class="line">  modify_slatheryml(slather_yml_file_name)</span><br><span class="line">  <span class="string">"\n## Code Coverage Report\n```\n"</span> + <span class="string">`slather coverage`</span> + <span class="string">"\n```"</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置 .gitlab-ci.yml，即可在 MR 中显示 Code Coverage</span></span><br><span class="line"><span class="attr">build_project:</span></span><br><span class="line"><span class="attr">  coverage:</span> <span class="string">'/\d+(?:\.\d*)?\%$/'</span></span><br></pre></td></tr></table></figure>
+<h3 id="danger"><a href="#danger" class="headerlink" title="danger"></a><a href="https://github.com/danger/danger" target="_blank" rel="noopener">danger</a></h3><p>danger 能够获取信息都是与 MR 有关的，比如修改了哪些文件，改动有多少行，有没有填写描述等等，具体的内容可以看它的文档。在 GitLab 上集成 danger 有些问题，如果是是 fork 仓库向主库提交 MR，danger 就会获取不到正确的 <code>project_id</code> 和 <code>mr_iid</code>，它就不能找到对应的 MR 进行评论，这就需要我们帮它找到对应的值并告知，</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># .gitlab-ci.yml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">danger:</span></span><br><span class="line"><span class="attr">  stage:</span> <span class="string">danger</span></span><br><span class="line"><span class="attr">  script:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">git</span> <span class="string">archive</span> <span class="bullet">--remote=xxx.git</span> <span class="string">HEAD</span> <span class="string">ci-danger.sh</span> <span class="string">| tar xvf -</span></span><br><span class="line"><span class="string">    - sh ci-danger.sh</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ci-danger.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载 Dangerfile</span></span><br><span class="line">git archive --remote=xxxx.git HEAD Dangerfile | tar xvf -</span><br><span class="line"><span class="comment"># 下载获取 mr_iid 的脚本</span></span><br><span class="line">git archive --remote=xxx.git HEAD ci-mr_iid.rb | tar xvf -</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 project_id 和 mr_iid</span></span><br><span class="line">output=$(ruby <span class="string">"ci-mr_iid.rb"</span>)</span><br><span class="line">project_id=$(cut -d<span class="string">','</span> -f1 &lt;&lt;&lt; <span class="variable">$output</span>)</span><br><span class="line">mr_iid=$(cut -d<span class="string">','</span> -f2 &lt;&lt;&lt; <span class="variable">$output</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行 danger 命令，把获取到的字段作为 ENV 传给 danger</span></span><br><span class="line">DANGER_GITLAB_HOST=git.xxx.com \</span><br><span class="line">  DANGER_GITLAB_API_BASE_URL=https://git.xxx.com/api/v4 \</span><br><span class="line">  DANGER_GITLAB_API_TOKEN=xxx \</span><br><span class="line">  CI_PROJECT_ID=<span class="variable">$project_id</span> \</span><br><span class="line">  CI_MERGE_REQUEST_ID=<span class="variable">$mr_iid</span> \</span><br><span class="line">  danger</span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ci-mr_iid.rb</span></span><br><span class="line"><span class="comment"># 作用是找到当前仓库的 project_id 和 mr_iid</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'gitlab'</span></span><br><span class="line"></span><br><span class="line">project_name = ENV[<span class="string">'CI_PROJECT_NAME'</span>]</span><br><span class="line"><span class="comment"># GitLab private token</span></span><br><span class="line">private_token = <span class="string">"xxx"</span></span><br><span class="line"><span class="comment"># 所有仓库所在的 group id，需要用 API 获取一下</span></span><br><span class="line">platform_groud_id = <span class="string">"123"</span></span><br><span class="line">commit_sha = ENV[<span class="string">'CI_COMMIT_SHA'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在这个 group 中寻找名字一样的 project，获取它的 project_id</span></span><br><span class="line">g = Gitlab.client(<span class="symbol">endpoint:</span> <span class="string">'https://git.xxx.com/api/v4'</span>, <span class="symbol">private_token:</span> private_token)</span><br><span class="line">platform_group = g.group(platform_groud_id)</span><br><span class="line"></span><br><span class="line">project_id = platform_group.projects.find&#123; <span class="params">|p|</span> p[<span class="string">"name"</span>] == project_name &#125;[<span class="string">"id"</span>].to_s</span><br><span class="line"><span class="comment"># 这一次 commit 的 SHA，用来获取 mr_iid</span></span><br><span class="line"><span class="comment"># 获取 mr_iid</span></span><br><span class="line">mr_cmd = <span class="string">"curl -s \"https://git.xxx.com/api/v4/projects/<span class="subst">#&#123;project_id&#125;</span>/merge_requests?private_token=<span class="subst">#&#123;private_token&#125;</span>&amp;state=opened\" | jq -r \".[]|select(.sha == \\\"<span class="subst">#&#123;commit_sha&#125;</span>\\\")|.iid\""</span></span><br><span class="line">mr_iid = <span class="string">`<span class="subst">#&#123;mr_cmd&#125;</span>`</span></span><br><span class="line"></span><br><span class="line">ENV[<span class="string">'CI_PROJECT_ID'</span>] = project_id</span><br><span class="line">ENV[<span class="string">'CI_MERGE_REQUEST_ID'</span>] = mr_iid</span><br><span class="line"></span><br><span class="line">puts project_id + <span class="string">","</span> + mr_iid</span><br></pre></td></tr></table></figure>
+<p>以上的各个步骤，除了 <code>.gitlab-ci.yml</code> 以外的脚本及配置文件，都是从其它仓库下载下来的，这样做的好处有很多，让配置的规则有动态更新的能力，让每个仓库保持干净，没有代码没有多余的无关文件可以隐藏细节（这也算是一种程度的封装吧😆）等等。如果有更好的方式，以及上面的代码有什么问题，欢迎提出意见</p>
+<h2 id="pod-template"><a href="#pod-template" class="headerlink" title="pod template"></a><code>pod template</code></h2><p>如果要让每一个独立组件都适应类似的 <code>.gitlab-ci.yml</code> ，就需要做一番大改动了。每个组件都有自己的 git 仓库，不管对于已经存在的组件，还是未来将要出现的组件，都需要提供一套快速创建出一个可以直接支持当前 CI workflow 的工程模版。</p>
+<p>可能很多人都不知道，CocoaPods 自带一条命令，<code>pod lib create</code>，它可以通过一个模板的 git 链接创建一个组件。我们可以通过 <code>--template-url</code> 来指向自己需要的模板，从而达到快速创建工程的目的。</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225553.png" alt></p>
+<h3 id="pod-template-文件组织"><a href="#pod-template-文件组织" class="headerlink" title="pod template 文件组织"></a>pod template 文件组织</h3><p>假如有这样一个 pod 叫 BestFramework，我是这样组织它的结构的，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~/D/BestFramework tree . -L 2 -a</span><br><span class="line">.</span><br><span class="line">├── .gitignore</span><br><span class="line">├── .gitlab-ci.yml</span><br><span class="line">├── BestFramework</span><br><span class="line">│   ├── Classes</span><br><span class="line">│   └── Resources</span><br><span class="line">├── BestFramework.podspec</span><br><span class="line">├── Example</span><br><span class="line">│   ├── BestFramework</span><br><span class="line">│   ├── BestFramework.xcodeproj</span><br><span class="line">│   ├── BestFramework.xcworkspace</span><br><span class="line">│   ├── Podfile</span><br><span class="line">│   ├── Podfile.lock</span><br><span class="line">│   ├── Pods</span><br><span class="line">│   └── Tests</span><br><span class="line">├── README.md</span><br><span class="line">└── _Pods.xcodeproj -&gt; Example/Pods/Pods.xcodeproj</span><br></pre></td></tr></table></figure>
+<p>把 BestFramework 当作一个 Development Pods 作为 Example 的依赖，测试放到 <code>Example/Tests</code> 中，<code>gitlab-ci.yml</code> 中的内容是根据创建时候给出的名字动态创建的。其实文件夹结构这种东西怎么组织都可以，只要外面能正确引用就可以了</p>
+<p>最后以这样一幅图作为总结，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225623.png" alt></p>
+<p>所以我们主要覆盖的是创建项目以及提交 MR 两个阶段，提供一些效率工具及使用 CI 帮助我们更好更快地书写/review代码</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-03-12-ios-gitlab-ci/">https://x140yu.github.io/2018-03-12-ios-gitlab-ci/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/CI/">CI</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-04-08-method-dispatch-in-swift-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Swift 中的方法调用（Method Dispatch）（一） - 概述</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-01-24-homebrew-formula/">
+        <span class="next-text nav-default">使用 Homebrew Formula 搭建命令行工具</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-03-12-ios-gitlab-ci/';
+        this.page.identifier = '2018-03-12-ios-gitlab-ci/';
+        this.page.title = '给 iOS 组件集成 GitLab CI';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

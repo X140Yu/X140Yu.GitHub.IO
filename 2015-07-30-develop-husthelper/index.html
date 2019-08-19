@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="开发「理工助手」那些事儿">
+
+
+
+
+  <meta name="keywords" content="瞎扯, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2015-07-30-develop-husthelper/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 开发「理工助手」那些事儿 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          开发「理工助手」那些事儿
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-07-30
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2015-07-30-develop-husthelper/" data-title="开发「理工助手」那些事儿">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x10-起因"><span class="toc-text">0x10. 起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x11-动手"><span class="toc-text">0x11. 动手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x12-上架"><span class="toc-text">0x12. 上架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x13-初衷-amp-希望"><span class="toc-text">0x13. 初衷 &amp; 希望</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>  <a href="https://itunes.apple.com/us/app/li-gong-zhu-shou-ha-li-gong/id1024462561?ls=1&amp;mt=8" target="_blank" rel="noopener">App Store 下载链接</a></p>
+</blockquote>
+<h2 id="0x10-起因"><a href="#0x10-起因" class="headerlink" title="0x10. 起因"></a>0x10. 起因</h2><p>一直就觉得，在手机上登录教务处的网站，查课表，查成绩什么的太不方便了。我的 Safari 固然能记录账户和密码，但是这种登录教务处查东西的姿势不够优雅。</p>
+<a id="more"></a>
+<p>暑假刚好闲着没事儿，刚好学习 iOS 也有一段时间了，那我为什么不写一个 App 来实现这些简单的功能呢？这既能测验一下自己的 iOS 编程能力，又能为大家提供便利，为什么不去做呢？</p>
+<p>好吧，说干就干。在 7/22/15，4:47 PM（我创建 Xcode 项目的时间），「理工助手」就这样开始了。</p>
+<h2 id="0x11-动手"><a href="#0x11-动手" class="headerlink" title="0x11. 动手"></a>0x11. 动手</h2><p>说实话，这款 App 的难点就在于数据的获取。由于教务处并没有提供官方的 API，所以我只能通过手机来模仿浏览器的行为，从而获取特定页面的 HTML 信息，然后给解析出来，展示到用户界面中去。</p>
+<p>其实写一个 App 真的挺简单的：获取数据 - 展示 - 用户操作 - 再获取。基本就是这么一直循环下去。</p>
+<p>1.0 的版本我只给用户提供了四个功能：「教务新闻」，「查课表」，「查成绩」，「查考试时间」。估计这些也是大部分登陆教务处网站做的事情了。</p>
+<p>有了需求，该写代码了。</p>
+<p>我本以为数据的获取会是难点，因为会涉及登陆啊，验证码啊，cookie 验证什么的。但是那些真的是轻松搞定的。我真的没有想到，难点在于 HTML 的解析。原本以为可以用一套开源的框架完成，可是没想到我怎么用都有问题，我也不想在这上面花费太久，于是就采用最「笨」，也是最浪费时间的办法：用正则表达式一点一点从 HTML 中提取内容然后转成 Model。在这个地方我写了非常糟糕而且极难维护的代码，这就好像我跟教务处的人员有了约定，“嘿，哥们，你们的前端页面千万别升级啊。”，因为一旦发生了变化，我的这套代码都得推翻重写 TAT。</p>
+<p>有了数据，有了 Model，该展示了吧？</p>
+<p>1.0 遵循的原则就是一切从简，所以 UI 都是我一个人包办的。从 App 的图标到应用内部的配色以及 icon 都是我一个人制作以及挑选的。这种又当爹又当妈的感觉其实挺好的，因为你可以自豪地说，这个 App 是我一个人做的。不过说实话，界面不算好看，但也绝对算不上丑。主界面四个大图标，这个也实在是无奈之举（因为功能就这么少 - -#）。仁者见仁智者见智吧。</p>
+<h2 id="0x12-上架"><a href="#0x12-上架" class="headerlink" title="0x12. 上架"></a>0x12. 上架</h2><p>在 7/30/15 下午，我向 App Store 提交了我人生中的第一个应用。说实话，其实注册 Apple 的 Developer Program 是今年大概五月份事情，我记得当时为了办它申请了一张 Visa 的信用卡（没想到还成功了，天助我也）。当时想得挺简单，花了 ￥688 以后，自己学习的劲头应该更足一些吧。可是事实总是令人悲伤，其实在放假前的一个月左右，自己根本没有写什么代码，事实上，我也不知道自己都做些什么。抱着考试复习的幌子在玩？也许吧！结果也蛮感人的，期末直接挂了两科。</p>
+<p>好像扯了半天都跟上架没啥关系啊。忽然想起，我为什么要上架呢？</p>
+<p>其实在提交完应用以后，我很清楚，软件现在还有好几个已知的 BUG。可我真的是懒得改了…这一周写代码写得脑袋痛，想休息一周，刚好 App 的审核也需要好久，我想就不要把这段时间给浪费掉了，先上架看看同学们的反应吧（能不能成功审核在现在看来还是一个问题）。如果大家对这个软件看法不错，我会更加用心地做好它的。</p>
+<h2 id="0x13-初衷-amp-希望"><a href="#0x13-初衷-amp-希望" class="headerlink" title="0x13. 初衷 &amp; 希望"></a>0x13. 初衷 &amp; 希望</h2><p>其实写这个 App 最开始就是希望方便自己顺便方便大家（没错，这就是我的真实想法）。iOS 是一个优雅的系统，希望大家在上面完成什么动作的过程都是优雅的。</p>
+<p>最后希望我的 App 能审核通过吧。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2015-07-30-develop-husthelper/">https://x140yu.github.io/2015-07-30-develop-husthelper/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/瞎扯/">瞎扯</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2015-10-16-use-xcodebuild/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">使用 xcodebuild</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015-07-20-multithreading/">
+        <span class="next-text nav-default">iOS 多线程学习笔记</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2015-07-30-develop-husthelper/';
+        this.page.identifier = '2015-07-30-develop-husthelper/';
+        this.page.title = '开发「理工助手」那些事儿';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

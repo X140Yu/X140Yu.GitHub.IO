@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 Swift 和 Objective-C 混编">
+
+
+
+
+  <meta name="keywords" content="iOS, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2015-04-23-usingSwiftWithObjectiveC/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 Swift 和 Objective-C 混编 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 Swift 和 Objective-C 混编
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2015-04-23
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2015-04-23-usingSwiftWithObjectiveC/" data-title="使用 Swift 和 Objective-C 混编">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#零、-Into"><span class="toc-text">零、 Into</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一、步骤"><span class="toc-text">一、步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、我遇到的几个坑"><span class="toc-text">二、我遇到的几个坑</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Block-语法问题"><span class="toc-text">1. Block 语法问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-enum-问题"><span class="toc-text">2. enum 问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-BOOL-的-setter-问题"><span class="toc-text">3. BOOL 的 setter 问题</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h3 id="零、-Into"><a href="#零、-Into" class="headerlink" title="零、 Into"></a>零、 Into</h3><p>Apple 已经建议开发者今后不再提交纯 Objective-C 书写的程序。而是提交纯 Swift 或者 Swift 与 Objective-C 混编的程序</p>
+<a id="more"></a>
+<p>在 SDK 还是 Objective-C 的前提下，还是可以使用 Swift 进行开发的。这就涉及到了在 Swift 文件中调用 Objective-C 代码的问题。</p>
+<p>关于怎样混编 Swift 和 Objective-C 的代码，Apple 的 iOS Developer Library 的<a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithObjective-CAPIs.html#//apple_ref/doc/uid/TP40014216-CH4-XID_25" target="_blank" rel="noopener">这篇文章</a>讲得要比我清楚地多…</p>
+<h3 id="一、步骤"><a href="#一、步骤" class="headerlink" title="一、步骤"></a>一、步骤</h3><p>首先，需要建立 <code>.pch</code> 文件，这是桥接文件，用于导入需要调用的 Objective-C 代码的头文件。<br>然后，需要在工程中设置 Objective-C Bridging Header 这一项。</p>
+<p>在 <code>.pch</code> 文件导入 Objective-C 的头文件以后，就可以愉快地在 Swift 中调用已经写好的 Objective-C 代码了。</p>
+<p>StackOverflow 上的<a href="http://stackoverflow.com/questions/24002369/how-to-call-objective-c-code-from-swift" target="_blank" rel="noopener">这个答案</a>步骤要更加完整一些。</p>
+<h3 id="二、我遇到的几个坑"><a href="#二、我遇到的几个坑" class="headerlink" title="二、我遇到的几个坑"></a>二、我遇到的几个坑</h3><h4 id="1-Block-语法问题"><a href="#1-Block-语法问题" class="headerlink" title="1. Block 语法问题"></a>1. Block 语法问题</h4><p>对于下面这个 Block：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">[[EaseMob sharedInstance].chatManager asyncRegisterNewAccount:<span class="string">@"8001"</span> password:<span class="string">@"111111"</span></span><br><span class="line">    withCompletion:^(<span class="built_in">NSString</span> *username, <span class="built_in">NSString</span> *password, EMError *error) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!error) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"注册成功"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; onQueue:<span class="literal">nil</span>];</span><br></pre></td></tr></table></figure>
+<p>翻译成 Swift 闭包是这样的：</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="type">EaseMob</span>.sharedInstance().chatManager.asyncRegisterNewAccount(userName, password: password,</span><br><span class="line">    withCompletion: &#123;userName, password, error <span class="keyword">in</span></span><br><span class="line">	<span class="keyword">if</span> error == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">println</span>(<span class="string">"注册成功"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;, onQueue: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="2-enum-问题"><a href="#2-enum-问题" class="headerlink" title="2. enum 问题"></a>2. enum 问题</h4><p>用 Objective-C 定义了如此的 enum:</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> : <span class="built_in">NSUInteger</span> &#123;</span><br><span class="line">    EMErrorServerNotReachable,                  </span><br><span class="line">    EMErrorServerTimeout,                       </span><br><span class="line">    EMErrorServerAuthenticationFailure,         </span><br><span class="line">&#125;  EMErrorType;</span><br></pre></td></tr></table></figure>
+<p>比如我在调用注册代码以后，需要判断错误类型，根据错误种类做出相应的措施，用 Objective-C 判断是这样的：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> (error.errorCode) &#123;</span><br><span class="line">    <span class="keyword">case</span> EMErrorServerNotReachable:</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> EMErrorServerAuthenticationFailure:</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> EMErrorServerTimeout:  		</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而用 Swift 做 Switch 操作需要这样：</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> error.errorCode.value &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="type">EMErrorServerNotReachable</span>.value:</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">EMErrorServerAuthenticationFailure</span>.value:</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">EMErrorServerTimeout</span>.value:</span><br><span class="line">    <span class="comment">// Do something</span></span><br><span class="line">	<span class="keyword">default</span>: <span class="keyword">break</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-BOOL-的-setter-问题"><a href="#3-BOOL-的-setter-问题" class="headerlink" title="3. BOOL 的 setter 问题"></a>3. BOOL 的 setter 问题</h4><p>这个问题我也不知道算不算是个问题，原因是什么我也不太了解。</p>
+<p>在接触环信 SDK，有一个设置用户自动登录的方法：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 设置自动登录</span></span><br><span class="line">[[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<p>我在 Swift 文件中不管怎样写都实现不了这段代码。我的解决方案是，新建一个 Objective-C 的类，其中一个类方法为：</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)setIsAutoLoginEnabled:(<span class="built_in">BOOL</span>)flag &#123;</span><br><span class="line">	[[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:flag];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，我在 Swift 文件中就可以愉快地调用了。</p>
+<p>参考资料:  </p>
+<ol>
+<li><a href="http://stackoverflow.com/questions/24168612/working-with-objective-c-blocks-with-swift" target="_blank" rel="noopener">http://stackoverflow.com/questions/24168612/working-with-objective-c-blocks-with-swift</a>  </li>
+<li><a href="http://stackoverflow.com/questions/24544712/how-do-i-access-an-enum-in-swift-from-objective-c" target="_blank" rel="noopener">http://stackoverflow.com/questions/24544712/how-do-i-access-an-enum-in-swift-from-objective-c</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithObjective-CAPIs.html#//apple_ref/doc/uid/TP40014216-CH4-XID_25" target="_blank" rel="noopener">https://developer.apple.com/library/ios/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithObjective-CAPIs.html#//apple_ref/doc/uid/TP40014216-CH4-XID_25</a></li>
+<li><a href="http://stackoverflow.com/questions/24002369/how-to-call-objective-c-code-from-swift" target="_blank" rel="noopener">http://stackoverflow.com/questions/24002369/how-to-call-objective-c-code-from-swift</a></li>
+</ol>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2015-04-23-usingSwiftWithObjectiveC/">https://x140yu.github.io/2015-04-23-usingSwiftWithObjectiveC/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2015-04-29-ios-register-login-page/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">如何实现 iOS 应用注册/登录页面</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2015-04-14-tencent-interview/">
+        <span class="next-text nav-default">记一次腾讯实习生面试</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2015-04-23-usingSwiftWithObjectiveC/';
+        this.page.identifier = '2015-04-23-usingSwiftWithObjectiveC/';
+        this.page.title = '使用 Swift 和 Objective-C 混编';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

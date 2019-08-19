@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="Express 的 API 版本控制">
+
+
+
+
+  <meta name="keywords" content="Nodejs, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-02-01-express-api-versioning/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> Express 的 API 版本控制 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Express 的 API 版本控制
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-02-01
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-02-01-express-api-versioning/" data-title="Express 的 API 版本控制">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#api-v1-post-id"><span class="toc-text">/api/v1/post/:id</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accept-Version-1-0"><span class="toc-text">Accept-Version: 1.0</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>在<a href="http://x140yu.com/2017-02-01-api-versioning/" target="_blank" rel="noopener">上一篇博文</a>中，我们介绍了一下后端做 API 版本控制的几种方法。</p>
+<p>最近在用 Node.js 做一个小项目 <a href="https://github.com/DayCache/DayCache" target="_blank" rel="noopener">DayCache</a>，其中就涉及到了给客户端提供 API 调用这一块,当然就也需要 API 的版本控制了。</p>
+<a id="more"></a>
+<h2 id="api-v1-post-id"><a href="#api-v1-post-id" class="headerlink" title="/api/v1/post/:id"></a><code>/api/v1/post/:id</code></h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// Version 1</span><br><span class="line">@GET /api/v1/post/:id</span><br><span class="line"></span><br><span class="line">// Version 2</span><br><span class="line">@GET /api/v2/post/:id</span><br></pre></td></tr></table></figure>
+<p>对于这种方式的 API 版本控制我们应该怎么实现呢？</p>
+<p>首先，把目录结构组织如下，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">├── api</span><br><span class="line">│   └── v1</span><br><span class="line">│       └── index.js</span><br><span class="line">│       └── signin.js</span><br><span class="line">│       └── signup.js</span><br><span class="line">└── index.js</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  // API</span></span><br><span class="line"><span class="comment">  如果需要新增加一个 API 的版本</span></span><br><span class="line"><span class="comment">  1. 把 ./api/v1 目录复制一份，改名为 v2</span></span><br><span class="line"><span class="comment">  2. 在下面的 API_VERSIONS 字典中加入一对 kv，如 `'Version 2': '/v2'`</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> API_VERSIONS = &#123;</span><br><span class="line">  <span class="string">'Version 1'</span>: <span class="string">'/v1'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> v <span class="keyword">in</span> API_VERSIONS) &#123;</span><br><span class="line">  <span class="keyword">var</span> api = <span class="built_in">require</span>(<span class="string">'./api'</span> + API_VERSIONS[v]);</span><br><span class="line">  api(app);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// api/v1/index.js</span></span><br><span class="line"><span class="comment">// 如果需要加入新的请求路径，只需要在下面加入路径</span></span><br><span class="line"><span class="comment">// 然后在 `api/v1` 下建立同名文件即可</span></span><br><span class="line"><span class="keyword">let</span> ROUTE_PATHS = [</span><br><span class="line">  <span class="string">'/signin'</span>,</span><br><span class="line">  <span class="string">'/signup'</span>,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">app</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> ROUTE_PATHS) &#123;</span><br><span class="line">    <span class="keyword">let</span> path = ROUTE_PATHS[i];</span><br><span class="line">    <span class="built_in">console</span>.log(path);</span><br><span class="line">    app.use(<span class="string">'/api/v1'</span> + path, <span class="built_in">require</span>(<span class="string">'.'</span> + path));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这样，API 版本化的工作就已经完成了，而且不同版本的 API 拆分地比较干净，同一个版本不同路径的请求也都在不同的文件中。</p>
+<h2 id="Accept-Version-1-0"><a href="#Accept-Version-1-0" class="headerlink" title="Accept-Version: 1.0"></a><code>Accept-Version: 1.0</code></h2><p>对于这种请求的 API 版本放到 header 中的，也比较好处理，可以看一下 <a href="https://github.com/Prasanna-sr/express-routes-versioning" target="_blank" rel="noopener">express-routes-versioning</a> 这个中间件（毕竟 Express.js，中间件就是多），它就是比较优雅地处理了这个问题：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">var</span> app = <span class="built_in">require</span>(<span class="string">'express'</span>)();</span><br><span class="line"><span class="keyword">var</span> routesVersioning = <span class="built_in">require</span>(<span class="string">'express-routes-versioning'</span>)();</span><br><span class="line"></span><br><span class="line">app.get(<span class="string">'/test'</span>, routesVersioning(&#123;</span><br><span class="line">   <span class="string">"1.0.0"</span>: respondV1,</span><br><span class="line">   <span class="string">"~2.2.1"</span>: respondV2</span><br><span class="line">&#125;));</span><br><span class="line"></span><br><span class="line"><span class="comment">// curl -s -H 'accept-version: 1.0.0' localhost:3000/test</span></span><br><span class="line"><span class="comment">// version 1.0.0 or 1.0 or 1 !</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">respondV1</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">   res.status(<span class="number">200</span>).send(<span class="string">'ok v1'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//curl -s -H 'accept-version: 2.2.0' localhost:3000/test</span></span><br><span class="line"><span class="comment">//Anything from 2.2.0 to 2.2.9</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">respondV2</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">   res.status(<span class="number">200</span>).send(<span class="string">'ok v2'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把请求 header 中 <code>Accept-Version</code> 不同的 API 版本挂在到不同的 handler 中，而且还可以使用类似于 <code>~2.2.1</code> 的方式指定版本号。<br>这个中间件的代码没有多少，可以根据你的需要定制一个，比如 custom header 啦，版本号的匹配规则啦。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-02-01-express-api-versioning/">https://x140yu.github.io/2017-02-01-express-api-versioning/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/Nodejs/">Nodejs</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-04-11-Reachability/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">读 AFNetworking 源码之 Reachability</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-02-01-api-versioning/">
+        <span class="next-text nav-default">服务器端的 API 版本控制</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-02-01-express-api-versioning/';
+        this.page.identifier = '2017-02-01-express-api-versioning/';
+        this.page.title = 'Express 的 API 版本控制';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

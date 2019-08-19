@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="读 Apple Sample Code 之 Simple Ping">
+
+
+
+
+  <meta name="keywords" content="iOS, Objective-C, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-04-12-simple-ping/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 读 Apple Sample Code 之 Simple Ping - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          读 Apple Sample Code 之 Simple Ping
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-04-13
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-04-12-simple-ping/" data-title="读 Apple Sample Code 之 Simple Ping">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ping"><span class="toc-text">ping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo-中-SimplePing-的使用"><span class="toc-text">Demo 中 SimplePing 的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SimplePing-的实现原理"><span class="toc-text">SimplePing 的实现原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于-Core-Foundation"><span class="toc-text">关于 Core Foundation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#异步函数的调用"><span class="toc-text">异步函数的调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存管理"><span class="toc-text">内存管理</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>在翻 <a href="https://developer.apple.com/library/content/navigation/" target="_blank" rel="noopener">Apple Developer Guides and Sample Code</a> 的时候，顺着 Network 那一栏往下翻，看到了一个 <a href="https://en.wikipedia.org/wiki/Ping_(networking_utility" target="_blank" rel="noopener">ping</a>) 的<a href="https://developer.apple.com/library/content/samplecode/SimplePing/Introduction/Intro.html#//apple_ref/doc/uid/DTS10000716" target="_blank" rel="noopener">封装实现</a>。ping 是一个非常常用的命令，相信大家或多或少都有用过。</p>
+<a id="more"></a>
+<p>这个示例的封装实现了最基本的 ping 功能，其中包括 resolve host，create socket(send &amp; recv data), 解析 ICMP 包验证 checksum 等。同时支持 iPv4 和 iPv6。其实就是对 Core Foundation 中网络相关的 C 函数的封装。</p>
+<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><p>ping 是通过网络层的 IP 协议发送 ICMP 协议的数据包，然后等待目标回传 ICMP 数据包，通过时间和成功响应的次数估算丢包率和网络时延。</p>
+<p>其实 ping 并不能完全代表你能不能连接上那个 host，像 zhihu.com 就封掉了 ICMP（ping 就没办法工作了，一直提示超时），但是通过浏览器（HTTP）还是能打开知乎的。</p>
+<h2 id="Demo-中-SimplePing-的使用"><a href="#Demo-中-SimplePing-的使用" class="headerlink" title="Demo 中 SimplePing 的使用"></a>Demo 中 SimplePing 的使用</h2><p>下载好源码，发现 demo 是用 Swift 写的！可惜它使用的版本是 2.3（目前的 Swift 版本是 3.1），看来 Apple 的这些 Sample Code 更新的不是很及时。不过还好代码量比较少，Xcode 帮忙升级，自己再 fix 一两处，项目就可以 run 起来了。</p>
+<p>Demo 中使用 SimplePing 的基本流程如下，</p>
+<p><img src="media/2017-04-15-simple-ping-01.png" alt></p>
+<p>其实主要的流程也就以下几个部分，</p>
+<ul>
+<li>初始化。包括创建 pinger 对象，设置想要 iPv4 还是 iPv6 的地址，设置 delegate</li>
+<li>调用 <code>start()</code> 方法，开启 ping 的流程。pinger 会把对应的 host 解析成 IP 地址</li>
+<li>在需要的情况下调用 <code>send</code> 方法。探测对应的 host，delegate 中的回调就会得到对应的回应了。 </li>
+</ul>
+<h2 id="SimplePing-的实现原理"><a href="#SimplePing-的实现原理" class="headerlink" title="SimplePing 的实现原理"></a>SimplePing 的实现原理</h2><p>ping 的实现过程并不复杂，一共以下几个步骤，</p>
+<ul>
+<li>解析传入的 host，获取第一个可用 IP 地址</li>
+<li>创建传输/接收数据的 socket</li>
+<li>发送数据，封装一个 ICMP 包 </li>
+<li>解析目标 IP 传回的 ICMP 包</li>
+</ul>
+<p>不要觉得 ICMP 包之类是什么高深高难的词语，其实它就是一个协议。双方规定好一个数据包的前几个字节是什么，后几个字节是什么，双方按照正确的格式封装包的数据发送或者解析就可以了。</p>
+<p><img src="media/2017-04-15-simple-ping-02.png" alt></p>
+<p>ICMP 是位于网络层的一个协议，它依靠 IP 来完成工作。如上图所示，ICMP 的包会有 IP 的 header，但这个 header 对于我们实现 ping 是没有什么必要性的，可以看到代码也有一个方法 <code>icmpHeaderOffsetInIPv4Packet:</code> 计算 IP header 的 offset 从而直接跳过 IP 头。</p>
+<p>Simple Ping 也对 ICMPHeader 也做出了定义，</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ICMPHeader</span> &#123;</span></span><br><span class="line">    <span class="comment">// iPv4 or iPv6</span></span><br><span class="line">    <span class="keyword">uint8_t</span>     type;</span><br><span class="line">    <span class="comment">// 0</span></span><br><span class="line">    <span class="keyword">uint8_t</span>     code;</span><br><span class="line">    <span class="comment">// 0</span></span><br><span class="line">    <span class="keyword">uint16_t</span>    checksum;</span><br><span class="line">    <span class="comment">// 初始化 host 的时候随机生成的 id</span></span><br><span class="line">    <span class="keyword">uint16_t</span>    identifier;</span><br><span class="line">    <span class="comment">// 类内部维护的，发送 ping 数据的序号</span></span><br><span class="line">    <span class="keyword">uint16_t</span>    sequenceNumber;</span><br><span class="line">    <span class="comment">// data...</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">ICMPHeader</span> <span class="title">ICMPHeader</span>;</span></span><br></pre></td></tr></table></figure>
+<p>发送 ping 数据的时候，会对一个 ICMPHeader 结构体进行初始化，除了上述的几个字段，结合上面的那张图看到，还有 payload，如果调用者没有指定发送的 payload，方法内部会添加默认的 payload。</p>
+<p>接收回应的时候，会对 ICMP 包进行校验，也会跳过 IP 头，其中主要验证的字段是 checksum 和 sequenceNumber（iPv6 只需要验证 sequenceNumber）。checksum 的计算根据的是标准的 BSD checksum 生成函数，主要依据是 ICMP 包，计算规则没细看，因为它是一种标准嘛（想看的同学可以看这里 <a href="https://en.wikipedia.org/wiki/IPv4_header_checksum" target="_blank" rel="noopener">IPv4 header checksum</a>）。</p>
+<p>至此，一次 ping 的完整流程就结束了。</p>
+<h2 id="关于-Core-Foundation"><a href="#关于-Core-Foundation" class="headerlink" title="关于 Core Foundation"></a>关于 Core Foundation</h2><p>上次看了 Reachability，这次看了 Simple Ping，其实都是对 Core Foundation 中的 C 函数进行封装。其中让我觉得比较关键的点就是对 Core Foundation 中异步函数的调用和内存管理问题。</p>
+<h3 id="异步函数的调用"><a href="#异步函数的调用" class="headerlink" title="异步函数的调用"></a>异步函数的调用</h3><p>Core Foundation 中的异步方法设置一般需要以下几个步骤，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)start &#123;</span><br><span class="line">    Boolean             success;</span><br><span class="line">    <span class="built_in">CFHostClientContext</span> context = &#123;<span class="number">0</span>, (__bridge <span class="keyword">void</span> *)(<span class="keyword">self</span>), <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;;</span><br><span class="line">    <span class="built_in">CFStreamError</span>       streamError;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 创建相关的 context，一般都是把 self 存到 info 字段中，方便从 callback 中提取出对象然后调用处理的 Objective-C 方法</span></span><br><span class="line">    <span class="keyword">self</span>.host = (<span class="built_in">CFHostRef</span>) <span class="built_in">CFAutorelease</span>( <span class="built_in">CFHostCreateWithName</span>(<span class="literal">NULL</span>, (__bridge <span class="built_in">CFStringRef</span>) <span class="keyword">self</span>.hostName) );</span><br><span class="line">    <span class="comment">// 2. 创建一个与 callback 函数指针相同签名的静态函数，处理异步方法回调后的逻辑，设置 context 等相关参数  </span></span><br><span class="line">    <span class="built_in">CFHostSetClient</span>(<span class="keyword">self</span>.host, HostResolveCallback, &amp;context);</span><br><span class="line">    <span class="comment">// 3. 设置函数需要执行的 runloop 及 runloop mode</span></span><br><span class="line">    <span class="built_in">CFHostScheduleWithRunLoop</span>(<span class="keyword">self</span>.host, <span class="built_in">CFRunLoopGetCurrent</span>(), kCFRunLoopDefaultMode);</span><br><span class="line">    <span class="comment">// 4. 开始执行，如果成功，那我们的 callback 就会被调用，失败会立即返回 nil</span></span><br><span class="line">    success = <span class="built_in">CFHostStartInfoResolution</span>(<span class="keyword">self</span>.host, kCFHostAddresses, &amp;streamError);</span><br><span class="line">    <span class="keyword">if</span> (!success) &#123;</span><br><span class="line">        <span class="comment">// handle error</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 在 callback 中，就可以取出我们之前传入的 info 等字段（也就是注册回调的 SimplePing 对象）</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">HostResolveCallback</span><span class="params">(CFHostRef theHost, CFHostInfoType typeInfo, <span class="keyword">const</span> CFStreamError *error, <span class="keyword">void</span> *info)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/// 从 info 中就可以取出 Objective-C 中的 object</span></span><br><span class="line">    SimplePing *obj = (__bridge SimplePing *) info;</span><br><span class="line">    <span class="comment">/// .... </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本质上就是从 C 的静态方法到调用 Objective-C 对象方法的过程，多数的异步函数都是这种调用方式，基本都是套路化的，同时也比较原始，需要写很多代码。</p>
+<h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p>Core Foundation 并不支持 ARC，它里面的对象都是需要手动管理内存的。</p>
+<p>根据 Apple 的<a href="https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html" target="_blank" rel="noopener">文档</a>，</p>
+<blockquote>
+<p>The compiler does not automatically manage the lifetimes of Core Foundation objects. You tell the compiler about the ownership semantics of objects using either a cast (defined in objc/runtime.h) or a Core Foundation-style macro (defined in NSObject.h):</p>
+<ul>
+<li><code>__bridge</code> transfers a pointer between Objective-C and Core Foundation with no transfer of ownership.</li>
+<li><code>__bridge_retained</code> or <code>CFBridgingRetain</code> casts an Objective-C pointer to a Core Foundation pointer and also transfers ownership to you.<br>You are responsible for calling CFRelease or a related function to relinquish ownership of the object.</li>
+<li><code>__bridge_transfer</code> or <code>CFBridgingRelease</code> moves a non-Objective-C pointer to Objective-C and also transfers ownership to ARC.<br>ARC is responsible for relinquishing ownership of the object.</li>
+</ul>
+</blockquote>
+<p>也就是说，</p>
+<ul>
+<li>利用 Core Foundation API 创建出来的对象（一般是指针类型的），最后都需要我们自己释放（CFRelease）</li>
+<li>通过 <code>__bridge</code> 转换 OC 和 CF 对象只涉及类型的变化，内存管理权并不发生改变</li>
+<li>通过 <code>__bridge_retained</code> 或 <code>CFBridgingRetain</code> 把 OC -&gt; CF 对象，此时这个对象的内存需要你手动管理</li>
+<li>通过 <code>__bridge_transfer</code> 或 <code>CFBridgingRelease</code> 把 CF -&gt; OC 对象，它之后的内存就交给 ARC 来管理，你就不需要负责它的内存处理了</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-04-12-simple-ping/">https://x140yu.github.io/2017-04-12-simple-ping/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Objective-C/">Objective-C</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-04-14-swift-syntax-cheat-code/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default"><译> Swift 代码小抄</译></span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-04-11-Reachability/">
+        <span class="next-text nav-default">读 AFNetworking 源码之 Reachability</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-04-12-simple-ping/';
+        this.page.identifier = '2017-04-12-simple-ping/';
+        this.page.title = '读 Apple Sample Code 之 Simple Ping';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

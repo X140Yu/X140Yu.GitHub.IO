@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="服务器端的 API 版本控制">
+
+
+
+
+  <meta name="keywords" content="后端, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-02-01-api-versioning/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 服务器端的 API 版本控制 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          服务器端的 API 版本控制
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-02-01
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-02-01-api-versioning/" data-title="服务器端的 API 版本控制">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Why"><span class="toc-text">Why?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How"><span class="toc-text">How?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#api-v1-xxx"><span class="toc-text">/api/v1/xxx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#API-VERSION-3-0"><span class="toc-text">API-VERSION: 3.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accept-application-vnd-xxx-v2-json"><span class="toc-text">Accept: application/vnd.xxx.v2+json</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <h2 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h2><p>发布出去的 API 就像泼出去的水，不进行版本控制，对某些调用者来说一定会是灾难性的。</p>
+<p>举个例子。比如你在一家公司负责后端 API 的开发，同时给公司的 Android 和 iOS 客户端提供接口。<br>在 1 月份的时候，你开发了一个接口，用于获取文章的详情</p>
+<a id="more"></a>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">@GET /post/:id</span><br><span class="line">//response</span><br><span class="line">&#123;</span><br><span class="line">   <span class="attr">"title"</span>: <span class="string">"xxx"</span>,</span><br><span class="line">   <span class="attr">"content"</span>: <span class="string">"xxx"</span>,</span><br><span class="line">   <span class="attr">"author"</span>: &#123;</span><br><span class="line">     <span class="attr">"id"</span>: <span class="number">123</span>,</span><br><span class="line">     <span class="attr">"name"</span>: <span class="string">"xxx"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>开发完成后，你很 happy 地告诉客户端同学，获取文章详情就调我这个接口吧，一点问题都没有。客户端同学也很 happy 地调用了。2 月份，客户端开发完成，顺利发布 1.0 版本。这个时候，还没有遇到任何问题。</p>
+<p>3 月份的时候，设计变了，文章支持了多作者！所以现在那个相同的 API 返回的结果可能是这样的，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@GET /post/:id</span><br><span class="line">// response</span><br><span class="line">&#123;</span><br><span class="line">   &quot;title&quot;: &quot;xxx&quot;,</span><br><span class="line">   &quot;content&quot;: &quot;xxx&quot;,</span><br><span class="line">   &quot;author&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">         &quot;id&quot;: 123,</span><br><span class="line">         &quot;name&quot;: &quot;xxx&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">         &quot;id&quot;: 456</span><br><span class="line">         &quot;name&quot;: &quot;xxx&quot;</span><br><span class="line">      &#125;</span><br><span class="line">   ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Boom! 这下可糟了，如果 API 产生了这么重大的变化，那么已经发出去的 1.0 版本的客户端可怎么办啊？（开发过客户端的同学都知道，同一个接口返回这么「脏」的数据是会 crash 的）。这个时候，就需要 API versioning（版本化）了。</p>
+<h2 id="How"><a href="#How" class="headerlink" title="How?"></a>How?</h2><p>通常来说，API 版本控制有以下几种方式：</p>
+<h3 id="api-v1-xxx"><a href="#api-v1-xxx" class="headerlink" title="/api/v1/xxx"></a><code>/api/v1/xxx</code></h3><p>直接把 API 的版本信息放到 URL 里面，<a href="http://open.weibo.com/wiki/2/users/show" target="_blank" rel="noopener">新浪</a>是这么做的。</p>
+<p>优点：直观<br>缺点：URL 被污染了，很不优雅</p>
+<h3 id="API-VERSION-3-0"><a href="#API-VERSION-3-0" class="headerlink" title="API-VERSION: 3.0"></a><code>API-VERSION: 3.0</code></h3><p>使用自定义的 header 识别 API 的版本，知乎目前是这么做的。</p>
+<p>优点：URL 变得很干净<br>缺点：不直观，代码不好组织，而且容易产生向后兼容的问题（至少知乎的某些 API 是这样的，一般这种对于 header 的修改都是全局的，某些 API 说好了可以升级到 2.0，但是我调用 2.0 的 <code>/singin</code> 都登录不上）</p>
+<h3 id="Accept-application-vnd-xxx-v2-json"><a href="#Accept-application-vnd-xxx-v2-json" class="headerlink" title="Accept: application/vnd.xxx.v2+json"></a><code>Accept: application/vnd.xxx.v2+json</code></h3><p>修改 header 中的 <code>Accept</code> 字段，<a href="https://developer.github.com/v3/" target="_blank" rel="noopener">Github</a> 是这么做的。</p>
+<p>优缺点同上</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-02-01-api-versioning/">https://x140yu.github.io/2017-02-01-api-versioning/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/后端/">后端</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-02-01-express-api-versioning/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Express 的 API 版本控制</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-01-14-yu-ge-dai-ni-you-tian-tan/">
+        <span class="next-text nav-default">宇带逛之天坛篇</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-02-01-api-versioning/';
+        this.page.identifier = '2017-02-01-api-versioning/';
+        this.page.title = '服务器端的 API 版本控制';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

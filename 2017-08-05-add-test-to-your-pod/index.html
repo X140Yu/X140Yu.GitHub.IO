@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="为你的 pod 添加测试">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-08-05-add-test-to-your-pod/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 为你的 pod 添加测试 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          为你的 pod 添加测试
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-08-05
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-08-05-add-test-to-your-pod/" data-title="为你的 pod 添加测试">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#过去我们如何添加测试"><span class="toc-text">过去我们如何添加测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#现在我们如何添加测试"><span class="toc-text">现在我们如何添加测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#举个例子"><span class="toc-text">举个例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Something-else"><span class="toc-text">Something else</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>前几天 Cocoapods release 了 <a href="http://link.zhihu.com/?target=http%3A//blog.cocoapods.org/CocoaPods-1.3.0/" target="_blank" rel="noopener">1.3.0</a> ，一个比较令人激动的功能是可以在 pod 内部添加测试了。</p>
+<a id="more"></a>
+<h2 id="过去我们如何添加测试"><a href="#过去我们如何添加测试" class="headerlink" title="过去我们如何添加测试"></a>过去我们如何添加测试</h2><p>在过去不支持这个功能的时候，如果要为一个 pod 添加测试就需要另外一个工程依赖之，然后把测试文件都添加到离此 pod 十万八千里的地方，如下图所示，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225914.png" alt></p>
+<p>这样子的弊端是十分明显的，</p>
+<p>首先就是<strong>代码和测试分离了</strong>（关于为什么要把代码和测试放到一起，<a href="http://link.zhihu.com/?target=https%3A//kickstarter.engineering/why-you-should-co-locate-your-xcode-tests-c69f79211411" target="_blank" rel="noopener">这篇文章</a>解释地很清楚）。这种分离还不是同一个 project 中不同 target 的分离，而是不同 project 的那种分离。也就是说，我为了看到这个 pod 中的测试，还必须要下载对应的 project 打开才能看到。</p>
+<p>其次，这个 pod 中的测试没法办作为一个 target 单独运行。当然了，这只是个小问题。</p>
+<h2 id="现在我们如何添加测试"><a href="#现在我们如何添加测试" class="headerlink" title="现在我们如何添加测试"></a>现在我们如何添加测试</h2><p>那 CocoaPods 1.3 之后是怎样了呢？</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225929.png" alt></p>
+<p>可以看到，源码和测试已经在一起了。如果我们想看到对应 pod 中的测试，现在已经不需要下载它 Example 或者 Demo 的 project 来看了，而是可以直接在对应的 pod 文件夹中看到，十分方便。而且这个 pod 中的测试可以通过一个单独的 target 运行起来（如果看不到需要在 <code>Manage Schemes</code> 中把测试 target 勾选 <code>show</code>）。于是上面两个问题都得到了解决。</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225942.png" alt></p>
+<h2 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h2><p>我的一个 pod <a href="http://link.zhihu.com/?target=https%3A//github.com/X140Yu/pangu.Swift" target="_blank" rel="noopener">pangu.Swift</a> 收到了一条来自 <a href="http://www.zhihu.com/people/ce825ce5cb9e00b0c9046197f9edbcbd" target="_blank" rel="noopener">@Gao JiJi</a> 的 issue，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225952.png" alt></p>
+<p>作为一个有追求的 engineer，怎么会不写测试呢？我们就以这个 repo 为例，看看如何为这个 pod 添加测试。</p>
+<p>首先你要确保 Cocoapods 的版本 &gt;= 1.3，版本不够的同学可以执行，</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gem install cocoapods</span><br></pre></td></tr></table></figure>
+<p>打开对应的 podspec，添加下面几行，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">  s.test_spec <span class="string">'Tests'</span> <span class="keyword">do</span> <span class="params">|test_spec|</span></span><br><span class="line">    test_spec.source_files = <span class="string">'Tests/*.swift'</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>意思是我们添加了一个叫 <code>Tests</code> 的 <code>test_spec</code>，里面测试文件的位置在 <code>Tests/*.swift</code>。</p>
+<p>如果你的测试需要依赖其它 pods，可以像 sub_spec 一样，添加 test_spec 的 dependency，具体做法 cocoapods 中的那篇文章中有写。</p>
+<p>然后我们就可以在 <code>Tests</code> 目录中添加测试文件了，添加完毕后别忘记自己测试一下，然后就可以升级个版本然后 push 到 spec repo 中了。是的，就是这么简单。</p>
+<p>对于此 pod 使用者，如果你不想看到它的测试，那什么都不用做就好了。但是如果你想在工程里看到并运行对应的测试，就需要给 Podfile 中的引用添加一个参数 <code>testspecs</code>，</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">target <span class="string">'Demo'</span> <span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  pod <span class="string">'Pangu-Swift'</span>, <span class="symbol">:testspecs</span> =&gt; [<span class="string">'Tests'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这个参数对应的是它 podspec 中的 ‘Tests’。</p>
+<p>更改之后记得 <code>pod install</code>，这样，此 pod 中的测试文件就都被引入了，而且还多一个测试的 target 以支持单独运行。</p>
+<h2 id="Something-else"><a href="#Something-else" class="headerlink" title="Something else"></a>Something else</h2><ul>
+<li>testspec 和 subspec 一样，都支持多个。如果你的 pod 测试太多，可以把它们拆到不同的 testspec 中</li>
+<li>写测试是一种美德</li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-08-05-add-test-to-your-pod/">https://x140yu.github.io/2017-08-05-add-test-to-your-pod/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-09-16-development-pods-dependency-checker/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">如果你也用 Development Pods</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-07-23-result/">
+        <span class="next-text nav-default">聊聊 Result 这个 Swift µframework</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-08-05-add-test-to-your-pod/';
+        this.page.identifier = '2017-08-05-add-test-to-your-pod/';
+        this.page.title = '为你的 pod 添加测试';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

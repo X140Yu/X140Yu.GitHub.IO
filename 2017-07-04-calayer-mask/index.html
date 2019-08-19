@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="用 CALayer.mask 实现边界的渐隐效果">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-07-04-calayer-mask/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 用 CALayer.mask 实现边界的渐隐效果 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          用 CALayer.mask 实现边界的渐隐效果
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-04
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-07-04-calayer-mask/" data-title="用 CALayer.mask 实现边界的渐隐效果">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+
+
+    <div class="post-content">
+      
+        <a id="more"></a>
+<p>先看看最终要实现的效果</p>
+<p><img src="http://oo8znht6g.bkt.clouddn.com/20170703210237_sUBP2Y_2.gif" alt></p>
+<p>一开始看到这种效果我有点懵，这和普通的阴影不太一样，并不是带有颜色的蒙层，绞尽脑汁想了一会，应该是在上面加一个 <code>CAGradientLayer</code> 吧，但是这层 <code>layer</code> 的颜色到底是什么才对呢？翻了翻 <code>CALayer</code> 的文档，发现了这样一个属性 <code>mask: CALayer?</code>，它是这样说的，</p>
+<blockquote>
+<p>A layer whose alpha channel is used as a mask to select between the layer’s background and the result of compositing the layer’s contents with its filtered background. Defaults to nil. When used as a mask the layer’s <code>compositingFilter</code> and <code>backgroundFilters</code> properties are ignored. When setting the mask to a new layer, the new layer must have a nil superlayer, otherwise the behavior is undefined. Nested masks (mask layers with their own masks) are unsupported.</p>
+</blockquote>
+<p>大概的解释就是，这个 mask 的 alpha 通道会作用在当前的 layer 上，你可以把它想像成一个 filter，layer 后面的 backgroud 如果能透过这个 alpha 层，那它就能与当前 layer 在一起显示。经过一些实验，这个 mask 并不会影响它后面内容的显示。那我们就可以用这个 layer 的 <code>mask</code> 属性搞一些事情出来了。</p>
+<p>要想实现上图的效果大概需要要做以下几个事情，</p>
+<p>创建一个 <code>CAGradientLayer</code> ，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="built_in">lazy</span> <span class="keyword">var</span> gradientLayer: <span class="type">CAGradientLayer</span> = &#123;</span><br><span class="line">    <span class="keyword">let</span> v = <span class="type">CAGradientLayer</span>()</span><br><span class="line">    <span class="comment">// 这里的颜色是什么都无所谓，因为只有 alpha 通道会起作用</span></span><br><span class="line">    v.colors = [<span class="type">UIColor</span>.clear.withAlphaComponent(<span class="number">0</span>).cgColor, <span class="type">UIColor</span>.clear.withAlphaComponent(<span class="number">1</span>).cgColor]</span><br><span class="line">    v.locations = [<span class="number">0.0</span>, <span class="number">1</span>]</span><br><span class="line">    v.rasterizationScale = <span class="type">UIScreen</span>.main.scale</span><br><span class="line">    v.startPoint = <span class="type">CGPoint</span>(x: <span class="number">0</span>, y: <span class="number">1</span>)</span><br><span class="line">    v.endPoint = <span class="type">CGPoint</span>(x: <span class="number">0</span>, y: <span class="number">0.8</span>)</span><br><span class="line">    <span class="keyword">return</span> v</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+<p>因为要透过后面内容的显示，tableView 的背景需要是透明的，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">tableView.backgroundColor = <span class="type">UIColor</span>.clear</span><br></pre></td></tr></table></figure>
+<p>考虑到列表是会滚动的，把这个 layer 加到 tableView 的 mask 上的固定位置，那列表一滚动，效果就不对了，所以需要把 tableView 加到一个 background 上面去，然后把 <code>layer.mask</code> 设置成这我们之前创建好的 <code>gradientLayer</code></p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="built_in">lazy</span> <span class="keyword">var</span> tableViewBackgroundView: <span class="type">UIView</span> = &#123;</span><br><span class="line">    <span class="keyword">let</span> v = <span class="type">UIView</span>()</span><br><span class="line">    v.backgroundColor = <span class="type">UIColor</span>.clear</span><br><span class="line">    v.layer.mask = <span class="keyword">self</span>.gradientLayer</span><br><span class="line">    <span class="keyword">return</span> v</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+<p>由于是 AutoLayout 布局，而 layer 却不能加约束，所以我们监听 backgroundView 的 <code>bounds</code> 手动更新 layer 的 frame（这里用了 RxSwift，其它方式也都 OK）</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">tableViewBackgroundView.rx.observe(<span class="type">CGRect</span>.<span class="keyword">self</span>, <span class="string">"bounds"</span>)</span><br><span class="line">  .subscribe(onNext: &#123; [<span class="keyword">weak</span> <span class="keyword">self</span>] bounds <span class="keyword">in</span></span><br><span class="line">      <span class="keyword">guard</span> <span class="keyword">let</span> bounds = bounds <span class="keyword">else</span> &#123; <span class="keyword">return</span> &#125;</span><br><span class="line">      <span class="keyword">self</span>?.gradientLayer.frame = bounds</span><br><span class="line">  &#125;).addDisposableTo(bag)</span><br></pre></td></tr></table></figure>
+<p>Boom，带有边界渐隐效果的列表就 OK 了，是不是很方便捏</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-07-04-calayer-mask/">https://x140yu.github.io/2017-07-04-calayer-mask/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-07-08-ios-oss-1/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">在 Kickstarter-iOS 源码中学到的（一） - 工程相关</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-05-25-frp-in-swift-basic/">
+        <span class="next-text nav-default">记一次团队的内部分享 - FRP in Swift</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-07-04-calayer-mask/';
+        this.page.identifier = '2017-07-04-calayer-mask/';
+        this.page.title = '用 CALayer.mask 实现边界的渐隐效果';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

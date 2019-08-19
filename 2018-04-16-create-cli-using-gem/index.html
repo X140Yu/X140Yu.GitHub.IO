@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="使用 Ruby Gem 创建命令行工具">
+
+
+
+
+  <meta name="keywords" content="ruby, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-04-16-create-cli-using-gem/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 使用 Ruby Gem 创建命令行工具 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          使用 Ruby Gem 创建命令行工具
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-04-16
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-04-16-create-cli-using-gem/" data-title="使用 Ruby Gem 创建命令行工具">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#通过-Gem-搭建-CLI"><span class="toc-text">通过 Gem 搭建 CLI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建"><span class="toc-text">创建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加依赖"><span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加命令行入口"><span class="toc-text">添加命令行入口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用"><span class="toc-text">使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与-Homebrew-Formula-的区别（都是通过源码而非发布的安装情况下）"><span class="toc-text">与 Homebrew Formula 的区别（都是通过源码而非发布的安装情况下）</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>之前曾经依赖过 Homebrew Formula <a href="https://zhaoxinyu.me/2018-01-24-homebrew-formula/" target="_blank" rel="noopener">创建过基于 Ruby 的命令行工具</a>。但创建过程繁琐，对于依赖的处理不是很友好而且没办法让其它人依赖特定的版本。既然是做基于 Ruby 的 CLI，那为什么不把它做成一个 gem？</p>
+<a id="more"></a>
+<h2 id="通过-Gem-搭建-CLI"><a href="#通过-Gem-搭建-CLI" class="headerlink" title="通过 Gem 搭建 CLI"></a>通过 Gem 搭建 CLI</h2><p>如果我们要创建一个名字叫 CLIGem 的命令行工具，它依赖 <code>gli</code> 这个 gem，它提供一个命令 <code>cg</code>，在执行后会输出一句话 <code>Hello, world!</code>。创建一个这样的 CLI 需要哪些过程呢？</p>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>首先执行 <code>bundle gem CLIGem</code> ，相当于执行一个脚手架，它会通过模板帮你创建出一个已经搭建好的框架</p>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>打开 <code>CLIGem.gemspec</code>，添加 <code>spec.add_dependency &quot;gli&quot;, &quot;~&gt; 2.0&quot;</code> ，这里最好要指定版本号</p>
+<h3 id="添加命令行入口"><a href="#添加命令行入口" class="headerlink" title="添加命令行入口"></a>添加命令行入口</h3><p>通过修改 <code>.gemspec</code> 的 <code>bindir</code> 还有 <code>executables</code> 字段可以把命令暴露给安装这个 gem 的人，达到成为一个 CLI 的目的。</p>
+<figure class="highlight rb"><table><tr><td class="code"><pre><span class="line">spec.bindir        = <span class="string">"exe"</span></span><br><span class="line">spec.executables   = <span class="string">"cg"</span></span><br></pre></td></tr></table></figure>
+<p>需要在要目录创建一个目录 <code>exe</code>，添加一个新文件 <code>cg</code> 并添加可执行的权限。<code>cg</code> 的内容如下，</p>
+<figure class="highlight rb"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/ruby</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'gli'</span></span><br><span class="line"></span><br><span class="line">puts <span class="string">"Hello, world!"</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>如果把它发布出去，那通过 <code>gem install CLIGem</code> 安装就可以了</p>
+<p>但如果不想发布，要如何安装使用呢？</p>
+<p>所幸 gem 提供了通过源码安装的方式。<code>gem build</code> 可以根据一个 <code>gemspec</code> 生成一个 <code>.gem</code> 文件供 gem 安装，所以在拥有源码的情况下，执行以下几句就可以安装了，</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">gem build CLIGem.gemspec</span><br><span class="line">gem install *.gem</span><br></pre></td></tr></table></figure>
+<p>如果别人通过 bundler 来依赖你，那么他可以在工程中的 <code>Gemfile</code> 中这样写，</p>
+<figure class="highlight rb"><table><tr><td class="code"><pre><span class="line">gem <span class="string">'CLIGem'</span>, <span class="symbol">:git</span> =&gt; <span class="string">'git@git.xxx.com:xxx/CLIGem.git'</span>, <span class="symbol">:tag</span> =&gt; <span class="string">'1.0.1'</span></span><br></pre></td></tr></table></figure>
+<p>这样，每次 <code>bundle install</code>，依赖就会自动安装成功了</p>
+<h2 id="与-Homebrew-Formula-的区别（都是通过源码而非发布的安装情况下）"><a href="#与-Homebrew-Formula-的区别（都是通过源码而非发布的安装情况下）" class="headerlink" title="与 Homebrew Formula 的区别（都是通过源码而非发布的安装情况下）"></a>与 Homebrew Formula 的区别（都是通过源码而非发布的安装情况下）</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Gem</th>
+<th>Homebrew Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>依赖安装、上手容易</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>bundler 友好</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>安装更新容易</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>总体来看，如果是使用 ruby 编写 CLI，使用 gem 比使用 Homebrew 搭建更加方便。即使前者安装更新麻烦一些（需要 clone 源码），但可以通过把这些操作封装成 shell 脚本来解决。总体来说，使用 Gem 编写 CLI 体验更好。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-04-16-create-cli-using-gem/">https://x140yu.github.io/2018-04-16-create-cli-using-gem/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/ruby/">ruby</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-04-17-bundler-in-ios-proj/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">管理 iOS 项目的 ruby 依赖</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-04-14-what-happends-if-two-frameworks-defines-same-c-functions/">
+        <span class="next-text nav-default">两个 Framework 中如果定义了相同名字的 C 函数会发生什么？</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-04-16-create-cli-using-gem/';
+        this.page.identifier = '2018-04-16-create-cli-using-gem/';
+        this.page.title = '使用 Ruby Gem 创建命令行工具';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

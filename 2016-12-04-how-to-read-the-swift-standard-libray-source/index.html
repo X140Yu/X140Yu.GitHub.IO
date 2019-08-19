@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="<译> 如何阅读 Swift 标准库中的源码">
+
+
+
+
+  <meta name="keywords" content="翻译, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2016-12-04-how-to-read-the-swift-standard-libray-source/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> <译> 如何阅读 Swift 标准库中的源码 - X140Yu's Blog </译></title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          <译> 如何阅读 Swift 标准库中的源码
+        
+      </译></h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2016-12-10
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2016-12-04-how-to-read-the-swift-standard-libray-source/" data-title="<译> 如何阅读 Swift 标准库中的源码">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在哪里能找到标准库的源码？"><span class="toc-text">在哪里能找到标准库的源码？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#处理-GYB"><span class="toc-text">处理 GYB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#从源码编译-Swift"><span class="toc-text">从源码编译 Swift</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Orienting-yourself"><span class="toc-text">Orienting yourself</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#更新"><span class="toc-text">更新</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#切换到指定的版本"><span class="toc-text">切换到指定的版本</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>原文链接=<a href="https://oleb.net/blog/2016/10/swift-stdlib-source/" target="_blank" rel="noopener">https://oleb.net/blog/2016/10/swift-stdlib-source/</a><br>作者=Ole Begemann<br>译者=X140Yu</p>
+<a id="more"></a>
+<p><strong>在进行完 GYP 预处理后，阅读 Swift 标准库源码的<del>最简单的</del>一种方式是执行一次完整的 Swift 编译。（另一种是写一小段 shell 脚本。可以看下面的更新）</strong></p>
+<p>如果你想要开始阅读 Swift 源码，那它的标准库应该是首先开始阅读的地方。标准库中的代码是和每一个使用 Swift 的开发者都息息相关的，如果你也曾经对某个 API 的表现和性能有过怀疑，那么直接阅读对应的源码会是解决问题最快的方式。</p>
+<p>标准库也是 Swift 项目中最容易接触的地方。一点是因为，它是由 Swift 写的，而不是 C++。因为你每天都用它，所以对它的 API 也会非常熟悉。这就意味着，在源码中找到你想要找的那部分代码不是特别困难。如果你只是没有带着目标而泛泛地看，那么在源码中你可能会发现<a href="https://oleb.net/blog/2016/09/playground-print-hook/" title="_playgroundPrintHook" target="_blank" rel="noopener">一</a>或者<a href="https://oleb.net/blog/2016/10/swift-array-of-c-strings/" title="Passing an Array of Strings from Swift to C" target="_blank" rel="noopener">两</a>块金子.</p>
+<h1 id="在哪里能找到标准库的源码？"><a href="#在哪里能找到标准库的源码？" class="headerlink" title="在哪里能找到标准库的源码？"></a>在哪里能找到标准库的源码？</h1><p>标准库的代码在 <a href="https://github.com/apple/swift/tree/master/stdlib/public/core" target="_blank" rel="noopener"><code>stdlib/public/core</code></a>，GitHub 上的 <a href="https://github.com/apple/swift" target="_blank" rel="noopener">Swift 仓库中</a>。你可以在里面找到所有 public types，protocols 和 functions。你可以在浏览器中或者把代码 clone 到本地的机器上阅读。但是，一个比较复杂的地方在于，大约 1/3 的文件都以 <code>.swift.gyb</code> 结尾，如果你打开其中一个文件，例如：<a href="https://github.com/apple/swift/blob/master/stdlib/public/core/FixedPoint.swift.gyb" target="_blank" rel="noopener"><code>FixedPoint.swift.gyb</code></a>（Int 类型被定义的地方），你会发现一种和 Swift 混合在一起的模版语言：GYB。</p>
+<blockquote>
+<p>gyb 代表 Generate Your Boilerplate（生成你的样板文件）。 它是一个 Swift 团队开发的预处理的一个东西。如果他们需要编译十个非常相似的 <code>Int</code>，那他们就得把相同的代码复制粘贴十次。如果你打开某个 gyb 文件，你会发现其中大部分都是 Swift 的代码，但是也有一些行是由 Python 构成的。这个 这个预处理器在 Swift 的代码仓库中的 <a href="https://github.com/apple/swift/blob/master/utils/gyb" target="_blank" rel="noopener"><code>utils/gyb</code></a>，尽管大部分的代码在 <a href="https://github.com/apple/swift/blob/master/utils/gyb.py" target="_blank" rel="noopener"><code>utils/gyb.py</code></a>。</p>
+<p>— <a href="https://lists.swift.org/pipermail/swift-users/Week-of-Mon-20151207/000226.html" target="_blank" rel="noopener">Brent Royal-Gordon</a></p>
+</blockquote>
+<p>我们更想要看到 <a href="https://twitter.com/gottesmang/status/787493623533215745" target="_blank" rel="noopener">更少的 GYB</a>，更多的 Swift，因为它<a href="https://twitter.com/gottesmang/status/787493919072235520" target="_blank" rel="noopener">更具有表达性</a>，但是现在，我们不得不看到它们混和的一起。</p>
+<h1 id="处理-GYB"><a href="#处理-GYB" class="headerlink" title="处理 GYB"></a>处理 GYB</h1><p>如果你只想要阅读源码（而不是向 Swift 贡献代码），GYB 带来的坏处远比好处要多。那么怎么来预处理这些文件呢？你可以直接运行 <code>gyb</code> 脚本，但是它依赖于一个被 build 脚本创建的特殊环境。最好的方式是执行一次完整的 Swift build。也许对于阅读源码来说，build 一次可能会有点过了，但是我发现 build 以后，源码阅读起来会更容易一些。</p>
+<p><strong>更新：</strong> <a href="https://twitter.com/tonisuter/status/792325666591088668" target="_blank" rel="noopener">Toni Suter 指出</a> <code>gyb</code> 的脚本只依赖于一个你可以更改的变量（64-bit 和 32-bit 差别），如果你只想要处理 gyb, <a href="https://gist.github.com/tonisuter/e47267a25b3dcc90fe75a24d3ed2063a" target="_blank" rel="noopener">这个小脚本</a>比完整编译一次 Swift 要好很多。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">for f in `ls *.gyb`</span><br><span class="line">do</span><br><span class="line">    echo &quot;Processing $f&quot;</span><br><span class="line">    name=$&#123;f%.gyb&#125;</span><br><span class="line">    ../../../utils/gyb -D CMAKE_SIZEOF_VOID_P=8 -o $name $f --line-directive &quot;&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<p>它会把所有的 <code>.gyb</code> 文件处理完毕后放到相同的位置并去除 <code>.gyb</code> 后缀。去除 <code>--line-directive &quot;&quot;</code> 在处理完毕的文件中添加 source location 的注释（就像 Swift build 中处理的一样）。</p>
+<h1 id="从源码编译-Swift"><a href="#从源码编译-Swift" class="headerlink" title="从源码编译 Swift"></a>从源码编译 Swift</h1><p>环境的搭建可以阅读 Swift 仓库中的 <a href="https://github.com/apple/swift/blob/master/README.md" target="_blank" rel="noopener">readme</a>。 如果的 Mac 机器上，按照下面的步骤进行操作（使用 Homebrew 安装各种依赖），但是别忘记检查这些步骤是否还正确：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Install build tools</span><br><span class="line">brew install cmake ninja</span><br><span class="line"># Create base directory</span><br><span class="line">mkdir swift-source</span><br><span class="line">cd swift-source</span><br><span class="line"># Clone Swift</span><br><span class="line">git clone https://github.com/apple/swift.git</span><br><span class="line"># Clone dependencies (LLVM, Clang, etc.)</span><br><span class="line">./swift/utils/update-checkout --clone</span><br></pre></td></tr></table></figure>
+<p>最后一句命令会把 build Swift 需要的其它部分的 repo 给 clone 下来，比如 LLVM，Clang，LLDB 等等。就像对于 Linux 的 Foundation 和 libdispatch 模块一样。在这一步过后，你的 <code>swift-source</code> 文件夹子会看起来像这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">du -h -d 1</span><br><span class="line">250M	./clang</span><br><span class="line">4,7M	./cmark</span><br><span class="line"> 47M	./compiler-rt</span><br><span class="line"> 15M	./llbuild</span><br><span class="line">197M	./lldb</span><br><span class="line">523M	./llvm</span><br><span class="line">221M	./swift</span><br><span class="line"> 26M	./swift-corelibs-foundation</span><br><span class="line">7,8M	./swift-corelibs-libdispatch</span><br><span class="line">1,1M	./swift-corelibs-xctest</span><br><span class="line">316K	./swift-integration-tests</span><br><span class="line">960K	./swift-xcode-playground-support</span><br><span class="line">7,0M	./swiftpm</span><br><span class="line">1,3G	.</span><br></pre></td></tr></table></figure>
+<p>现在你就可以开始运行 build 脚本了，它会先开始 build LLVM，然后是 Swift：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./swift/utils/build-script -x -R</span><br></pre></td></tr></table></figure>
+<p>参数是很重要的：</p>
+<ul>
+<li><code>-x</code> 会生成一个 Xcode project，你就可以在这个 project 中使用 Xcode 阅读源码了。</li>
+<li><code>-R</code> 代表 release 模式的编译。它会比 debug 模式更快，在我 2.6 GHz 的 core i7 2013 电脑上，25 分 vs 70 分。占用的空间也更少，2GB vs 24GB。</li>
+</ul>
+<h1 id="Orienting-yourself"><a href="#Orienting-yourself" class="headerlink" title="Orienting yourself"></a>Orienting yourself</h1><p>当 build 结束快捷，你可以在 <code>./build/Xcode-ReleaseAssert/swift-macosx-x86_64/</code> 中找到结果，<code>swift-source</code> 的子文件夹中。其中会有一个 <code>Swift.xcodeproj</code> Xcode 项目，已经处理好的标准库代码在 <code>./stdlib/public/code/8/</code> 中。注意，这个文件夹中只有从 .gyb 文件处理过来的文件，原来以 <code>.swift</code> 结尾的文件还在原来的位置。</p>
+<p>不幸的是, 在 Xcode 中使用 <em>Open Quickly</em> (⇧⌘O) <a href="https://twitter.com/UINT_MIN/status/792101106495008768" target="_blank" rel="noopener">打不开特定的 API</a>. 我通常使用 <em>Find in Project</em> (⇧⌘F) 来进行导航。如果你使用只出现的函数定义的字符串来搜索，那就很容易搜索到了。比如要搜索 <code>print</code> 函数的定义，搜索 “func print(“ 而不是 “print”。</p>
+<p>你也可以运行 <code>swift</code> REPL 或者 <code>swiftc</code> 编译器了。都在 <code>./Release/bin/</code> 中。如果你想要测试一些在之前 release 中有的 bug，但是在当前 master 已经被修复了，就会很方便了。</p>
+<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>如果你想在以后更新本地的 clone，重新运行 <code>update-checkout</code> 脚本，并且 rebuild:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./swift/utils/update-checkout</span><br><span class="line">./swift/utils/build-script -x -R</span><br></pre></td></tr></table></figure>
+<p>这些都是增量编译，比第一次要快得多。</p>
+<h1 id="切换到指定的版本"><a href="#切换到指定的版本" class="headerlink" title="切换到指定的版本"></a>切换到指定的版本</h1><p>如果你想要验证一个你在生产环境中已经使用的 Swift 特定版本 API 的表现，你就需要查看那个版本的 Swift 代码而不是当前 <em>master</em> 分支。但是简单地切换分支并不能解决问题，因为如果一些依赖的版本对不上的话，编译是会失败的。</p>
+<p><code>update-checkout</code> 脚本能够让你指定一个特定的 tag 或者 branch。它会帮你切换所有依赖的版本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Either</span><br><span class="line">./swift/utils/update-checkout --tag swift-3.0-RELEASE</span><br><span class="line"># or</span><br><span class="line">./swift/utils/update-checkout --scheme swift-3.0-branch</span><br></pre></td></tr></table></figure>
+<p><em>swift-3.0-RELEASE</em> tag 和 <em>swift-3.0-branch</em> branch 的区别是，tag 相当于一个 mailstone，代表 Swift 的某个特定的 release 分支。然而分支是会伴随着 bug 修复和功能改进不断更新的。现在来看，在官方 release Xcode 8.1 的 Swift 3.0.1 时，<em>swift-3.0-branch</em> 分支已经包含了一些 Swift 3.0.2 中的修复。</p>
+<p>不幸的是，我发现 <code>update-checkout --scheme</code> 的命令非常脆弱（<code>--tag</code> 在我看来能好一些）。这个脚本会对代码进行 <a href="https://git-scm.com/docs/git-rebase" target="_blank" rel="noopener">rebase</a>  操作，并且切换到指定的分支，这会在子项目中带来合并冲突，然而我并没有对代码作出任何更改。我不明白为什么这个脚本会这样。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2016-12-04-how-to-read-the-swift-standard-libray-source/">https://x140yu.github.io/2016-12-04-how-to-read-the-swift-standard-libray-source/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/翻译/">翻译</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-01-01-wwmxd/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default"><读>「万万没想到 - 用理工科思维理解世界」</读></span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2016-11-20-vagrant-setup/">
+        <span class="next-text nav-default">使用 Vagrant 搭建 Node.js 环境</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2016-12-04-how-to-read-the-swift-standard-libray-source/';
+        this.page.identifier = '2016-12-04-how-to-read-the-swift-standard-libray-source/';
+        this.page.title = '<译> 如何阅读 Swift 标准库中的源码';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

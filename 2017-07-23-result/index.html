@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="聊聊 Result 这个 Swift µframework">
+
+
+
+
+  <meta name="keywords" content="iOS, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-07-23-result/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 聊聊 Result 这个 Swift µframework - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          聊聊 Result 这个 Swift µframework
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-23
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-07-23-result/" data-title="聊聊 Result 这个 Swift µframework">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Result-解决了什么问题"><span class="toc-text">Result 解决了什么问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Result-中的高阶函数"><span class="toc-text">Result 中的高阶函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Result-的价值"><span class="toc-text">Result 的价值</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>本文主要介绍了 <a href="https://github.com/antitypical/Result" target="_blank" rel="noopener">Result</a> 这个 Swift 的 µframework 解决的问题以及其基本的使用。</p>
+</blockquote>
+<a id="more"></a>
+<p>先来看一段我们曾经写过无数次的代码，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">login</span><span class="params">(userName: String, password: String, completionHandler: @escaping <span class="params">(token: String?, error: Error?)</span></span></span> -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">    <span class="comment">// network request ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这么看可能看不出什么问题，我们来试着调用一下这个方法吧，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="type">RequestHelper</span>.login(username: <span class="string">"123"</span>, password: <span class="string">"123"</span>) &#123; (token, error) <span class="keyword">in</span></span><br><span class="line">    <span class="comment">/// how to handle token &amp; error?</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>completionHandler</code> 中的 token 和 error 是包在一个括号里的，包在一个括号里说明它们构成一个 tupple，tupple 代表 <code>and</code> 的意思，而且这两个参数还都是 optional 的，也就说明这个 completion 的参数有以下四种情况，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216230112.png" alt></p>
+<p>可以看出，只有 (1) 和 (4) 的参数组合对于调用者是有意义的。你可能会提出疑问，(2) 和 (3) 的组合应该不会有人去判断吧？的确，但是这是因为你的判断建立在大家或者团队的「隐性」约定之上，我们认为这两种情形的组合是不应当存在，所以才不去判断，而不是让代码明确地说明根本没有这两种组合的情况。</p>
+<p>这个 <code>completionHandler</code> 参数的语意代表的应当是 <code>token | error</code> 而不是 <code>token? &amp; error?</code> 既然 tuple 是代表 <code>&amp;</code>，那什么什么代表 <code>|</code> 呢？</p>
+<p>没错，就是 enum！</p>
+<p><a href="https://github.com/antitypical/Result" target="_blank" rel="noopener">Result</a> 这个简单的 library 就是解决这类问题的。</p>
+<h2 id="Result-解决了什么问题"><a href="#Result-解决了什么问题" class="headerlink" title="Result 解决了什么问题"></a>Result 解决了什么问题</h2><p>在使用了 Result 之后，函数的定义及实现变成了这样，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">LoginError</span>: <span class="title">Error</span> </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> noNetwork</span><br><span class="line">    <span class="keyword">case</span> wrongUsername</span><br><span class="line">    <span class="keyword">case</span> wrongPassword</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">func</span> <span class="title">login</span>(<span class="title">username</span>: <span class="title">String</span>, <span class="title">password</span>: <span class="title">String</span>, <span class="title">completion</span>: @<span class="title">escaping</span> (<span class="title">Result</span>&lt;<span class="title">String</span>, <span class="title">LoginError</span>&gt;) -&gt; <span class="title">Void</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// network request</span></span><br><span class="line">    completion(.success(<span class="string">"123jl123"</span>))</span><br><span class="line">    <span class="comment">// or</span></span><br><span class="line">    completion(.failure(.wrongPassword))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用者视角，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="type">RequestHelper</span>.login(username: <span class="string">"123"</span>, password: <span class="string">"123"</span>) &#123; (result) <span class="keyword">in</span></span><br><span class="line">    <span class="keyword">switch</span> result &#123;</span><br><span class="line">    <span class="keyword">case</span> .success(<span class="keyword">let</span> token):</span><br><span class="line">        <span class="comment">// do something with token</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">case</span> .failure(<span class="keyword">let</span> error):</span><br><span class="line">        <span class="keyword">switch</span> error &#123;</span><br><span class="line">        <span class="keyword">case</span> .noNetwork:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">case</span> .wrongUsername:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">case</span> .wrongPassword:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不觉得生活更美好了吗？这其中没有隐性的约定，没有出现理解不了的情况组合，只需要按照 swich 里面的 case 处理对应的情况就好了。</p>
+<p>所以 Result 解决了一类问题，就是把<em>可能成功</em>或者<em>可能失败</em>的情况组合从 tuple 变为了 enum。</p>
+<p>Swift 的网络请求库 <a href="https://github.com/Moya/Moya/blob/master/Moya.podspec#L26" target="_blank" rel="noopener">Moya</a> 依赖了这个小框架，另一个著名的网络库 <a href="https://github.com/Alamofire/Alamofire/blob/master/Source/Result.swift" target="_blank" rel="noopener">Alamofire</a> 也有类似的设计。</p>
+<p>那么问题来了，如果只是为了一个 enum 的定义，我们有什么理由依赖一个 framework 呢？</p>
+<h2 id="Result-中的高阶函数"><a href="#Result-中的高阶函数" class="headerlink" title="Result 中的高阶函数"></a>Result 中的高阶函数</h2><p>看文档会知道 Result 类型实现了 <code>map</code> 和 <code>flatMap</code> 函数，所以 Result 是个 Monad（如果你不知道什么是 Monad 没有关系，我只是跩了一个名词，千万不要一见到 Monad 就害怕了，其实没有什么复杂的东西）。我们简单地看一下 Result 的 <code>map</code> 和 <code>flatMap</code> 都做了什么，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// Returns a new Result by mapping `Success`es’ values using `transform`, or re-wrapping `Failure`s’ errors.</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">map</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(<span class="keyword">Self</span>.Value)</span></span></span> -&gt; <span class="type">U</span>) -&gt; <span class="type">Result</span>.<span class="type">Result</span>&lt;<span class="type">U</span>, <span class="type">Self</span>.<span class="type">Error</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// Returns the result of applying `transform` to `Success`es’ values, or re-wrapping `Failure`’s errors.</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">flatMap</span>&lt;U&gt;<span class="params">(<span class="number">_</span> transform: <span class="params">(<span class="keyword">Self</span>.Value)</span></span></span> -&gt; <span class="type">Result</span>.<span class="type">Result</span>&lt;<span class="type">U</span>, <span class="type">Self</span>.<span class="type">Error</span>&gt;) -&gt; <span class="type">Result</span>.<span class="type">Result</span>&lt;<span class="type">U</span>, <span class="type">Self</span>.<span class="type">Error</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>假如我们的类型是这样的，<code>Result&lt;T, E&gt;</code>（T 是 value 的类型，E 是 Error 的类型），观察上面的函数签名，</p>
+<p>对它调用 <code>map</code> 方法，会返回一个新的 <code>Result&lt;U, E&gt;</code>，也就是 Value 类型发生了改变，而 Error 的类型还跟原来一样。</p>
+<p>对它调用 <code>flatMap</code> 方法，会返回一个新的 <code>Result&lt;U, F&gt;</code>，value 和 error 的类型都可以被改变，</p>
+<p>通过一个例子来理解一下。比如有这样一个 Result，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> loginResult = <span class="type">Result</span>&lt;<span class="type">String</span>, <span class="type">LoginError</span>&gt;(<span class="string">"123"</span>)</span><br></pre></td></tr></table></figure>
+<p>对它调用 <code>map</code>，<code>transform</code> 函数给了你一个改变 value 类型的机会，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">loginResult.<span class="built_in">map</span> &#123; token -&gt; <span class="type">U</span> <span class="keyword">in</span></span><br><span class="line">    <span class="comment">/// transform token to any type you like</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对它调用 <code>flatMap</code>，<code>transform</code> 函数给了你一个返回一个类型完全不一样的 <code>Result</code> 的机会，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">loginResult.flatMap &#123; token -&gt; <span class="type">Result</span>&lt;<span class="type">U</span>, <span class="type">E</span>&gt; <span class="keyword">in</span></span><br><span class="line">    <span class="comment">// trnasform token or error to any type you like</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很多 framwork 中的类型都实现了 <code>map</code> 和 <code>flatMap</code>，比如 RxSwift 中的 <code>Observable</code>，Promise 中的 <code>Promise</code>（虽然命名可能是 <code>then</code> 但跟 <code>flatMap</code> 的签名是类似的）。</p>
+<p>有了这些方法就可以对 Result 进行更多的变换操作，从而把一个不知道从什么地方飞来的 Result 变成一个你真正需要的 Result。</p>
+<h2 id="Result-的价值"><a href="#Result-的价值" class="headerlink" title="Result 的价值"></a>Result 的价值</h2><p>它 repo 中的 README 有这样一句话，</p>
+<blockquote>
+<p>Using this µframework instead of rolling your own Result type allows you to easily interface with other frameworks that also use Result.</p>
+</blockquote>
+<p>对于很多 framework 来说，它们都需要像 Result 类似的数据结构来代表可能成功可能失败的结果。所以 Result 的愿景是，不希望大家再定义属于自己的 Result 类型，而是使用我，这样在 Result 之间的转换也比较轻松，而且还省去了很多类似的冗余代码。</p>
+<p>如果你依赖的 framwork 已经依赖了 Result，那么在写下一个类似 <code>login</code> 的函数时，试试返回一个 Result；没有依赖也没有关系，在写下一个返回可能成功可能失败的多个参数的函数时，用 <code>enum</code> 代替 <code>tuple</code> 吧。</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-07-23-result/">https://x140yu.github.io/2017-07-23-result/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-08-05-add-test-to-your-pod/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">为你的 pod 添加测试</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-07-16-iOS-initializers/">
+        <span class="next-text nav-default">如何正确书写 iOS 中的 Initializer</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-07-23-result/';
+        this.page.identifier = '2017-07-23-result/';
+        this.page.title = '聊聊 Result 这个 Swift µframework';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

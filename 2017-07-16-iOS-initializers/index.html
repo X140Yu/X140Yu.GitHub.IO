@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="如何正确书写 iOS 中的 Initializer">
+
+
+
+
+  <meta name="keywords" content="iOS, Objective-C, Swift, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2017-07-16-iOS-initializers/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 如何正确书写 iOS 中的 Initializer - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          如何正确书写 iOS 中的 Initializer
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2017-07-16
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2017-07-16-iOS-initializers/" data-title="如何正确书写 iOS 中的 Initializer">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Initializer-的种类"><span class="toc-text">Initializer 的种类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Designated-Initializer-指定初始化方法"><span class="toc-text">Designated Initializer (指定初始化方法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Convenience-Initializer-便捷初始化方法"><span class="toc-text">Convenience Initializer (便捷初始化方法)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Example"><span class="toc-text">Example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Swift"><span class="toc-text">Swift</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Q-amp-A"><span class="toc-text">Q&amp;A</span></a></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <p>开发过程中，写 Initializer 应该是日常。会写的可以直接不看。如果没有好好了解过如何写 Initializer，每次都凭着感觉写而且还没有任何问题，说明其中的「玄机」你已经掌握了，可以大概扫一扫。但是每次写 Initializer 都要查 Google，那这篇文章就是给你（我🌚）准备的</p>
+<a id="more"></a>
+<h2 id="Initializer-的种类"><a href="#Initializer-的种类" class="headerlink" title="Initializer 的种类"></a>Initializer 的种类</h2><p>一个类中可能会有多个 Initializer，但不管有多少，都只会是下面两种类型中的一种。</p>
+<h3 id="Designated-Initializer-指定初始化方法"><a href="#Designated-Initializer-指定初始化方法" class="headerlink" title="Designated Initializer (指定初始化方法)"></a>Designated Initializer (指定初始化方法)</h3><p>是类中的一等 Initializer，会把类中所有相关的属性都初始化。需要调用父类的 Designated Initializer。</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225707.png" alt></p>
+<h3 id="Convenience-Initializer-便捷初始化方法"><a href="#Convenience-Initializer-便捷初始化方法" class="headerlink" title="Convenience Initializer (便捷初始化方法)"></a>Convenience Initializer (便捷初始化方法)</h3><p>是类中的二等 Initializer，会调用类中的 Designated Initializer 或 Convenience Initializer，把其它没有传进来的属性初始化为默认值。主要是给调用者以方便。被其它 Convenience Initializer 调用的 Convenience Initializer，必须调用同类中的 Designated Initializer。</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225718.png" alt></p>
+<p>那么如何区分类中的初始化方法是 designated 的还是 convenience 的呢？有几个方法，</p>
+<ul>
+<li>通常来说，Designated Initializer 的参数要比 Convenience Initializer 多，因为指定初始化方法希望把这个类中的相关属性都初始化掉，而便捷初始化方法只会初始化掉一部分，其余不太要紧的属性则会提供默认值。</li>
+<li>看这个方法的声明里有没有使用 <code>NS_DESIGNATED_INITIALIZER</code> 标记。</li>
+</ul>
+<p>结合一个 <code>UIViewController</code> 子类，看看 Initializer 到底该怎么写。</p>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>不考虑使用 StoryBoard 的情况</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ProfileViewController</span> : <span class="title">UIViewController</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">readonly</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *userID;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">readonly</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *gender; <span class="comment">// "0" or "1"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>在初始化的时候，<code>userID</code> 是必须要被初始化的，而 <code>gender</code> 在不知道的情况下可以被初始化为默认值，后续可以通过网络请求更新这个值。那么这个类的初始化方法大概应该长成这个样子，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">+ (<span class="keyword">instancetype</span>)new <span class="built_in">NS_UNAVAILABLE</span>; <span class="comment">// (1)</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)init <span class="built_in">NS_UNAVAILABLE</span>; <span class="comment">// (2)</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)aDecoder <span class="built_in">NS_UNAVAILABLE</span>; <span class="comment">// (3)</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithNibName:(<span class="built_in">NSString</span> *)nibNameOrNil bundle:(<span class="built_in">NSBundle</span> *)nibBundleOrNil <span class="built_in">NS_UNAVAILABLE</span>; <span class="comment">// (4)</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithUserID:(<span class="built_in">NSString</span> *)userID gender:(<span class="built_in">NSUInteger</span>)gender <span class="built_in">NS_DESIGNATED_INITIALIZER</span>; <span class="comment">// (5)</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithUserID:(<span class="built_in">NSString</span> *)userID; <span class="comment">// (6)</span></span><br></pre></td></tr></table></figure>
+<p>从上往下看，(1) ~ (4) 都是从父类中继承来的初始化方法，虽然我们的类能够使用这些方法初始化，但是我们不希望调用者使用这些方法，因为这会导致 <code>userID</code> 没有被初始化，逻辑就会不正确了，作为一个有节操的 programmer，把这些方法标记为 <code>NS_UNAVAILABLE</code>，告诉调用者，不要使用这些方法初始化，Xcode 也会有调用这些方法的地方抛出错误。</p>
+<p>(5) 会初始化掉所有相关的属性，所以它是作为 Designated Initializer 的存在，同样作为一个有节操的 programmer，我们把它标记为 <code>NS_DESIGNATED_INITIALIZER</code>，这个标记会做以下几件事情，</p>
+<ul>
+<li>在实现这个指定初始化方法时，如果没有调用父类的 Designated Initializer，Xcode 会抛出警告。</li>
+<li>Xcode 会把其它没有这个标记的初始化方法自动认为是 Convenience Initializer，包括从父类继承来的 Designated Initializer，并在实现的时候检查函数内有没有调用同类中的其它初始化方法 (Convenience 和 Designated 都可以)。</li>
+</ul>
+<p>所以这个标记是非常有用的，如果你在适当的初始化方法前面加了这个标记，而且实现类中的所有初始化方法后还没有警告，那么出错几乎是不可能的。所以在实现新类初始化方法的时候都应该添加这个标记，让编译器提醒你到底应该做什么事情，减少犯错误的可能。</p>
+<p>(6) 是一个 Convenience Initializer。</p>
+<p>看到这里，实现上面类中的两个初始化方法应该很容易了吧，</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">instancetype</span>)initWithUserID:(<span class="built_in">NSString</span> *)userID &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> initWithUserID:userID gender:<span class="string">@"1"</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithUserID:(<span class="built_in">NSString</span> *)userID gender:(<span class="built_in">NSString</span> *)gender &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> = [<span class="keyword">super</span> initWithNibName:<span class="string">@""</span> bundle:<span class="literal">nil</span>]) &#123;</span><br><span class="line">        _userID = userID;</span><br><span class="line">        _gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一句话总结，子类的指定初始化方法必须调父类的指定初始化方法；子类的便捷初始化方法必须调用同类的其它初始化方法。</p>
+<h2 id="Swift"><a href="#Swift" class="headerlink" title="Swift"></a>Swift</h2><p>Swift 跟 Objective-C 不太一样，不会默认要求你重写父类的指定初始化方法。如果覆写了父类中的指定初始化方法，一定要加上 <code>override</code> 关键字。</p>
+<p>加了 <code>convience</code> 关键字的就是 Convenience Initializer，规则与 Objective-C 的相同。</p>
+<p>对于初始化方法前面没有 <code>convience</code> 关键字的，编译器都会把它当作 Designated Initializer，跟 Objective-C 初始化方法前面加 <code>NS_DESIGNATED_INITIALIZER</code> 是一样的。在实现这些方法时，可以参考上面的规则。</p>
+<p>对于可能失败的初始化方法，需要把 <code>init</code> 关键字换成 <code>init?</code>，调用此类初始化方法时，返回值也会从确认有值，变成一个 optional。</p>
+<p>所以一个 Swift 的 UIViewController 子类大概需要这样写，</p>
+<figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProfileViewController</span>: <span class="title">UIViewController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> userID: <span class="type">String</span></span><br><span class="line">    <span class="keyword">let</span> gender: <span class="type">String</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(userID: <span class="type">String</span>, gender: <span class="type">String</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.userID = userID</span><br><span class="line">        <span class="keyword">self</span>.gender = gender</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(nibName: <span class="literal">nil</span>, bundle: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</span><br><span class="line">        <span class="built_in">fatalError</span>(<span class="string">"init(coder:) has not been implemented"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 感谢 <a href="https://twitter.com/kemchenj" target="_blank" rel="noopener">@四娘</a> <a href="https://twitter.com/kemchenj/status/941151493557596161" target="_blank" rel="noopener">提醒</a>，所以重写 <code>init(nibName, bundle)</code> 并不必要</p>
+<h2 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h2><p>Q: 为啥写个初始化方法还有这么多讲究？<br>A: 保证调用初始化方法后，由这个类引入的 property 都正确地被初始化，从而确保逻辑正确。</p>
+<p>Q: Convenience Initializer 到底有啥用？<br>A: 就是给调用者图个方便嘛。比如 Texture 中的 ASDisplayNode 就提供了 4 个 Convenience Initializer，不需要初始化之后再 <code>node.xxxBlock = ^() {};</code> ，而是把常用的 block property 在初始化的时候就给你了，就是为了方便。</p>
+<figure class="highlight objc"><table><tr><td class="code"><pre><span class="line">- (<span class="keyword">instancetype</span>)init <span class="built_in">NS_DESIGNATED_INITIALIZER</span>;</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithViewBlock:(ASDisplayNodeViewBlock)viewBlock;</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithViewBlock:(ASDisplayNodeViewBlock)viewBlock didLoadBlock:(<span class="keyword">nullable</span> ASDisplayNodeDidLoadBlock)didLoadBlock;</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithLayerBlock:(ASDisplayNodeLayerBlock)layerBlock;</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithLayerBlock:(ASDisplayNodeLayerBlock)layerBlock didLoadBlock:(<span class="keyword">nullable</span> ASDisplayNodeDidLoadBlock)didLoadBlock;</span><br></pre></td></tr></table></figure>
+<p>Q: 父类中的 Designated Initializer 在子类中还是 Designated Initializer 吗？<br>A: 父类中的 Designated Initializer 在子类中不一定必须是 Designated Initializer。如果在头文件中没对方法进行任何标记，那么父类中的 Designated Initializer 在子类中依旧是 Designated Initializer，如果在子类没有覆写这个方法，编译器会给出警告；但如果在子类中对父类的 Designated Initializer 标记为 <code>NS_UNAVAILABLE</code>，那么父类中的这个方法在子类中不再是 Designated Initializer，即使不覆写，编译器也不会有任何警告。</p>
+<p>Q: Objective-C 中的初始化方法中，引用 propery 的时候，到底该使用下划线的方式还是 <code>self.</code> 的方式？<br>A: Prefer <code>_userID</code> to  <code>self.userID</code>。</p>
+<p>Q: 为何在初始化方法中， Swift 类的变量需要在调用父类的初始化方法之前初始化？<br>A:<br>根据文档，</p>
+<blockquote>
+<p>Class initialization in Swift is a two-phase process. In the first phase, each stored property is assigned an initial value by the class that introduced it. Once the initial state for every stored property has been determined, the second phase begins, and each class is given the opportunity to customize its stored properties further before the new instance is considered ready for use.</p>
+</blockquote>
+<p>根 Objective-C 初始化不同的地方在第一步，就是把此类加入的 property 都初始化掉。因为 Swift 并不会像 Objective-C 一样，在没有显式初始化这些 property 的时候，自动把它们设为 <code>nil</code> 或 <code>0</code>。</p>
+<p>举个例子解释下上面的情况。新手写 Swift 通常会遇到这样的情况，</p>
+<p><img src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181216225737.png" alt></p>
+<p>编译器抱怨 <code>userID</code> 需要在 <code>super.init</code> 之前被初始化，就是因为 <code>userID</code> 没有默认值，如果在初始化的时候，我们还没给它提供值，那就会产生问题了(从编译器的角度来看，初始化的时候需要确保所有 property 都确认有值(nil 也算确认有值)。但你现在并没有告诉我它的值是什么。 )可是编译器为何没有抱怨 <code>gender</code> 和 <code>age</code> 呢？因为它们都有默认值（optional 在默认的情况下为 nil）。</p>
+<p>Q: 为什么每次创建 Swift UIViewController 子类，只要添加了任何一个初始化方法，Xcode 都会提醒要添加 <code>required init?(coder:)</code> 方法？<br>A: 因为 UIViewController 符合了 <code>NSCoding</code> 协议，其中有一个方法是 Designated Initializer，子类必须要实现这个协议的初始化方法。</p>
+<p>Q: 一个类可能会有多个 Designated Initializer 吗？<br>A: 可能。比如 <code>NSArray</code> 就有三个。但一般情况下都是只有一个。</p>
+<p>上面只是一些我自己的困惑，如果你也有困惑，欢迎留言。</p>
+<p>这下应该可以开开心心地写 Initializer 了吧 :]</p>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2017-07-16-iOS-initializers/">https://x140yu.github.io/2017-07-16-iOS-initializers/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/Objective-C/">Objective-C</a>
+            
+              <a href="/tags/Swift/">Swift</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2017-07-23-result/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">聊聊 Result 这个 Swift µframework</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2017-07-09-ios-oss-2/">
+        <span class="next-text nav-default">在 Kickstarter-iOS 源码中学到的（二） - 代码</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2017-07-16-iOS-initializers/';
+        this.page.identifier = '2017-07-16-iOS-initializers/';
+        this.page.title = '如何正确书写 iOS 中的 Initializer';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>

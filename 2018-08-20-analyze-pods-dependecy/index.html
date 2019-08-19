@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="分析使用 CocoaPods 项目的依赖">
+
+
+
+
+  <meta name="keywords" content="iOS, ruby, CocoaPods, X140Yu's Blog">
+
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="X140Yu's Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.10.1">
+
+
+
+<link rel="canonical" href="https://x140yu.github.io/2018-08-20-analyze-pods-dependecy/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.10.1">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3a87e709bb71d639f8a7b07fe411881";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102142985-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-102142985-1');
+</script>
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz",
+      appKey: "Uj8vhWY0bvdNySseOuCmtnPB"
+    });
+  </script>
+
+
+
+
+
+<script>
+  window.config = {"leancloud":{"app_id":"DoDg8Bwgi002rkBzkdWjJhGN-gzGzoHsz","app_key":"Uj8vhWY0bvdNySseOuCmtnPB"},"toc":true,"fancybox":true,"pjax":true};
+</script>
+
+    <title> 分析使用 CocoaPods 项目的依赖 - X140Yu's Blog </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">X140Yu's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          
+          
+            Home
+          
+        </li>
+      </a>
+    
+      <a href="/archives/">
+        <li class="mobile-menu-item">
+          
+          
+            Archives
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          
+          
+            Tags
+          
+        </li>
+      </a>
+    
+      <a href="/about">
+        <li class="mobile-menu-item">
+          
+          
+            About
+          
+        </li>
+      </a>
+    
+  </ul>
+</nav>
+
+    <div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">X140Yu's Blog</a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            
+            
+              Home
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            
+            
+              Archives
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            
+            
+              Tags
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            
+            
+              About
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+      </header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          分析使用 CocoaPods 项目的依赖
+        
+      </h1>
+
+      <div class="post-meta">
+        <span class="post-time">
+          2018-09-02
+        </span>
+        
+        
+        <span class="post-visits" data-url="/2018-08-20-analyze-pods-dependecy/" data-title="分析使用 CocoaPods 项目的依赖">
+          阅读次数 0
+        </span>
+        
+      </div>
+    </header>
+
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#先回顾一下我们的需求"><span class="toc-text">先回顾一下我们的需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上一个方案存在的问题"><span class="toc-text">上一个方案存在的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Analyzer"><span class="toc-text">Analyzer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CocoaPods-中的几个基本概念"><span class="toc-text">CocoaPods 中的几个基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-Config"><span class="toc-text">Pod::Config</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-Installer"><span class="toc-text">Pod::Installer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-Sandbox"><span class="toc-text">Pod::Sandbox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-Podfile-amp-amp-Pod-Podfile-lock"><span class="toc-text">[Pod::Podfile] &amp;&amp; [Pod::Podfile.lock]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搞事情"><span class="toc-text">搞事情</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#优势"><span class="toc-text">优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#限制"><span class="toc-text">限制</span></a></li></ol></li></ol>
+    </div>
+  </div>
+
+
+
+    <div class="post-content">
+      
+        <blockquote>
+<p>在去年，我曾用 electron 写过一个分析使用 CocoaPods 项目依赖的<a href="https://github.com/X140Yu/development-pods-dependency-checker" target="_blank" rel="noopener">工具</a>，当时对 CocoaPods 还不怎么了解，用了一种「非正常」的操作解决了我当时的需求。不过现在，我找到了一种更好的解决方案</p>
+</blockquote>
+<h2 id="先回顾一下我们的需求"><a href="#先回顾一下我们的需求" class="headerlink" title="先回顾一下我们的需求"></a>先回顾一下我们的需求</h2><p><code>podspec</code> 中列出的 dependecy 在某些情况下要远远比看起来的多得多，尤其是在大量使用 development pods 的情况下。而有些情况，需要确认一个 pod 的全部依赖（比如为这个 pod 创建 Example 工程的时候），这时就需要一个工具来分析了。最终的目标是在拥有一个 podfile 的情况下，把每个依赖的所有依赖都找出来</p>
+<a id="more"></a>
+<h2 id="上一个方案存在的问题"><a href="#上一个方案存在的问题" class="headerlink" title="上一个方案存在的问题"></a>上一个方案存在的问题</h2><p>如果忘记了之前原理的同学可以快速地翻一下<a href="https://zhaoxinyu.me/2017-09-16-development-pods-dependency-checker/#Development-Pods-Dependency-Checker" target="_blank" rel="noopener">这个部分</a>，目前看来，这个方案有几个问题，</p>
+<ol>
+<li><code>Pods/Local Podspecs</code> 里只会存在使用 <code>url</code> 方式引用的 pod。换句话说，如果是以版本号的方式引用的 pod，那它的描述就不会出现在那个目录中。根据之前的分析逻辑，我们就假设它没有依赖了，这样分析完的依赖是不全的</li>
+<li>分析依赖需要 <code>pod install</code> 一次，有些重</li>
+</ol>
+<p>那怎样才能优雅而且正确地实现这个需求呢？答案就是使用 CocoaPods 本身 🤓</p>
+<h2 id="Analyzer"><a href="#Analyzer" class="headerlink" title="Analyzer"></a>Analyzer</h2><p>通过查看 CocoaPods 的源码，我发现了一个类叫做 <code>Analyzer</code>，它有一个 <code>analyze</code> 方法 会返回一个 <code>AnalysisResult</code> 的结构，其中包含一个名字叫 <code>specifications</code> 的 Array。这就应该我们要找的答案</p>
+<figure class="highlight ruby"><figcaption><span>Analyzer</span><a href="https://github.com/CocoaPods/CocoaPods/blob/355bda2a4b8bd00748650a8d293626f4e118b69a/lib/cocoapods/installer/analyzer.rb#L6" target="_blank" rel="noopener">analyzer.rb</a></figcaption><table><tr><td class="code"><pre><span class="line"><span class="comment"># Initialize a new instance</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Analyzes the Podfile, the Lockfile, and the sandbox manifest to generate the information relative to a CocoaPods installation.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Analyzer</span></span></span><br><span class="line">  <span class="comment"># Parameters:</span></span><br><span class="line">  <span class="comment"># sandbox (Sandbox) — <span class="doctag">@see</span> sandbox</span></span><br><span class="line">  <span class="comment"># podfile (Podfile) — <span class="doctag">@see</span> podfile</span></span><br><span class="line">  <span class="comment"># lockfile (Lockfile) (defaults to: nil) — <span class="doctag">@see</span> lockfile</span></span><br><span class="line">  <span class="comment"># plugin_sources (Array&lt;Source&gt;) (defaults to: nil) — <span class="doctag">@see</span> plugin_sources</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(sandbox, podfile, lockfile = <span class="literal">nil</span>, plugin_sources = <span class="literal">nil</span>)</span></span> ⇒ Analyzer</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># Performs the analysis.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment"># The Podfile and the Lockfile provide the information necessary to</span></span><br><span class="line">  <span class="comment"># compute which specification should be installed. The manifest of the</span></span><br><span class="line">  <span class="comment"># sandbox returns which specifications are installed.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment"># <span class="doctag">@param</span>  [Bool] allow_fetches</span></span><br><span class="line">  <span class="comment">#         whether external sources may be fetched</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment"># <span class="doctag">@return</span> [AnalysisResult]</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">analyze</span><span class="params">(allow_fetches = <span class="literal">true</span>)</span></span></span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">  <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>所以现在的任务就变成了，构造一个 <code>Analyzer</code> 然后调用它的 <code>analyze</code> 方法。不过在操作之前，有一些概念需要搞清。</p>
+<h2 id="CocoaPods-中的几个基本概念"><a href="#CocoaPods-中的几个基本概念" class="headerlink" title="CocoaPods 中的几个基本概念"></a>CocoaPods 中的几个基本概念</h2><h3 id="Pod-Config"><a href="#Pod-Config" class="headerlink" title="Pod::Config"></a><a href="https://github.com/CocoaPods/CocoaPods/blob/355bda2a4b8bd00748650a8d293626f4e118b69a/lib/cocoapods/config.rb#L2" target="_blank" rel="noopener">Pod::Config</a></h3><p>用于配置 CocoaPods，比如每次 <code>pod install</code> 是否需要执行 <code>pod repo update</code>；specs master repo 位置之类的。可以通过修改 <code>~/.cocoapods/config.yaml</code> 文件来实现自定义的配置。</p>
+<h3 id="Pod-Installer"><a href="#Pod-Installer" class="headerlink" title="Pod::Installer"></a><a href="https://github.com/CocoaPods/CocoaPods/blob/355bda2a4b8bd00748650a8d293626f4e118b69a/lib/cocoapods/installer.rb#L31" target="_blank" rel="noopener">Pod::Installer</a></h3><p>最重要的一类，负责 <code>pod install</code> 的整个流程。负责读取 <code>Podfile</code> 和 <code>Podfile.lock</code> 中的依赖内容以及对应的版本信息，把依赖变成 <code>Pods</code> 目录中的一个个实体，然后对 <code>project</code> 文件进行修改，以便我们能直接在工程里用上这些依赖。</p>
+<h3 id="Pod-Sandbox"><a href="#Pod-Sandbox" class="headerlink" title="Pod::Sandbox"></a><a href="https://github.com/CocoaPods/CocoaPods/blob/355bda2a4b8bd00748650a8d293626f4e118b69a/lib/cocoapods/sandbox.rb#L38" target="_blank" rel="noopener">Pod::Sandbox</a></h3><p>可以理解为与 <code>Podfile</code> 同级的 <code>Pod</code> 目录的抽象</p>
+<h3 id="Pod-Podfile-amp-amp-Pod-Podfile-lock"><a href="#Pod-Podfile-amp-amp-Pod-Podfile-lock" class="headerlink" title="[Pod::Podfile] &amp;&amp; [Pod::Podfile.lock]"></a>[Pod::Podfile] &amp;&amp; [Pod::Podfile.lock]</h3><p>它们两个都在 cocoaPods-core 仓库中，分别代表 podfile 和 podfile.lock</p>
+<h2 id="搞事情"><a href="#搞事情" class="headerlink" title="搞事情"></a>搞事情</h2><p><del>本来在写这篇本文之前已经写了一个小脚本以为能完成工作，但在文章写了一半的时候发现逻辑并不完善，于是文章就搁置了</del></p>
+<p>后来花一些时间好好把逻辑优化了一下，觉得其它人应该也能用得上，就把代码发到了 GitHub 上了 <a href="https://github.com/X140Yu/cocoapods-dependency" target="_blank" rel="noopener">（点这里查看）</a></p>
+<p>主要的代码在 <a href="https://github.com/X140Yu/cocoapods-dependency/blob/master/lib/cocoapods/analyze.rb" target="_blank" rel="noopener">analyze.rb</a> 文件中，核心的逻辑如下，</p>
+<ul>
+<li>通过 <code>analyzer</code> 找出所有的 <code>specifications</code></li>
+<li>对于每一个 <code>specification</code>，把它的 <code>name</code> 作为 key，它的依赖（在当前项目中使用的 <code>subsbpec</code> 和 <code>dependecies</code> 的合）作为 value，生成一个 <code>map</code></li>
+<li>再次遍历 <code>specification</code>，根据它的依赖还有上一步生成的 map，递归地寻找它的全部依赖</li>
+</ul>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>解决了上一个方案中出现的所有问题</p>
+<ul>
+<li>能完整地列出整个 podfile 中的所有依赖（不光 podfile 中列出的，还有依赖的依赖）</li>
+<li>很好地处理了 subspec 的问题，会根据 podfile 中依赖的 subspec 输出正确的结果。比如 <code>pod &#39;Texture&#39;, &#39;2.7&#39;</code> 和 <code>pod &#39;Texture&#39;, &#39;2.7&#39;, subspecs: %w[PINRemoteImage IGListKit Yoga]</code> 就会产生不同的输出</li>
+<li>不需要 <code>pod install</code>，非常轻量</li>
+</ul>
+<h3 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h3><ul>
+<li>分析的项目中需要包含 Podfile 和对应的 xcodeproj 文件，不能只有 Podfile</li>
+<li>用法还比较复杂，需要 clone 工程然后运行脚本指定路径，后续考虑做成一个 pod 插件的形式，参考<a href="https://github.com/X140Yu/cocoapods-dependency/issues/2" target="_blank" rel="noopener">这个 issue</a></li>
+</ul>
+
+      
+    </div>
+
+    
+      
+      
+
+  <div class="post-copyright">
+    <p class="copyright-item">
+      <span>Author: </span>
+      <a href="https://x140yu.github.io">X140Yu</a>
+    </p>
+    <p class="copyright-item">
+      <span>Link: </span>
+      <a href="https://x140yu.github.io/2018-08-20-analyze-pods-dependecy/">https://x140yu.github.io/2018-08-20-analyze-pods-dependecy/</a>
+    </p>
+    <p class="copyright-item">
+      <span>License: </span>
+      
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </div>
+
+
+
+      
+      
+  <div class="post-reward">
+    <input type="checkbox" name="reward" id="reward" hidden>
+    <label class="reward-button" for="reward">Reward</label>
+    <div class="qr-code">
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222906.png" title="wechat">
+        </label>
+      
+      
+        <label class="qr-code-image" for="reward">
+          <img class="image" src="http://blog-1258178021.cosbj.myqcloud.com/blog/20181230222847.png" title="alipay">
+        </label>
+      
+    </div>
+  </div>
+
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/iOS/">iOS</a>
+            
+              <a href="/tags/ruby/">ruby</a>
+            
+              <a href="/tags/CocoaPods/">CocoaPods</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018-09-03-trip-to-hk/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">香港印象</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2018-04-28-cocoapods-1-5/">
+        <span class="next-text nav-default">升级 CocoaPods 1.5，使用 Swift Static Framework</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+
+      </footer>
+    
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:zhaoxinyu1994@gmail.com" class="iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://github.com/x140yu" class="iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+        
+          <a href="https://twitter.com/_X140Yu" class="iconfont icon-twitter" title="twitter"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.instagram.com/x140yu/" class="iconfont icon-instagram" title="instagram"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.zhihu.com/people/X140Yu" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+        
+          <a href="https://www.douban.com/people/X140Yu/" class="iconfont icon-douban" title="douban"></a>
+        
+      
+    
+      
+    
+      
+        
+          <a href="https://www.linkedin.com/in/xinyu-zhao/" class="iconfont icon-linkedin" title="linkedin"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+      <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2014 - 
+    
+    2019
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">X140Yu</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+
+    
+  
+  <script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://x140yu.github.io/2018-08-20-analyze-pods-dependecy/';
+        this.page.identifier = '2018-08-20-analyze-pods-dependecy/';
+        this.page.title = '分析使用 CocoaPods 项目的依赖';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//x140yu.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script>
+
+  
+
+  
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=2.10.1"></script>
+
+  </body>
+</html>
